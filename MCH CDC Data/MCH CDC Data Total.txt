@@ -1,0 +1,524 @@
+"Notes"	"Year"	"Year Code"	"County"	"County Code"	Births
+	"2007"	"2007"	"Alameda County, CA"	"06001"	21522
+	"2007"	"2007"	"Butte County, CA"	"06007"	2523
+	"2007"	"2007"	"Contra Costa County, CA"	"06013"	13487
+	"2007"	"2007"	"El Dorado County, CA"	"06017"	1882
+	"2007"	"2007"	"Fresno County, CA"	"06019"	17292
+	"2007"	"2007"	"Humboldt County, CA"	"06023"	1599
+	"2007"	"2007"	"Imperial County, CA"	"06025"	3146
+	"2007"	"2007"	"Kern County, CA"	"06029"	15336
+	"2007"	"2007"	"Kings County, CA"	"06031"	2781
+	"2007"	"2007"	"Los Angeles County, CA"	"06037"	151908
+	"2007"	"2007"	"Madera County, CA"	"06039"	2612
+	"2007"	"2007"	"Marin County, CA"	"06041"	2820
+	"2007"	"2007"	"Merced County, CA"	"06047"	4652
+	"2007"	"2007"	"Monterey County, CA"	"06053"	7551
+	"2007"	"2007"	"Napa County, CA"	"06055"	1665
+	"2007"	"2007"	"Orange County, CA"	"06059"	44038
+	"2007"	"2007"	"Placer County, CA"	"06061"	4054
+	"2007"	"2007"	"Riverside County, CA"	"06065"	34563
+	"2007"	"2007"	"Sacramento County, CA"	"06067"	22119
+	"2007"	"2007"	"San Bernardino County, CA"	"06071"	35190
+	"2007"	"2007"	"San Diego County, CA"	"06073"	47569
+	"2007"	"2007"	"San Francisco County, CA"	"06075"	9129
+	"2007"	"2007"	"San Joaquin County, CA"	"06077"	11600
+	"2007"	"2007"	"San Luis Obispo County, CA"	"06079"	2884
+	"2007"	"2007"	"San Mateo County, CA"	"06081"	9914
+	"2007"	"2007"	"Santa Barbara County, CA"	"06083"	6292
+	"2007"	"2007"	"Santa Clara County, CA"	"06085"	27490
+	"2007"	"2007"	"Santa Cruz County, CA"	"06087"	3571
+	"2007"	"2007"	"Shasta County, CA"	"06089"	2230
+	"2007"	"2007"	"Solano County, CA"	"06095"	5849
+	"2007"	"2007"	"Sonoma County, CA"	"06097"	5742
+	"2007"	"2007"	"Stanislaus County, CA"	"06099"	8827
+	"2007"	"2007"	"Tulare County, CA"	"06107"	8507
+	"2007"	"2007"	"Ventura County, CA"	"06111"	12198
+	"2007"	"2007"	"Yolo County, CA"	"06113"	2522
+	"2007"	"2007"	"Unidentified Counties, CA"	"06999"	11350
+"Total"	"2007"	"2007"			566414
+	"2008"	"2008"	"Alameda County, CA"	"06001"	20976
+	"2008"	"2008"	"Butte County, CA"	"06007"	2520
+	"2008"	"2008"	"Contra Costa County, CA"	"06013"	13135
+	"2008"	"2008"	"El Dorado County, CA"	"06017"	1814
+	"2008"	"2008"	"Fresno County, CA"	"06019"	16764
+	"2008"	"2008"	"Humboldt County, CA"	"06023"	1601
+	"2008"	"2008"	"Imperial County, CA"	"06025"	3241
+	"2008"	"2008"	"Kern County, CA"	"06029"	15316
+	"2008"	"2008"	"Kings County, CA"	"06031"	2711
+	"2008"	"2008"	"Los Angeles County, CA"	"06037"	147745
+	"2008"	"2008"	"Madera County, CA"	"06039"	2535
+	"2008"	"2008"	"Marin County, CA"	"06041"	2719
+	"2008"	"2008"	"Merced County, CA"	"06047"	4422
+	"2008"	"2008"	"Monterey County, CA"	"06053"	7435
+	"2008"	"2008"	"Napa County, CA"	"06055"	1671
+	"2008"	"2008"	"Orange County, CA"	"06059"	42467
+	"2008"	"2008"	"Placer County, CA"	"06061"	4035
+	"2008"	"2008"	"Riverside County, CA"	"06065"	32881
+	"2008"	"2008"	"Sacramento County, CA"	"06067"	21397
+	"2008"	"2008"	"San Bernardino County, CA"	"06071"	33837
+	"2008"	"2008"	"San Diego County, CA"	"06073"	46755
+	"2008"	"2008"	"San Francisco County, CA"	"06075"	9106
+	"2008"	"2008"	"San Joaquin County, CA"	"06077"	11030
+	"2008"	"2008"	"San Luis Obispo County, CA"	"06079"	2739
+	"2008"	"2008"	"San Mateo County, CA"	"06081"	9770
+	"2008"	"2008"	"Santa Barbara County, CA"	"06083"	6320
+	"2008"	"2008"	"Santa Clara County, CA"	"06085"	26731
+	"2008"	"2008"	"Santa Cruz County, CA"	"06087"	3537
+	"2008"	"2008"	"Shasta County, CA"	"06089"	2186
+	"2008"	"2008"	"Solano County, CA"	"06095"	5609
+	"2008"	"2008"	"Sonoma County, CA"	"06097"	5763
+	"2008"	"2008"	"Stanislaus County, CA"	"06099"	8550
+	"2008"	"2008"	"Tulare County, CA"	"06107"	8535
+	"2008"	"2008"	"Ventura County, CA"	"06111"	12075
+	"2008"	"2008"	"Yolo County, CA"	"06113"	2669
+	"2008"	"2008"	"Unidentified Counties, CA"	"06999"	11182
+"Total"	"2008"	"2008"			551779
+	"2009"	"2009"	"Alameda County, CA"	"06001"	20325
+	"2009"	"2009"	"Butte County, CA"	"06007"	2440
+	"2009"	"2009"	"Contra Costa County, CA"	"06013"	12686
+	"2009"	"2009"	"El Dorado County, CA"	"06017"	1727
+	"2009"	"2009"	"Fresno County, CA"	"06019"	16271
+	"2009"	"2009"	"Humboldt County, CA"	"06023"	1541
+	"2009"	"2009"	"Imperial County, CA"	"06025"	3151
+	"2009"	"2009"	"Kern County, CA"	"06029"	14828
+	"2009"	"2009"	"Kings County, CA"	"06031"	2645
+	"2009"	"2009"	"Los Angeles County, CA"	"06037"	139757
+	"2009"	"2009"	"Madera County, CA"	"06039"	2390
+	"2009"	"2009"	"Marin County, CA"	"06041"	2496
+	"2009"	"2009"	"Merced County, CA"	"06047"	4407
+	"2009"	"2009"	"Monterey County, CA"	"06053"	7070
+	"2009"	"2009"	"Napa County, CA"	"06055"	1653
+	"2009"	"2009"	"Orange County, CA"	"06059"	40437
+	"2009"	"2009"	"Placer County, CA"	"06061"	3810
+	"2009"	"2009"	"Riverside County, CA"	"06065"	31605
+	"2009"	"2009"	"Sacramento County, CA"	"06067"	20433
+	"2009"	"2009"	"San Bernardino County, CA"	"06071"	32006
+	"2009"	"2009"	"San Diego County, CA"	"06073"	44982
+	"2009"	"2009"	"San Francisco County, CA"	"06075"	8810
+	"2009"	"2009"	"San Joaquin County, CA"	"06077"	10876
+	"2009"	"2009"	"San Luis Obispo County, CA"	"06079"	2617
+	"2009"	"2009"	"San Mateo County, CA"	"06081"	9452
+	"2009"	"2009"	"Santa Barbara County, CA"	"06083"	6041
+	"2009"	"2009"	"Santa Clara County, CA"	"06085"	25203
+	"2009"	"2009"	"Santa Cruz County, CA"	"06087"	3299
+	"2009"	"2009"	"Shasta County, CA"	"06089"	2068
+	"2009"	"2009"	"Solano County, CA"	"06095"	5393
+	"2009"	"2009"	"Sonoma County, CA"	"06097"	5685
+	"2009"	"2009"	"Stanislaus County, CA"	"06099"	7942
+	"2009"	"2009"	"Tulare County, CA"	"06107"	8361
+	"2009"	"2009"	"Ventura County, CA"	"06111"	11360
+	"2009"	"2009"	"Yolo County, CA"	"06113"	2483
+	"2009"	"2009"	"Unidentified Counties, CA"	"06999"	10770
+"Total"	"2009"	"2009"			527020
+	"2010"	"2010"	"Alameda County, CA"	"06001"	19306
+	"2010"	"2010"	"Butte County, CA"	"06007"	2457
+	"2010"	"2010"	"Contra Costa County, CA"	"06013"	12358
+	"2010"	"2010"	"El Dorado County, CA"	"06017"	1621
+	"2010"	"2010"	"Fresno County, CA"	"06019"	16283
+	"2010"	"2010"	"Humboldt County, CA"	"06023"	1551
+	"2010"	"2010"	"Imperial County, CA"	"06025"	3081
+	"2010"	"2010"	"Kern County, CA"	"06029"	14419
+	"2010"	"2010"	"Kings County, CA"	"06031"	2509
+	"2010"	"2010"	"Los Angeles County, CA"	"06037"	133252
+	"2010"	"2010"	"Madera County, CA"	"06039"	2434
+	"2010"	"2010"	"Marin County, CA"	"06041"	2371
+	"2010"	"2010"	"Merced County, CA"	"06047"	4249
+	"2010"	"2010"	"Monterey County, CA"	"06053"	6765
+	"2010"	"2010"	"Napa County, CA"	"06055"	1525
+	"2010"	"2010"	"Orange County, CA"	"06059"	38250
+	"2010"	"2010"	"Placer County, CA"	"06061"	3825
+	"2010"	"2010"	"Riverside County, CA"	"06065"	30670
+	"2010"	"2010"	"Sacramento County, CA"	"06067"	20056
+	"2010"	"2010"	"San Bernardino County, CA"	"06071"	31368
+	"2010"	"2010"	"San Diego County, CA"	"06073"	44867
+	"2010"	"2010"	"San Francisco County, CA"	"06075"	8806
+	"2010"	"2010"	"San Joaquin County, CA"	"06077"	10596
+	"2010"	"2010"	"San Luis Obispo County, CA"	"06079"	2735
+	"2010"	"2010"	"San Mateo County, CA"	"06081"	9194
+	"2010"	"2010"	"Santa Barbara County, CA"	"06083"	5821
+	"2010"	"2010"	"Santa Clara County, CA"	"06085"	23940
+	"2010"	"2010"	"Santa Cruz County, CA"	"06087"	3192
+	"2010"	"2010"	"Shasta County, CA"	"06089"	2136
+	"2010"	"2010"	"Solano County, CA"	"06095"	5050
+	"2010"	"2010"	"Sonoma County, CA"	"06097"	5393
+	"2010"	"2010"	"Stanislaus County, CA"	"06099"	7806
+	"2010"	"2010"	"Tulare County, CA"	"06107"	8155
+	"2010"	"2010"	"Ventura County, CA"	"06111"	11150
+	"2010"	"2010"	"Yolo County, CA"	"06113"	2427
+	"2010"	"2010"	"Unidentified Counties, CA"	"06999"	10580
+"Total"	"2010"	"2010"			510198
+	"2011"	"2011"	"Alameda County, CA"	"06001"	19003
+	"2011"	"2011"	"Butte County, CA"	"06007"	2391
+	"2011"	"2011"	"Contra Costa County, CA"	"06013"	12060
+	"2011"	"2011"	"El Dorado County, CA"	"06017"	1630
+	"2011"	"2011"	"Fresno County, CA"	"06019"	16160
+	"2011"	"2011"	"Humboldt County, CA"	"06023"	1448
+	"2011"	"2011"	"Imperial County, CA"	"06025"	3079
+	"2011"	"2011"	"Kern County, CA"	"06029"	14287
+	"2011"	"2011"	"Kings County, CA"	"06031"	2567
+	"2011"	"2011"	"Los Angeles County, CA"	"06037"	130370
+	"2011"	"2011"	"Madera County, CA"	"06039"	2401
+	"2011"	"2011"	"Marin County, CA"	"06041"	2386
+	"2011"	"2011"	"Merced County, CA"	"06047"	4280
+	"2011"	"2011"	"Monterey County, CA"	"06053"	6812
+	"2011"	"2011"	"Napa County, CA"	"06055"	1572
+	"2011"	"2011"	"Orange County, CA"	"06059"	38101
+	"2011"	"2011"	"Placer County, CA"	"06061"	3834
+	"2011"	"2011"	"Riverside County, CA"	"06065"	30611
+	"2011"	"2011"	"Sacramento County, CA"	"06067"	20002
+	"2011"	"2011"	"San Bernardino County, CA"	"06071"	30566
+	"2011"	"2011"	"San Diego County, CA"	"06073"	43643
+	"2011"	"2011"	"San Francisco County, CA"	"06075"	8813
+	"2011"	"2011"	"San Joaquin County, CA"	"06077"	10329
+	"2011"	"2011"	"San Luis Obispo County, CA"	"06079"	2631
+	"2011"	"2011"	"San Mateo County, CA"	"06081"	9048
+	"2011"	"2011"	"Santa Barbara County, CA"	"06083"	5804
+	"2011"	"2011"	"Santa Clara County, CA"	"06085"	23649
+	"2011"	"2011"	"Santa Cruz County, CA"	"06087"	3233
+	"2011"	"2011"	"Shasta County, CA"	"06089"	2022
+	"2011"	"2011"	"Solano County, CA"	"06095"	5160
+	"2011"	"2011"	"Sonoma County, CA"	"06097"	5150
+	"2011"	"2011"	"Stanislaus County, CA"	"06099"	7738
+	"2011"	"2011"	"Tulare County, CA"	"06107"	7966
+	"2011"	"2011"	"Ventura County, CA"	"06111"	10656
+	"2011"	"2011"	"Yolo County, CA"	"06113"	2341
+	"2011"	"2011"	"Unidentified Counties, CA"	"06999"	10377
+"Total"	"2011"	"2011"			502120
+	"2012"	"2012"	"Alameda County, CA"	"06001"	19546
+	"2012"	"2012"	"Butte County, CA"	"06007"	2399
+	"2012"	"2012"	"Contra Costa County, CA"	"06013"	12065
+	"2012"	"2012"	"El Dorado County, CA"	"06017"	1513
+	"2012"	"2012"	"Fresno County, CA"	"06019"	15955
+	"2012"	"2012"	"Humboldt County, CA"	"06023"	1504
+	"2012"	"2012"	"Imperial County, CA"	"06025"	3054
+	"2012"	"2012"	"Kern County, CA"	"06029"	14553
+	"2012"	"2012"	"Kings County, CA"	"06031"	2358
+	"2012"	"2012"	"Los Angeles County, CA"	"06037"	131664
+	"2012"	"2012"	"Madera County, CA"	"06039"	2257
+	"2012"	"2012"	"Marin County, CA"	"06041"	2305
+	"2012"	"2012"	"Merced County, CA"	"06047"	4312
+	"2012"	"2012"	"Monterey County, CA"	"06053"	6652
+	"2012"	"2012"	"Napa County, CA"	"06055"	1431
+	"2012"	"2012"	"Orange County, CA"	"06059"	38183
+	"2012"	"2012"	"Placer County, CA"	"06061"	3648
+	"2012"	"2012"	"Riverside County, CA"	"06065"	30300
+	"2012"	"2012"	"Sacramento County, CA"	"06067"	19623
+	"2012"	"2012"	"San Bernardino County, CA"	"06071"	30701
+	"2012"	"2012"	"San Diego County, CA"	"06073"	44396
+	"2012"	"2012"	"San Francisco County, CA"	"06075"	9075
+	"2012"	"2012"	"San Joaquin County, CA"	"06077"	10129
+	"2012"	"2012"	"San Luis Obispo County, CA"	"06079"	2580
+	"2012"	"2012"	"San Mateo County, CA"	"06081"	9185
+	"2012"	"2012"	"Santa Barbara County, CA"	"06083"	5585
+	"2012"	"2012"	"Santa Clara County, CA"	"06085"	24308
+	"2012"	"2012"	"Santa Cruz County, CA"	"06087"	3083
+	"2012"	"2012"	"Shasta County, CA"	"06089"	2109
+	"2012"	"2012"	"Solano County, CA"	"06095"	5062
+	"2012"	"2012"	"Sonoma County, CA"	"06097"	5143
+	"2012"	"2012"	"Stanislaus County, CA"	"06099"	7591
+	"2012"	"2012"	"Tulare County, CA"	"06107"	8000
+	"2012"	"2012"	"Ventura County, CA"	"06111"	10641
+	"2012"	"2012"	"Yolo County, CA"	"06113"	2451
+	"2012"	"2012"	"Unidentified Counties, CA"	"06999"	10394
+"Total"	"2012"	"2012"			503755
+	"2013"	"2013"	"Alameda County, CA"	"06001"	19257
+	"2013"	"2013"	"Butte County, CA"	"06007"	2415
+	"2013"	"2013"	"Contra Costa County, CA"	"06013"	12154
+	"2013"	"2013"	"El Dorado County, CA"	"06017"	1534
+	"2013"	"2013"	"Fresno County, CA"	"06019"	15737
+	"2013"	"2013"	"Humboldt County, CA"	"06023"	1531
+	"2013"	"2013"	"Imperial County, CA"	"06025"	3094
+	"2013"	"2013"	"Kern County, CA"	"06029"	14149
+	"2013"	"2013"	"Kings County, CA"	"06031"	2394
+	"2013"	"2013"	"Los Angeles County, CA"	"06037"	128598
+	"2013"	"2013"	"Madera County, CA"	"06039"	2315
+	"2013"	"2013"	"Marin County, CA"	"06041"	2321
+	"2013"	"2013"	"Merced County, CA"	"06047"	4162
+	"2013"	"2013"	"Monterey County, CA"	"06053"	6547
+	"2013"	"2013"	"Napa County, CA"	"06055"	1450
+	"2013"	"2013"	"Orange County, CA"	"06059"	37281
+	"2013"	"2013"	"Placer County, CA"	"06061"	3688
+	"2013"	"2013"	"Riverside County, CA"	"06065"	29941
+	"2013"	"2013"	"Sacramento County, CA"	"06067"	19371
+	"2013"	"2013"	"San Bernardino County, CA"	"06071"	30246
+	"2013"	"2013"	"San Diego County, CA"	"06073"	43659
+	"2013"	"2013"	"San Francisco County, CA"	"06075"	8814
+	"2013"	"2013"	"San Joaquin County, CA"	"06077"	9800
+	"2013"	"2013"	"San Luis Obispo County, CA"	"06079"	2650
+	"2013"	"2013"	"San Mateo County, CA"	"06081"	8824
+	"2013"	"2013"	"Santa Barbara County, CA"	"06083"	5755
+	"2013"	"2013"	"Santa Clara County, CA"	"06085"	23313
+	"2013"	"2013"	"Santa Cruz County, CA"	"06087"	2871
+	"2013"	"2013"	"Shasta County, CA"	"06089"	2143
+	"2013"	"2013"	"Solano County, CA"	"06095"	5259
+	"2013"	"2013"	"Sonoma County, CA"	"06097"	4983
+	"2013"	"2013"	"Stanislaus County, CA"	"06099"	7579
+	"2013"	"2013"	"Tulare County, CA"	"06107"	7653
+	"2013"	"2013"	"Ventura County, CA"	"06111"	10446
+	"2013"	"2013"	"Yolo County, CA"	"06113"	2491
+	"2013"	"2013"	"Unidentified Counties, CA"	"06999"	10280
+"Total"	"2013"	"2013"			494705
+	"2014"	"2014"	"Alameda County, CA"	"06001"	19650
+	"2014"	"2014"	"Butte County, CA"	"06007"	2481
+	"2014"	"2014"	"Contra Costa County, CA"	"06013"	12557
+	"2014"	"2014"	"El Dorado County, CA"	"06017"	1618
+	"2014"	"2014"	"Fresno County, CA"	"06019"	15762
+	"2014"	"2014"	"Humboldt County, CA"	"06023"	1468
+	"2014"	"2014"	"Imperial County, CA"	"06025"	3226
+	"2014"	"2014"	"Kern County, CA"	"06029"	14193
+	"2014"	"2014"	"Kings County, CA"	"06031"	2350
+	"2014"	"2014"	"Los Angeles County, CA"	"06037"	130289
+	"2014"	"2014"	"Madera County, CA"	"06039"	2313
+	"2014"	"2014"	"Marin County, CA"	"06041"	2401
+	"2014"	"2014"	"Merced County, CA"	"06047"	4164
+	"2014"	"2014"	"Monterey County, CA"	"06053"	6455
+	"2014"	"2014"	"Napa County, CA"	"06055"	1475
+	"2014"	"2014"	"Orange County, CA"	"06059"	38595
+	"2014"	"2014"	"Placer County, CA"	"06061"	3631
+	"2014"	"2014"	"Riverside County, CA"	"06065"	30235
+	"2014"	"2014"	"Sacramento County, CA"	"06067"	19871
+	"2014"	"2014"	"San Bernardino County, CA"	"06071"	31226
+	"2014"	"2014"	"San Diego County, CA"	"06073"	44596
+	"2014"	"2014"	"San Francisco County, CA"	"06075"	9104
+	"2014"	"2014"	"San Joaquin County, CA"	"06077"	10113
+	"2014"	"2014"	"San Luis Obispo County, CA"	"06079"	2596
+	"2014"	"2014"	"San Mateo County, CA"	"06081"	9083
+	"2014"	"2014"	"Santa Barbara County, CA"	"06083"	5830
+	"2014"	"2014"	"Santa Clara County, CA"	"06085"	23742
+	"2014"	"2014"	"Santa Cruz County, CA"	"06087"	3069
+	"2014"	"2014"	"Shasta County, CA"	"06089"	2083
+	"2014"	"2014"	"Solano County, CA"	"06095"	5253
+	"2014"	"2014"	"Sonoma County, CA"	"06097"	5070
+	"2014"	"2014"	"Stanislaus County, CA"	"06099"	7511
+	"2014"	"2014"	"Tulare County, CA"	"06107"	7640
+	"2014"	"2014"	"Ventura County, CA"	"06111"	10468
+	"2014"	"2014"	"Yolo County, CA"	"06113"	2394
+	"2014"	"2014"	"Unidentified Counties, CA"	"06999"	10367
+"Total"	"2014"	"2014"			502879
+	"2015"	"2015"	"Alameda County, CA"	"06001"	19434
+	"2015"	"2015"	"Butte County, CA"	"06007"	2442
+	"2015"	"2015"	"Contra Costa County, CA"	"06013"	12596
+	"2015"	"2015"	"El Dorado County, CA"	"06017"	1594
+	"2015"	"2015"	"Fresno County, CA"	"06019"	15359
+	"2015"	"2015"	"Humboldt County, CA"	"06023"	1441
+	"2015"	"2015"	"Imperial County, CA"	"06025"	3168
+	"2015"	"2015"	"Kern County, CA"	"06029"	13768
+	"2015"	"2015"	"Kings County, CA"	"06031"	2274
+	"2015"	"2015"	"Los Angeles County, CA"	"06037"	124641
+	"2015"	"2015"	"Madera County, CA"	"06039"	2225
+	"2015"	"2015"	"Marin County, CA"	"06041"	2288
+	"2015"	"2015"	"Merced County, CA"	"06047"	4104
+	"2015"	"2015"	"Monterey County, CA"	"06053"	6420
+	"2015"	"2015"	"Napa County, CA"	"06055"	1457
+	"2015"	"2015"	"Orange County, CA"	"06059"	37609
+	"2015"	"2015"	"Placer County, CA"	"06061"	3747
+	"2015"	"2015"	"Riverside County, CA"	"06065"	30491
+	"2015"	"2015"	"Sacramento County, CA"	"06067"	19423
+	"2015"	"2015"	"San Bernardino County, CA"	"06071"	30530
+	"2015"	"2015"	"San Diego County, CA"	"06073"	43942
+	"2015"	"2015"	"San Francisco County, CA"	"06075"	8972
+	"2015"	"2015"	"San Joaquin County, CA"	"06077"	9983
+	"2015"	"2015"	"San Luis Obispo County, CA"	"06079"	2668
+	"2015"	"2015"	"San Mateo County, CA"	"06081"	9037
+	"2015"	"2015"	"Santa Barbara County, CA"	"06083"	5673
+	"2015"	"2015"	"Santa Clara County, CA"	"06085"	23393
+	"2015"	"2015"	"Santa Cruz County, CA"	"06087"	2840
+	"2015"	"2015"	"Shasta County, CA"	"06089"	2073
+	"2015"	"2015"	"Solano County, CA"	"06095"	5131
+	"2015"	"2015"	"Sonoma County, CA"	"06097"	5015
+	"2015"	"2015"	"Stanislaus County, CA"	"06099"	7698
+	"2015"	"2015"	"Tulare County, CA"	"06107"	7411
+	"2015"	"2015"	"Ventura County, CA"	"06111"	10060
+	"2015"	"2015"	"Yolo County, CA"	"06113"	2402
+	"2015"	"2015"	"Unidentified Counties, CA"	"06999"	10439
+"Total"	"2015"	"2015"			491748
+	"2016"	"2016"	"Alameda County, CA"	"06001"	19573
+	"2016"	"2016"	"Butte County, CA"	"06007"	2490
+	"2016"	"2016"	"Contra Costa County, CA"	"06013"	12340
+	"2016"	"2016"	"El Dorado County, CA"	"06017"	1601
+	"2016"	"2016"	"Fresno County, CA"	"06019"	15129
+	"2016"	"2016"	"Humboldt County, CA"	"06023"	1482
+	"2016"	"2016"	"Imperial County, CA"	"06025"	2939
+	"2016"	"2016"	"Kern County, CA"	"06029"	13728
+	"2016"	"2016"	"Kings County, CA"	"06031"	2248
+	"2016"	"2016"	"Los Angeles County, CA"	"06037"	123092
+	"2016"	"2016"	"Madera County, CA"	"06039"	2355
+	"2016"	"2016"	"Marin County, CA"	"06041"	2252
+	"2016"	"2016"	"Merced County, CA"	"06047"	4117
+	"2016"	"2016"	"Monterey County, CA"	"06053"	6219
+	"2016"	"2016"	"Napa County, CA"	"06055"	1406
+	"2016"	"2016"	"Orange County, CA"	"06059"	38106
+	"2016"	"2016"	"Placer County, CA"	"06061"	3732
+	"2016"	"2016"	"Riverside County, CA"	"06065"	30661
+	"2016"	"2016"	"Sacramento County, CA"	"06067"	19588
+	"2016"	"2016"	"San Bernardino County, CA"	"06071"	31032
+	"2016"	"2016"	"San Diego County, CA"	"06073"	42720
+	"2016"	"2016"	"San Francisco County, CA"	"06075"	9062
+	"2016"	"2016"	"San Joaquin County, CA"	"06077"	10268
+	"2016"	"2016"	"San Luis Obispo County, CA"	"06079"	2581
+	"2016"	"2016"	"San Mateo County, CA"	"06081"	8960
+	"2016"	"2016"	"Santa Barbara County, CA"	"06083"	5501
+	"2016"	"2016"	"Santa Clara County, CA"	"06085"	23042
+	"2016"	"2016"	"Santa Cruz County, CA"	"06087"	2799
+	"2016"	"2016"	"Shasta County, CA"	"06089"	2048
+	"2016"	"2016"	"Solano County, CA"	"06095"	5259
+	"2016"	"2016"	"Sonoma County, CA"	"06097"	4962
+	"2016"	"2016"	"Stanislaus County, CA"	"06099"	7862
+	"2016"	"2016"	"Tulare County, CA"	"06107"	7146
+	"2016"	"2016"	"Ventura County, CA"	"06111"	9592
+	"2016"	"2016"	"Yolo County, CA"	"06113"	2423
+	"2016"	"2016"	"Unidentified Counties, CA"	"06999"	10512
+"Total"	"2016"	"2016"			488827
+	"2017"	"2017"	"Alameda County, CA"	"06001"	18888
+	"2017"	"2017"	"Butte County, CA"	"06007"	2386
+	"2017"	"2017"	"Contra Costa County, CA"	"06013"	12180
+	"2017"	"2017"	"El Dorado County, CA"	"06017"	1570
+	"2017"	"2017"	"Fresno County, CA"	"06019"	14541
+	"2017"	"2017"	"Humboldt County, CA"	"06023"	1372
+	"2017"	"2017"	"Imperial County, CA"	"06025"	2894
+	"2017"	"2017"	"Kern County, CA"	"06029"	13326
+	"2017"	"2017"	"Kings County, CA"	"06031"	2373
+	"2017"	"2017"	"Los Angeles County, CA"	"06037"	116950
+	"2017"	"2017"	"Madera County, CA"	"06039"	2120
+	"2017"	"2017"	"Marin County, CA"	"06041"	2237
+	"2017"	"2017"	"Merced County, CA"	"06047"	4202
+	"2017"	"2017"	"Monterey County, CA"	"06053"	5810
+	"2017"	"2017"	"Napa County, CA"	"06055"	1291
+	"2017"	"2017"	"Orange County, CA"	"06059"	37369
+	"2017"	"2017"	"Placer County, CA"	"06061"	3689
+	"2017"	"2017"	"Riverside County, CA"	"06065"	29857
+	"2017"	"2017"	"Sacramento County, CA"	"06067"	19202
+	"2017"	"2017"	"San Bernardino County, CA"	"06071"	29643
+	"2017"	"2017"	"San Diego County, CA"	"06073"	41230
+	"2017"	"2017"	"San Francisco County, CA"	"06075"	8947
+	"2017"	"2017"	"San Joaquin County, CA"	"06077"	9928
+	"2017"	"2017"	"San Luis Obispo County, CA"	"06079"	2550
+	"2017"	"2017"	"San Mateo County, CA"	"06081"	8585
+	"2017"	"2017"	"Santa Barbara County, CA"	"06083"	5531
+	"2017"	"2017"	"Santa Clara County, CA"	"06085"	22133
+	"2017"	"2017"	"Santa Cruz County, CA"	"06087"	2658
+	"2017"	"2017"	"Shasta County, CA"	"06089"	2008
+	"2017"	"2017"	"Solano County, CA"	"06095"	5131
+	"2017"	"2017"	"Sonoma County, CA"	"06097"	4642
+	"2017"	"2017"	"Stanislaus County, CA"	"06099"	7441
+	"2017"	"2017"	"Tulare County, CA"	"06107"	7130
+	"2017"	"2017"	"Ventura County, CA"	"06111"	9318
+	"2017"	"2017"	"Yolo County, CA"	"06113"	2272
+	"2017"	"2017"	"Unidentified Counties, CA"	"06999"	10254
+"Total"	"2017"	"2017"			471658
+	"2018"	"2018"	"Alameda County, CA"	"06001"	18240
+	"2018"	"2018"	"Butte County, CA"	"06007"	2430
+	"2018"	"2018"	"Contra Costa County, CA"	"06013"	12002
+	"2018"	"2018"	"El Dorado County, CA"	"06017"	1674
+	"2018"	"2018"	"Fresno County, CA"	"06019"	14465
+	"2018"	"2018"	"Humboldt County, CA"	"06023"	1364
+	"2018"	"2018"	"Imperial County, CA"	"06025"	2629
+	"2018"	"2018"	"Kern County, CA"	"06029"	12916
+	"2018"	"2018"	"Kings County, CA"	"06031"	2262
+	"2018"	"2018"	"Los Angeles County, CA"	"06037"	110271
+	"2018"	"2018"	"Madera County, CA"	"06039"	2079
+	"2018"	"2018"	"Marin County, CA"	"06041"	2127
+	"2018"	"2018"	"Merced County, CA"	"06047"	3875
+	"2018"	"2018"	"Monterey County, CA"	"06053"	5895
+	"2018"	"2018"	"Napa County, CA"	"06055"	1204
+	"2018"	"2018"	"Orange County, CA"	"06059"	35679
+	"2018"	"2018"	"Placer County, CA"	"06061"	3663
+	"2018"	"2018"	"Riverside County, CA"	"06065"	28725
+	"2018"	"2018"	"Sacramento County, CA"	"06067"	19102
+	"2018"	"2018"	"San Bernardino County, CA"	"06071"	28994
+	"2018"	"2018"	"San Diego County, CA"	"06073"	40070
+	"2018"	"2018"	"San Francisco County, CA"	"06075"	8697
+	"2018"	"2018"	"San Joaquin County, CA"	"06077"	9841
+	"2018"	"2018"	"San Luis Obispo County, CA"	"06079"	2445
+	"2018"	"2018"	"San Mateo County, CA"	"06081"	8330
+	"2018"	"2018"	"Santa Barbara County, CA"	"06083"	5268
+	"2018"	"2018"	"Santa Clara County, CA"	"06085"	21292
+	"2018"	"2018"	"Santa Cruz County, CA"	"06087"	2449
+	"2018"	"2018"	"Shasta County, CA"	"06089"	1966
+	"2018"	"2018"	"Solano County, CA"	"06095"	5033
+	"2018"	"2018"	"Sonoma County, CA"	"06097"	4526
+	"2018"	"2018"	"Stanislaus County, CA"	"06099"	7364
+	"2018"	"2018"	"Tulare County, CA"	"06107"	6905
+	"2018"	"2018"	"Ventura County, CA"	"06111"	9065
+	"2018"	"2018"	"Yolo County, CA"	"06113"	2135
+	"2018"	"2018"	"Unidentified Counties, CA"	"06999"	9938
+"Total"	"2018"	"2018"			454920
+	"2019"	"2019"	"Alameda County, CA"	"06001"	18212
+	"2019"	"2019"	"Butte County, CA"	"06007"	2154
+	"2019"	"2019"	"Contra Costa County, CA"	"06013"	11729
+	"2019"	"2019"	"El Dorado County, CA"	"06017"	1524
+	"2019"	"2019"	"Fresno County, CA"	"06019"	14057
+	"2019"	"2019"	"Humboldt County, CA"	"06023"	1417
+	"2019"	"2019"	"Imperial County, CA"	"06025"	2533
+	"2019"	"2019"	"Kern County, CA"	"06029"	12765
+	"2019"	"2019"	"Kings County, CA"	"06031"	2115
+	"2019"	"2019"	"Los Angeles County, CA"	"06037"	107231
+	"2019"	"2019"	"Madera County, CA"	"06039"	2045
+	"2019"	"2019"	"Marin County, CA"	"06041"	2071
+	"2019"	"2019"	"Merced County, CA"	"06047"	3806
+	"2019"	"2019"	"Monterey County, CA"	"06053"	5846
+	"2019"	"2019"	"Napa County, CA"	"06055"	1279
+	"2019"	"2019"	"Orange County, CA"	"06059"	35052
+	"2019"	"2019"	"Placer County, CA"	"06061"	3658
+	"2019"	"2019"	"Riverside County, CA"	"06065"	28026
+	"2019"	"2019"	"Sacramento County, CA"	"06067"	19089
+	"2019"	"2019"	"San Bernardino County, CA"	"06071"	28656
+	"2019"	"2019"	"San Diego County, CA"	"06073"	38540
+	"2019"	"2019"	"San Francisco County, CA"	"06075"	8438
+	"2019"	"2019"	"San Joaquin County, CA"	"06077"	10009
+	"2019"	"2019"	"San Luis Obispo County, CA"	"06079"	2447
+	"2019"	"2019"	"San Mateo County, CA"	"06081"	8206
+	"2019"	"2019"	"Santa Barbara County, CA"	"06083"	5537
+	"2019"	"2019"	"Santa Clara County, CA"	"06085"	21184
+	"2019"	"2019"	"Santa Cruz County, CA"	"06087"	2434
+	"2019"	"2019"	"Shasta County, CA"	"06089"	1903
+	"2019"	"2019"	"Solano County, CA"	"06095"	5065
+	"2019"	"2019"	"Sonoma County, CA"	"06097"	4395
+	"2019"	"2019"	"Stanislaus County, CA"	"06099"	7402
+	"2019"	"2019"	"Tulare County, CA"	"06107"	6714
+	"2019"	"2019"	"Ventura County, CA"	"06111"	8736
+	"2019"	"2019"	"Yolo County, CA"	"06113"	2057
+	"2019"	"2019"	"Unidentified Counties, CA"	"06999"	10147
+"Total"	"2019"	"2019"			446479
+"Total"					6512502
+"---"
+"Dataset: Natality, 2007-2019"
+"Query Parameters:"
+"Title: MCH CDC Data Total"
+"States: California (06)"
+"Group By: Year; County"
+"Show Totals: True"
+"Show Zero Values: False"
+"Show Suppressed: False"
+"Calculate Rates Per: 1,000"
+"Population Option: No populations shown because rates were not selected."
+"---"
+"Help: See http://wonder.cdc.gov/wonder/help/Natality.html for more information."
+"---"
+"Query Date: Nov 26, 2020 11:11:24 PM"
+"---"
+"Suggested Citation: United States Department of Health and Human Services (US DHHS), Centers for Disease Control and Prevention"
+"(CDC), National Center for Health Statistics (NCHS), Division of Vital Statistics, Natality public-use data 2007-2019, on CDC"
+"WONDER Online Database, October 2020. Accessed at http://wonder.cdc.gov/natality-current.html on Nov 26, 2020 11:11:24 PM"
+"---"
+Caveats:
+"1. Each birth record represents one living baby."
+"2. County-level data are shown only for counties with populations of 100,000 persons or more. Within each state, data for all"
+"counties with fewer than 100,000 persons are combined together under the label ""Unidentified Counties""."
+"3. <p> As a result of population changes the following counties do not have data available for all years.<br/> Before 2014 the"
+"data for the following counties was recoded to the ""Unidentified Counties"" category within the state of the county because"
+"they did not meet minimum population standards. Houston County, AL (01069); Navajo County, AZ (04017); Faulkner County, AR"
+"(05045); Saline County, AR (05125); Bartow County, GA (13015); Carroll County, GA (13045); Columbia County, GA (13073); Coweta"
+"County, GA (13077); Douglas County, GA (13097); Fayette County, GA (13113); Forsyth County, GA (13117); Lowndes County, GA"
+"(13185); Paulding County, GA (13223); Whitfield County, GA (13313); Bonneville County, ID (16019); DeKalb County, IL (17037);"
+"Kendall County, IL (17093); Clark County, IN (18019); Douglas County, KS (20045); Boone County, KY (21015); Hardin County, KY"
+"(21093); Warren County, KY (21227); Ascension Parish, LA (22005); Bossier Parish, LA (22015); Livingston Parish, LA (22063);"
+"Cecil County, MD (24015); St. Mary's County, MD (24037); Scott County, MN (27139); Wright County, MN (27171); Franklin County,"
+"MO (29071); Missoula County, MT (30063); Sandoval County, NM (35043); Tompkins County, NY (36109); Brunswick County, NC (37019);"
+"Craven County, NC (37049); Harnett County, NC (37085); Henderson County, NC (37089); Miami County, OH (39109); Canadian County,"
+"OK (40017); Adams County, PA (42001); Dorchester County, SC (45035); Pennington County, SD (46103); Wilson County, TN (47189);"
+"Comal County, TX (48091); Guadalupe County, TX (48187); Hays County, TX (48209); Kaufman County, TX (48257); Parker County, TX"
+"(48367); Cache County, UT (49005); Washington County, UT (49053); Spotsylvania County, VA (51177); Stafford County, VA (51179);"
+"Cowlitz County, WA (53015); Berkeley County, WV (54003); Fond du Lac County, WI (55039); Walworth County, WI (55127). </p> <p>"
+"After 2013 the data for the following counties was recoded to the ""Unidentified Counties"" category within the state of the"
+"county because they did not meet minimum population standards. Cape May County, NJ (34009); Portsmouth city, VA (51740). </p>"
