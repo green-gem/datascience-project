@@ -1,8 +1,10 @@
 library(dplyr)
 library(tidyverse)
 #Cleaning up MCH Dataset 
+MCH.CDC.Data <- read.csv("MCH CDC Data.txt",  sep ="\t", dec=".", header = TRUE, stringsAsFactors = FALSE)
 MCH.CDC.Data <- MCH.CDC.Data[-c(482:538), ]
 MCH.CDC.Data <- MCH.CDC.Data[ ,-c(1, 3, 5, 7)]
+MCH.CDC.Data.Total <- read.csv("MCH CDC Data Total.txt",  sep ="\t", dec=".", header = TRUE, stringsAsFactors = FALSE)
 MCH.CDC.Data.Total <- MCH.CDC.Data.Total[,-c(1, 3, 5)]
 MCH.CDC.Data.Total %>% rename("Total Birth" = "Births")
 
