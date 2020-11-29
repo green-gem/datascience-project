@@ -1,0 +1,14 @@
+---
+title: "Final Project BST 260: The Effects of Pesticide Exposure on Maternal and Child Health (Lara, Sonia, Zainab)"
+output: html_document
+---
+Load Packages
+```{r}
+
+```
+
+Load Datasets
+```{r}
+
+```
+
