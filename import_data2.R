@@ -4,35 +4,72 @@ library(readr)
 library(tidyverse)
 library(stringr)
 
-doc <- "Year 2014.pdf"
-txt <- pdf_text(doc)
+# year and pages for table 1
+# 2007: 17-18
+# 2008: 14-15
+# 2009: 14-16
+# 2010: 14-15
+# 2011: 16-17
+# 2012: 16-17
+# 2013: 16-17
+# 2014: 16-17
+# 2015: 15-17
 
-indices <- str_which(txt, "Table 1") 
-# only the first 2 references are relevant, as they point to the actual table
+# function to write the pdf data into csv
+get_dat <- function(year, indices){
 
-start_table1 <- txt[indices[1]] %>% 
+start_table1a <- txt[indices[1]] %>% 
   read_lines() %>% # read in document line by line
   str_squish() # get rid of extra whitespace
 
-end_table1 <- txt[indices[2]] %>% 
-  read_lines() %>% 
-  str_squish()
+starteda <- str_which(start_table1a, "County Pounds Applied") # the last header for the table
+endeda <-  length(start_table1a)
 
-start16 <- str_which(start_table1, "County Pounds Applied") # the last header for the table
-end16 <-  length(start_table1)
-
-start17 <- str_which(end_table1, "County Pounds Applied")
-end17 <-  length(end_table1)
-
-tbl1 <- start_table1[(start16+1):(end16-1)] %>% #get rid of the header and page number
+tbl1a <- start_table1a[(starteda+1):(endeda-1)] %>% #get rid of the header and page number
   str_replace_all(",", "") %>% # gets rid of commas in numbers
   str_to_lower() %>% 
   str_split(boundary("word")) # splits by whitespace
 
-tbl1_b <- end_table1[(start17+1):(end17-2)] %>% # get rid of the header, the total row, and page number
-  str_replace_all(",", "") %>%
-  str_to_lower() %>%
-  str_split(boundary("word"))
+if(length(indices)>2){
+  
+  start_table1b <- txt[indices[2]] %>% 
+    read_lines() %>% 
+    str_squish()
+  
+  startedb <- str_which(start_table1b, "County Pounds Applied")
+  endedb <- length(start_table1b)
+  
+  tbl1b <- start_table1b[(startedb+1):(endedb-1)] %>% # get rid of the header, the total row, and page number
+    str_replace_all(",", "") %>%
+    str_to_lower() %>%
+    str_split(boundary("word"))
+  
+  
+  start_table1c <- txt[indices[3]] %>% 
+    read_lines() %>% 
+    str_squish()
+  
+  startedc <- str_which(start_table1c, "County Pounds Applied")
+  endedc <-  str_which(start_table1c, "Yuba")
+    #length(start_table1c)
+  
+  tbl1c <- start_table1c[(startedc+1):(endedc)] %>% # get rid of the header, the total row, and page number
+    str_replace_all(",", "") %>%
+    str_to_lower() %>%
+    str_split(boundary("word"))
+} else {
+  start_table1b <- txt[indices[2]] %>% 
+    read_lines() %>% 
+    str_squish()
+  
+  startedb <- str_which(start_table1b, "County Pounds Applied")
+  endedb <- str_which(start_table1b, "Yuba")
+  
+  tbl1b <- start_table1b[(startedb+1):(endedb)] %>% # get rid of the header, the total row, and page number
+    str_replace_all(",", "") %>%
+    str_to_lower() %>%
+    str_split(boundary("word"))
+}
 
 
 # function to take in the list from before, combine county names, and create a single table
@@ -41,9 +78,11 @@ combine_names <- function(listy) {
   #initialize empty data frame
   df <- data.frame(matrix(NA, nrow = length(listy), ncol = 5))
   # new column names, shorter than original header names
-  names(df) <- c("country", 
-                 "usage2013","rank2013", 
-                 "usage2014", "rank2014")
+  names(df) <- c("county", 
+                 paste0("lbs_", toString(as.numeric(year)-1)), 
+                 paste0("rank_", toString(as.numeric(year)-1)), 
+                 paste0("lbs_", year),
+                 paste0("rank_", year))
 
   # goes through each list in the list to create new row in data frame
   for (r in 1:length(listy)) {
@@ -81,7 +120,22 @@ combine_names <- function(listy) {
 }
 
 # Combines the two dataframes into 1 to get a full table 1 :)
-tabel1 <- bind_rows(combine_names(tbl1),
-                   combine_names(tbl1_b))
+if(length(indices)>2){
+  tabel1 <- bind_rows(combine_names(tbl1a),
+                      combine_names(tbl1b),
+                      combine_names(tbl1c))
+} else{
+  tabel1 <- bind_rows(combine_names(tbl1a),
+                      combine_names(tbl1b))
+}
+filename <- paste0("table1_", year, ".csv")
+write_csv(tabel1, filename)
+}
 
+Year <- "2014" # change based on year
+doc <- paste0("Year ", Year, ".pdf")
+txt <- pdf_text(doc)
+
+Pages <- c(seq(16, 17, 1)) # change based on year, put the first and last page number
+get_dat(Year, Pages)
 
