@@ -27,7 +27,6 @@ endeda <-  length(start_table1a)
 
 tbl1a <- start_table1a[(starteda+1):(endeda-1)] %>% #get rid of the header and page number
   str_replace_all(",", "") %>% # gets rid of commas in numbers
-  str_to_lower() %>% 
   str_split(boundary("word")) # splits by whitespace
 
 if(length(indices)>2){
@@ -41,7 +40,6 @@ if(length(indices)>2){
   
   tbl1b <- start_table1b[(startedb+1):(endedb-1)] %>% # get rid of the header, the total row, and page number
     str_replace_all(",", "") %>%
-    str_to_lower() %>%
     str_split(boundary("word"))
   
   
@@ -55,7 +53,6 @@ if(length(indices)>2){
   
   tbl1c <- start_table1c[(startedc+1):(endedc)] %>% # get rid of the header, the total row, and page number
     str_replace_all(",", "") %>%
-    str_to_lower() %>%
     str_split(boundary("word"))
 } else {
   start_table1b <- txt[indices[2]] %>% 
@@ -67,7 +64,6 @@ if(length(indices)>2){
   
   tbl1b <- start_table1b[(startedb+1):(endedb)] %>% # get rid of the header, the total row, and page number
     str_replace_all(",", "") %>%
-    str_to_lower() %>%
     str_split(boundary("word"))
 }
 
@@ -132,10 +128,9 @@ filename <- paste0("table1_", year, ".csv")
 write_csv(tabel1, filename)
 }
 
-Year <- "2014" # change based on year
+Year <- "2015" # change based on year
 doc <- paste0("Year ", Year, ".pdf")
 txt <- pdf_text(doc)
 
-Pages <- c(seq(16, 17, 1)) # change based on year, put the first and last page number
+Pages <- c(seq(15, 17, 1)) # change based on year, put the first and last page number
 get_dat(Year, Pages)
-
