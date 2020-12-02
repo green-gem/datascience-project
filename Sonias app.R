@@ -15,13 +15,15 @@ library(RColorBrewer)
 
 #data wrangling for 5-year trend (2014-2018) 
 lbwdata<-read.csv(paste0(getwd(),"/low-and-very-low-birthweight-by-county-2014-2018 (1).csv"), header = TRUE, stringsAsFactors = FALSE)
-lbwdata <- lbwdata %>% mutate(County = str_to_lower(County))
+lbwdata <- lbwdata %>% mutate(County = str_to_title(County))
 lbwdata$Events[is.na(lbwdata$Events)] <- 0
 lbwdata <- lbwdata %>% group_by(Year, County, Total.Births) %>% summarize(Events = sum(Events)) 
 lbwdata <- lbwdata %>% filter(!County == "california") 
 CaliforniaCounty <- map_data("county", "california")
+CaliforniaCounty <- CaliforniaCounty %>% mutate(subregion = str_to_title(subregion))
 head(CaliforniaCounty)
-california_map <- lbwdata %>% full_join(CaliforniaCounty, by = c("County" = "subregion")) %>% mutate(rate = Events/Total.Births * 10^2)
+california_map <- california_map %>% mutate(County = str_to_title(County))
+california_map <- lbwdata %>% full_join(CaliforniaCounty, by = c("County" = "subregion")) %>% mutate(Rate = Events/Total.Births * 10^2)
 
 #shinyapp 
 ui <- fluidPage(
@@ -29,7 +31,7 @@ ui <- fluidPage(
     titlePanel("Percent of Low Birth Weight (<2500g) in California"),
     sidebarLayout(
         sidebarPanel(
-            selectizeInput("countyInput", "Choose a County", choices = unique(california_map$County), selected = "los angeles", multiple = TRUE, options = list(maxItems = 6)),
+            selectizeInput("countyInput", "Choose a County", choices = unique(california_map$County), selected = "Los Angeles", multiple = TRUE, options = list(maxItems = 6)),
             sliderInput("yearInput", "Year", min = 2014, max = 2018, value = 2014, step = 1, 
                                       sep = "", ticks = FALSE, animate = TRUE),
            ), #closing sidebarpanel
@@ -49,7 +51,7 @@ server <- function(input, output) {
     output$lbwheatmap <- renderPlot (
         summary() %>%
             ggplot(aes(long, lat, group = group)) + 
-            geom_polygon(aes(fill = rate), color = "black") +
+            geom_polygon(aes(fill = Rate), color = "black") +
             scale_fill_viridis_c(name = "% Low Birth Weight \n(<2500g)", option = "B", limits=c(0,15), breaks = c(2,4,6,8,10,12,14)) +
             theme(panel.grid.major = element_blank(), 
                   panel.background = element_blank(),
@@ -61,8 +63,8 @@ server <- function(input, output) {
     
     output$bargraph <- renderPlot(
         summary () %>% 
-            filter(!is.na(rate)) %>% 
-            ggplot(aes(County, rate)) +
+            filter(!is.na(Rate)) %>% 
+            ggplot(aes(County, Rate)) +
             geom_bar(stat = "identity") +
             theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 1/2))
     )
@@ -71,7 +73,7 @@ server <- function(input, output) {
         california_map %>% 
             filter(Year %in% input$yearInput) %>% filter(County %in% input$countyInput)})
     output$rate <- renderPrint({
-        aggregate(rate ~ County, data = b(), sum)
+        aggregate(Rate ~ County, data = b(), sum)
     })
     
 
