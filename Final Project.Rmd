@@ -18,7 +18,6 @@ MCH Data Wrangling *Low BW Only
 ```{r}
 #Data Wrangling for Year 2014-2018 Data 
 lbwdata<- read.csv("low-and-very-low-birthweight-by-county-2014-2018 (1).csv", header = TRUE, stringsAsFactors = FALSE)
-lbwdata <- lbwdata %>% mutate(County = str_to_lower(County))
 lbwdata$Events[is.na(lbwdata$Events)] <- 0
 lbwdata <- lbwdata %>% group_by(Year, County, Total.Births) %>% summarize(Events = sum(Events)) 
 lbwdata <- lbwdata %>% filter(!County == "california")#removing the total count
