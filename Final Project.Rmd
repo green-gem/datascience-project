@@ -4,6 +4,8 @@ output: html_document
 ---
 Load Packages
 ```{r}
+library(dplyr)
+library(tidyverse)
 
 ```
 
@@ -12,27 +14,37 @@ Load Datasets
 
 ```
 
-MCH Data Wrangling
+MCH Data Wrangling *Low BW Only
 ```{r}
-#data wrangling for Year 2014-2018 data 
-library(dplyr)
-library(tidyverse)
+#Data Wrangling for Year 2014-2018 Data 
 lbwdata<- read.csv("low-and-very-low-birthweight-by-county-2014-2018 (1).csv", header = TRUE, stringsAsFactors = FALSE)
 lbwdata <- lbwdata %>% mutate(County = str_to_lower(County))
 lbwdata$Events[is.na(lbwdata$Events)] <- 0
 lbwdata <- lbwdata %>% group_by(Year, County, Total.Births) %>% summarize(Events = sum(Events)) 
 lbwdata <- lbwdata %>% filter(!County == "california")#removing the total count
 lbwdata <- lbwdata %>% mutate(rate = Events/Total.Births * 100)
+``` 
 
-#histogram by county  
+MCH Data Wrangling *New CDC Data (Lara)
+```{r}
+#Data Wrangling for CDC Data (COMPLETE)
+``` 
 
+Pesticide Data Wrangling
+```{r}
+
+```
+
+Sonia's Work with LBW Data
+```{r}
+#Histogram by county  
 lbwdata %>% 
   filter(Year == 2014 & !is.na(rate)) %>% 
   ggplot(aes(County, rate)) +
   geom_bar(stat = "identity") +
   theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 1/2))
  
-#heatmap 
+#Heatmap 
 library(maps)
 CaliforniaCounty <- map_data("county", "california")
 head(CaliforniaCounty)
@@ -48,12 +60,6 @@ CaliforniaCounty %>% ggplot(aes(x = long, y = lat, group = group)) +
 
 california_map <- lbwdata %>% full_join(CaliforniaCounty, by = c("County" = "subregion")) %>% mutate(rate = Events/Total.Births * 10^2)
 
-#see sonia's app for the shiny app 
+#see Sonia's app for the shiny app 
 ```
-
-Pesticide Data Wrangling
-```{r}
-
-```
-
 
