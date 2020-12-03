@@ -12,6 +12,7 @@ library(dplyr)
 library(tidyverse)
 library(shinyBS)
 library(RColorBrewer)
+library(shinydashboard)
 
 #data wrangling for 5-year trend (2014-2018) 
 lbwdata<-read.csv(paste0(getwd(),"/low-and-very-low-birthweight-by-county-2014-2018 (1).csv"), header = TRUE, stringsAsFactors = FALSE)
@@ -22,10 +23,11 @@ lbwdata <- lbwdata %>% filter(!County == "california")
 CaliforniaCounty <- map_data("county", "california")
 CaliforniaCounty <- CaliforniaCounty %>% mutate(subregion = str_to_title(subregion))
 head(CaliforniaCounty)
-california_map <- california_map %>% mutate(County = str_to_title(County))
 california_map <- lbwdata %>% full_join(CaliforniaCounty, by = c("County" = "subregion")) %>% mutate(Rate = Events/Total.Births * 10^2)
+california_map <- california_map %>% mutate(County = str_to_title(County))
 
 #shinyapp 
+
 ui <- fluidPage(
     theme=shinythemes::shinytheme("slate"),
     titlePanel("Percent of Low Birth Weight (<2500g) in California"),
@@ -44,6 +46,7 @@ ui <- fluidPage(
 )#closing fluidpage
 
 server <- function(input, output) {
+    
     summary <- reactive({
         california_map %>% 
             filter(Year %in% input$yearInput)})
