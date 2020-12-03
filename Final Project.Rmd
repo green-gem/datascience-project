@@ -155,20 +155,22 @@ MCH.CDC.Data_Care[MCH.CDC.Data_Care$County == "Tulare County, CA", "County"] <-"
 MCH.CDC.Data_Care[MCH.CDC.Data_Care$County == "Ventura County, CA", "County"] <-"Ventura"
 MCH.CDC.Data_Care[MCH.CDC.Data_Care$County == "Yolo County, CA", "County"] <-"Yolo"
 
+MCH.CDC.Data_Race<- MCH.CDC.Data_Race %>% rename("Mother's.Race" = "Mother.s.Bridged.Race")
+MCH.CDC.Data_Care<- MCH.CDC.Data_Care %>% rename("Mother's.Race" = "Mother.s.Bridged.Race")
 
 View(MCH.CDC.Data)
 View(MCH.CDC.Data_Race) 
 View(MCH.CDC.Data_Care)
-
-
 ``` 
+
 Data Key:
 'MCH.CDC.Data' is general data by county 
 'MCH.CDC.Data_Race' is stratified by race 
 'MCH.CDC.Data_Care' is stratified by race & includes month prenatal care began
 
 Variable Key:
-Birth Rate = The number of births divided by total population in the given year(s).
+Birth Rate = The number of births divided by total population in the given year(s) [Per 1,000] 
+
 
 Pesticide Data Wrangling
 
