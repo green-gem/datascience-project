@@ -64,7 +64,7 @@ california_map <- california_map %>% mutate(County = str_to_title(County))
 ui <- fluidPage(
     h3("Exploration of Pesticides and Perinatal Outcomes in California County"),
     tabsetPanel(
-        tabPanel("2018 LBW data in California County", icon = icon("map-pin"),
+        tabPanel("LBW Map Exploration data in California County", icon = icon("map-pin"),
                  sidebarPanel(
                      p(strong("Low Birth Weight"), "is defined as babies who are born weighing less than 2500g. They 
                        are at greater risk of experiencing certain long-term complications later in life, including high blood pressure, diabetes, or 
@@ -72,7 +72,7 @@ ui <- fluidPage(
                      br(),
                      br(),
                      strong("2018 Map Exploration"),
-                     p("On the top, we see a map of percentage of low birth weight (Year 2018) in the county of California. Please click on each county to see each county-specific percentage of low birth weight."), 
+                     p("On the top, we see a map of percentage of low birth weight (Year 2018) in the county of California. Please click on each county to see the county-specific percentage of low birth weight."), 
                      br(),
                      br(),
                      br(),
@@ -88,7 +88,7 @@ ui <- fluidPage(
                  mainPanel(leafletOutput("leafletmap"),
                            br(), br(),
                            plotOutput("lbwheatmap"))),
-        tabPanel("California LBW Trend from 2014-2018", icon = icon("chart-bar"),
+        tabPanel("California LBW Bar Graph Trend from 2014-2018", icon = icon("chart-bar"),
                  sidebarPanel(
                      selectizeInput("countyInput", "Choose a County", choices = unique(california_map$County), selected = "Los Angeles", multiple = TRUE, options = list(maxItems = 6)),
                      sliderInput("yearInput", "Year", min = 2014, max = 2018, value = 2014, step = 1, 
