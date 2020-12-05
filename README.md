@@ -1,5 +1,12 @@
-# datascience-project
-Filled with notes, data, and other delightful things :)
+# Final Project BST 260: The Effects of Pesticide Exposure on Maternal and Child Health by Lara Rostomian, Sonia Kim, and Zainab Soetan
+
+
+
+* background info on why we chose this topic, where all the data came from
+
+This project requires the following packages. Please install before running.
+
+dplyr, ggthemes, leaflet, maptools, pdftools, RColorBrewer, readr, rgdal, rgeos, scales, shiny, shinyBS, shinydashboard, sp, stringr, tidyverse
 
 
 Final Project.Rmd is where the main data wrangling occurs.
