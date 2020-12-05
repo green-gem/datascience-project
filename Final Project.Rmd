@@ -12,15 +12,26 @@ library(stringr)
 library(ggthemes)
 ```
 
-MCH Data Wrangling *Low BW Only
+MCH Data Wrangling *Low BW Only (for map)
 ```{r}
-#Data Wrangling for Year 2014-2018 Data 
+#Data Wrangling for Year 2014-2018 Data for Map.  
 lbwdata<- read.csv("low-and-very-low-birthweight-by-county-2014-2018 (1).csv", header = TRUE, stringsAsFactors = FALSE)
 lbwdata$Events[is.na(lbwdata$Events)] <- 0
 lbwdata <- lbwdata %>% group_by(Year, County, Total.Births) %>% summarize(Events = sum(Events)) 
 lbwdata <- lbwdata %>% filter(!County == "california")#removing the total count
 lbwdata <- lbwdata %>% mutate(rate = Events/Total.Births * 100)
 ``` 
+
+MCH Data Wranling *preterm birth only (for map)
+```{r}
+ptbirthdata<- read.csv("preterm-and-very-preterm-births-by-county-2010-2018-3.csv", header = TRUE, stringsAsFactors = FALSE)
+ptbirthdata$Events[is.na(ptbirthdata$Events)] <- 0
+ptbirthdata <- ptbirthdata[,-c(7,8)]
+ptbirthdata <- ptbirthdata %>% group_by(Year, County, Total.Births) %>% summarize(Events = sum(Events)) 
+ptbirthdata <- ptbirthdata %>% filter(!County == "california")#removing the total count
+ptbirthdata <- ptbirthdata %>% mutate(rate = Events/Total.Births * 100)
+
+```
 
 MCH Data Wrangling *New CDC Data (Lara)
 ```{r}
@@ -284,6 +295,17 @@ table1 <- Reduce(function(x, y) left_join(x, y, by = "county"), all_dat)
 long_table1 <- table1 %>% pivot_longer(!county, names_to = 'usage', values_to = "value")
 table1_ranks <- long_table1 %>% filter(str_starts(usage, "rank"))
 table1_lbs <- long_table1 %>% filter(str_starts(usage, "lbs"))
+
+long_table2 <- table1_2016 %>% pivot_longer(!county, names_to = 'usage', values_to = "value")
+table1_ranks_1516 <- long_table2 %>% filter(str_starts(usage, "rank"))
+table1_lbs_1516<- long_table2 %>% filter(str_starts(usage, "lbs"))
+
+table1_lbs$usage <- as.numeric(gsub("[^[:digit:]]+", "", table1_lbs$usage))
+table1_lbs_1516$usage <- as.numeric(gsub("[^[:digit:]]+", "", table1_lbs_1516$usage))
+combined_pesticide_use <- table1_lbs %>% full_join(table1_lbs_1516) 
+class(combined_pesticide_use$usage) 
+combined_pesticide_use <- combined_pesticide_use %>% group_by(usage) 
+combined_pesticide_use <- combined_pesticide_use %>% arrange(usage)
 ```
 
 Sonia's Work with LBW Data
@@ -395,6 +417,67 @@ leafletmap <- leaflet(SingleState,options = leafletOptions(zoomControl = FALSE, 
                 popup = ~as.factor(paste0("<b><font size=\"4\"><center>County: </b>",SingleState$NAME,"</font></center>","<b>% of Low Birth Weight Births: </b>", sprintf("%1.2f%%", SingleState$Rate),"<br/>"))) %>%
     addLegend(pal = pal, values = SingleState$Rate, opacity = 1)
 
+pesticide_averagebw_join %>% ggplot(aes(value, rate, color=County)) + geom_point()
+
 #see Sonia's app for the shiny app 
 ```
+Sonia's work with Preterm birth 
+```{r}
+cdc_pretermbirth <- read.delim("Preterm birth.txt",  sep ="\t", dec=".", header = TRUE, stringsAsFactors = FALSE)
+cdc_pretermbirth  <- cdc_pretermbirth [-c(422:472), ]
+cdc_pretermbirth  <- cdc_pretermbirth [ ,-c(1, 3, 5)]
+cdc_pretermbirth <- cdc_pretermbirth %>% rename("Events" = "Births")
+MCH.CDC.Data.Total <- read.delim("MCH CDC Data Total.txt",  sep ="\t", dec=".", header = TRUE, stringsAsFactors = FALSE)
+MCH.CDC.Data.Total <- MCH.CDC.Data.Total[,-c(1, 3, 5)]
+MCH.CDC.Data.Total <- MCH.CDC.Data.Total %>% rename("total_birth" = "Births")
 
+df1_pt <- full_join(cdc_pretermbirth , MCH.CDC.Data.Total, by=c("Year", "County"))
+
+df1_pt[df1_pt$County == "Alameda County, CA", "County"] <-"alameda"
+df1_pt[df1_pt$County == "Butte County, CA", "County"] <-"butte"
+df1_pt[df1_pt$County == "Contra Costa County, CA", "County"] <-"contra costa"
+df1_pt[df1_pt$County == "El Dorado County, CA", "County"] <-"el dorado"
+df1_pt[df1_pt$County == "Fresno County, CA", "County"] <-"fresno"
+df1_pt[df1_pt$County == "Humboldt County, CA", "County"] <-"humboldt"
+df1_pt[df1_pt$County == "Imperial County, CA", "County"] <-"imperial"
+df1_pt[df1_pt$County == "Kern County, CA", "County"] <-"kern"
+df1_pt[df1_pt$County == "Kings County, CA", "County"] <-"kings"
+df1_pt[df1_pt$County == "Los Angeles County, CA", "County"] <-"los angeles"
+df1_pt[df1_pt$County == "Madera County, CA", "County"] <-"madera"
+df1_pt[df1_pt$County == "Marin County, CA", "County"] <-"marin"
+df1_pt[df1_pt$County == "Contra Costa County, CA", "County"] <-"mariposa"
+df1_pt[df1_pt$County == "Merced County, CA", "County"] <-"merced"
+df1_pt[df1_pt$County == "Monterey County, CA", "County"] <-"monterey"
+df1_pt[df1_pt$County == "Napa County, CA", "County"] <-"napa"
+df1_pt[df1_pt$County == "Orange County, CA", "County"] <-"orange"
+df1_pt[df1_pt$County == "Placer County, CA", "County"] <-"placer"
+df1_pt[df1_pt$County == "Riverside County, CA", "County"] <-"riverside"
+df1_pt[df1_pt$County == "Sacramento County, CA", "County"] <-"sacramento"
+df1_pt[df1_pt$County == "San Bernardino County, CA", "County"] <-"san bernardino"
+df1_pt[df1_pt$County == "San Diego County, CA", "County"] <-"san diego"
+df1_pt[df1_pt$County == "San Francisco County, CA", "County"] <-"san francisco"
+df1_pt[df1_pt$County == "San Joaquin County, CA", "County"] <-"san joaquin"
+df1_pt[df1_pt$County == "San Luis Obispo County, CA", "County"] <-"san luis obispo"
+df1_pt[df1_pt$County == "San Mateo County, CA", "County"] <-"san mateo"
+df1_pt[df1_pt$County == "Santa Barbara County, CA", "County"] <-"santa barbara"
+df1_pt[df1_pt$County == "Santa Clara County, CA", "County"] <-"santa clara"
+df1_pt[df1_pt$County == "Santa Cruz County, CA", "County"] <-"santa cruz"
+df1_pt[df1_pt$County == "Shasta County, CA", "County"] <-"shasta"
+df1_pt[df1_pt$County == "Solano County, CA", "County"] <-"solano"
+df1_pt[df1_pt$County == "Sonoma County, CA", "County"] <-"sonoma"
+df1_pt[df1_pt$County == "Stanislaus County, CA", "County"] <-"stanislaus"
+df1_pt[df1_pt$County == "Tulare County, CA", "County"] <-"tulare"
+df1_pt[df1_pt$County == "Ventura County, CA", "County"] <-"ventura"
+df1_pt[df1_pt$County == "Yolo County, CA", "County"] <-"yolo"
+df1_pt <- df1_pt %>% mutate(County = str_to_title(County))
+df1_pt <- df1_pt %>% filter(!is.na("total_birth")) %>% filter(!is.na(Events)) %>% mutate(rate = Events/total_birth * 10^2)
+
+```
+SCATTERPLOT EXPLORATION 
+```{r}
+pesticide_averagebw_join %>% ggplot(aes(rate, value)) + geom_point(aes(color=County))
+
+pesticide_averagebw_join %>% filter(County %in% c("Fresno","Kern","San Joaquin", "Kings", "Madera", "Tulare")) %>% ggplot(aes(rate, value)) + geom_point(aes(color=County))
+pesticide_averagept_join %>% filter(County %in% c("Fresno","Kern","San Joaquin", "Kings", "Madera", "Tulare")) %>% ggplot(aes(rate, value)) + geom_point(aes(color=County))
+
+```

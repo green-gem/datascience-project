@@ -20,7 +20,7 @@ library(maptools)
 library(leaflet)
 library(scales)
 
-#data wrangling for 5-year lowbirth weight trend (2014-2018) 
+#data wrangling for 5-year lowbirth weight trend- for the leaflet map
 lbwdata<-read.csv(paste0(getwd(),"/low-and-very-low-birthweight-by-county-2014-2018 (1).csv"), header = TRUE, stringsAsFactors = FALSE)
 lbwdata <- lbwdata %>% mutate(County = str_to_title(County))
 lbwdata$Events[is.na(lbwdata$Events)] <- 0
@@ -33,6 +33,84 @@ head(CaliforniaCounty)
 california_map <- lbwdata %>% full_join(CaliforniaCounty, by = c("County" = "subregion")) %>% mutate(Rate = Events/Total.Births * 10^2)
 california_map <- california_map %>% mutate(County = str_to_title(County))
 
+#Data wrangling for preterm birth- for the leaflet map
+ptbirthdata<- read.csv("preterm-and-very-preterm-births-by-county-2010-2018-3.csv", header = TRUE, stringsAsFactors = FALSE)
+ptbirthdata$Events[is.na(ptbirthdata$Events)] <- 0
+ptbirthdata <- ptbirthdata[,-c(7,8)]
+ptbirthdata <- ptbirthdata %>% group_by(Year, County, Total.Births) %>% summarize(Events = sum(Events)) 
+ptbirthdata <- ptbirthdata %>% filter(!County == "california")#removing the total count
+ptbirthdata <- ptbirthdata %>% mutate(rate_pt = Events/Total.Births * 100)
+
+map <- readOGR(path.expand("cb_2018_us_county_20m.shp"),
+               layer = "cb_2018_us_county_20m", stringsAsFactors = FALSE)
+Statekey<-read.csv(paste0(getwd(),'/STATEFPtoSTATENAME_Key.csv'), colClasses=c('character'))
+map<-merge(x=map, y=Statekey, by="STATEFP", all=TRUE)
+SingleState <- subset(map, map$STATENAME %in% c(
+    "California"
+))
+
+ptbirthdata_2016 <- ptbirthdata %>% filter(Year == "2016") 
+spatial_pt <-sp::merge(x=SingleState, y=ptbirthdata_2016, by.x="NAME", by.y="County", by=x)
+
+bin <- c(5.5, 8.2, 9.1, 9.9, Inf)
+pal2 <- colorBin(
+    palette = "viridis",
+    domain = spatial_pt$rate_pt, n=7, bins=bin)
+
+#Data wrangling for preterm birth (CDC)
+cdc_pretermbirth <- read.delim("Preterm birth.txt",  sep ="\t", dec=".", header = TRUE, stringsAsFactors = FALSE)
+cdc_pretermbirth  <- cdc_pretermbirth [-c(422:472), ]
+cdc_pretermbirth  <- cdc_pretermbirth [ ,-c(1, 3, 5)]
+cdc_pretermbirth <- cdc_pretermbirth %>% rename("Events" = "Births")
+MCH.CDC.Data.Total <- read.delim("MCH CDC Data Total.txt",  sep ="\t", dec=".", header = TRUE, stringsAsFactors = FALSE)
+MCH.CDC.Data.Total <- MCH.CDC.Data.Total[,-c(1, 3, 5)]
+MCH.CDC.Data.Total <- MCH.CDC.Data.Total %>% rename("total_birth" = "Births")
+
+df1_pt <- full_join(cdc_pretermbirth , MCH.CDC.Data.Total, by=c("Year", "County"))
+
+df1_pt[df1_pt$County == "Alameda County, CA", "County"] <-"alameda"
+df1_pt[df1_pt$County == "Butte County, CA", "County"] <-"butte"
+df1_pt[df1_pt$County == "Contra Costa County, CA", "County"] <-"contra costa"
+df1_pt[df1_pt$County == "El Dorado County, CA", "County"] <-"el dorado"
+df1_pt[df1_pt$County == "Fresno County, CA", "County"] <-"fresno"
+df1_pt[df1_pt$County == "Humboldt County, CA", "County"] <-"humboldt"
+df1_pt[df1_pt$County == "Imperial County, CA", "County"] <-"imperial"
+df1_pt[df1_pt$County == "Kern County, CA", "County"] <-"kern"
+df1_pt[df1_pt$County == "Kings County, CA", "County"] <-"kings"
+df1_pt[df1_pt$County == "Los Angeles County, CA", "County"] <-"los angeles"
+df1_pt[df1_pt$County == "Madera County, CA", "County"] <-"madera"
+df1_pt[df1_pt$County == "Marin County, CA", "County"] <-"marin"
+df1_pt[df1_pt$County == "Contra Costa County, CA", "County"] <-"mariposa"
+df1_pt[df1_pt$County == "Merced County, CA", "County"] <-"merced"
+df1_pt[df1_pt$County == "Monterey County, CA", "County"] <-"monterey"
+df1_pt[df1_pt$County == "Napa County, CA", "County"] <-"napa"
+df1_pt[df1_pt$County == "Orange County, CA", "County"] <-"orange"
+df1_pt[df1_pt$County == "Placer County, CA", "County"] <-"placer"
+df1_pt[df1_pt$County == "Riverside County, CA", "County"] <-"riverside"
+df1_pt[df1_pt$County == "Sacramento County, CA", "County"] <-"sacramento"
+df1_pt[df1_pt$County == "San Bernardino County, CA", "County"] <-"san bernardino"
+df1_pt[df1_pt$County == "San Diego County, CA", "County"] <-"san diego"
+df1_pt[df1_pt$County == "San Francisco County, CA", "County"] <-"san francisco"
+df1_pt[df1_pt$County == "San Joaquin County, CA", "County"] <-"san joaquin"
+df1_pt[df1_pt$County == "San Luis Obispo County, CA", "County"] <-"san luis obispo"
+df1_pt[df1_pt$County == "San Mateo County, CA", "County"] <-"san mateo"
+df1_pt[df1_pt$County == "Santa Barbara County, CA", "County"] <-"santa barbara"
+df1_pt[df1_pt$County == "Santa Clara County, CA", "County"] <-"santa clara"
+df1_pt[df1_pt$County == "Santa Cruz County, CA", "County"] <-"santa cruz"
+df1_pt[df1_pt$County == "Shasta County, CA", "County"] <-"shasta"
+df1_pt[df1_pt$County == "Solano County, CA", "County"] <-"solano"
+df1_pt[df1_pt$County == "Sonoma County, CA", "County"] <-"sonoma"
+df1_pt[df1_pt$County == "Stanislaus County, CA", "County"] <-"stanislaus"
+df1_pt[df1_pt$County == "Tulare County, CA", "County"] <-"tulare"
+df1_pt[df1_pt$County == "Ventura County, CA", "County"] <-"ventura"
+df1_pt[df1_pt$County == "Yolo County, CA", "County"] <-"yolo"
+df1_pt <- df1_pt %>% mutate(County = str_to_title(County))
+df1_pt <- df1_pt %>% filter(!is.na("total_birth")) %>% filter(!is.na(Events)) %>% mutate(rate = Events/total_birth * 10^2)
+
+averagept <-df1_pt %>% select("County", "Year", "rate")
+pesticide_averagept_join <- averagept %>% inner_join(combined_pesticide_use, by = c("County" = "county", "Year" = "usage")) 
+
+
 #Creating Leaflet
 map <- readOGR(path.expand("cb_2018_us_county_20m.shp"),
                layer = "cb_2018_us_county_20m", stringsAsFactors = FALSE)
@@ -43,21 +121,12 @@ SingleState <- subset(map, map$STATENAME %in% c(
 ))
 
 lbwdata_2016 <- lbwdata %>% filter(Year == "2016") %>% mutate(Rate = Events/Total.Births*100)
-SingleState<-sp::merge(x=SingleState, y=lbwdata_2016, by.x="NAME", by.y="County", by=x)
+spatial_lbw <-sp::merge(x=SingleState, y=lbwdata_2016, by.x="NAME", by.y="County", by=x)
 
-pal <- colorNumeric(
+bins <- c(4.0,6.3,7.6,8.1, Inf)
+pal <- colorBin(
     palette = "viridis",
-    domain = SingleState$Rate, n=7)
-
-leafletmap <- leaflet(SingleState,options = leafletOptions(zoomControl = FALSE, zoomLevelFixed = FALSE, dragging=TRUE, minZoom = 3, maxZoom = 6)) %>% 
-    setView(lat = 36.778259, lng = -119.417931, zoom = 5) %>%
-    addPolygons(color = "#444444", weight = 1, smoothFactor = 0.5, 
-                opacity = 1.0, fillOpacity = 0.5, layerId = ~NAME,
-                fillColor = ~pal(Rate),
-                highlightOptions = highlightOptions(color = "white", weight = 2,
-                                                    bringToFront = TRUE), 
-                popup = ~as.factor(paste0("<b><font size=\"4\"><center>County: </b>",SingleState$NAME,"</font></center>","<b>% of Low Birth Weight Births: </b>", sprintf("%1.2f%%", SingleState$Rate),"<br/>"))) %>%
-    addLegend(pal = pal, values = SingleState$Rate, opacity = 1)
+    domain = spatial_lbw$Rate, n=7, bins=bins)
 
 
 
@@ -141,13 +210,18 @@ all_dat <- list(read_csv("table1_2007.csv")[1:3],
 
 table1 <- Reduce(function(x, y) left_join(x, y, by = "county"), all_dat)
 
-
 long_table1 <- table1 %>% pivot_longer(!county, names_to = 'usage', values_to = "value")
 table1_ranks <- long_table1 %>% filter(str_starts(usage, "rank"))
 table1_lbs <- long_table1 %>% filter(str_starts(usage, "lbs"))
 table1_lbs$usage <- as.numeric(gsub("[^[:digit:]]+", "", table1_lbs$usage))
+table1_lbs_1516$usage <- as.numeric(gsub("[^[:digit:]]+", "", table1_lbs_1516$usage))
+combined_pesticide_use <- table1_lbs %>% full_join(table1_lbs_1516) 
+combined_pesticide_use <- combined_pesticide_use %>% group_by(usage) 
+combined_pesticide_use <- combined_pesticide_use %>% arrange(usage)
+
 averagebw <-df2 %>% select("County", "Year", "rate")
-pesticide_averagebw_join <- averagebw %>% inner_join(table1_lbs, by = c("County" = "county", "Year" = "usage")) %>% filter(Year %in% c("2007", "2008", "2009", "2010", "2011", "2012", "2013", "2014"))
+pesticide_averagebw_join <- averagebw %>% inner_join(combined_pesticide_use, by = c("County" = "county", "Year" = "usage")) 
+
 
 #shinyapp 
 ui <- fluidPage(
@@ -157,104 +231,100 @@ ui <- fluidPage(
     tabsetPanel(
         tabPanel("LBW Data Map Exploration in California County", icon = icon("map-pin"),
                  sidebarPanel(
+                     radioButtons("outcomeinput", "Select a variable to display and click on a county to see its value:", 
+                                  choiceNames = list("% Low Birth Weight", "% Preterm Birth"), 
+                                  choiceValues = list("Rate", "rate_pt")),
                      p(strong("Low Birth Weight"), "is defined as babies who are born weighing less than 2500g. They 
                        are at greater risk of experiencing certain long-term complications later in life, including high blood pressure, diabetes, or 
-                       developmental delay. According to CDC, as of 2018, the national percentage of low birthweight rate is 8.28%"),
+                       developmental delay."),
                      br(),
-                     br(),
-                     strong("2016 Map Exploration"),
-                     p("On the top, we see a map of percentage of low birth weight (Year 2016) in the county of California. Please click on a county to see its specific percentage of low birth weight."), 
-                     br(),
-                     br(),
-                     br(),
-                     br(),
-                     strong("2014-2018 HeatMap Exploration"),
-                      p("The second map is a heatmap of low birth weight in the county of California from 2014-2018. Please click on the play button to see the trend in
-                        percentage of low birth weight across 5 years (2014-2018)."), 
-                     br(),
-                     br(),
-                     sliderInput("yearInput", "Year", min = 2014, max = 2018, value = 2014, step = 1, 
-                                 sep = "", ticks = FALSE, animate = TRUE)
+                     p(strong("Preterm Birth"), "is defined as babies who are born before 37 weeks of pregnancy. Premature birth can also lead to 
+                     short-term and long-term complications, including heart, GI, and immune system problems, and many chronic health issues.")
+                                  
                        ), #closing sidebarpanel
                  mainPanel(
                      h5(textOutput("caption1")), 
-                     leafletOutput("leafletmap"),
-                           br(), br(),
-                     h5(textOutput("caption2")),
-                           plotOutput("lbwheatmap"))),
+                     leafletOutput("leafletmap")
+                          
+                    )),
         
         #SECOND TAB- BAR GRAPH comparing LBW and pesticide use by county 
         tabPanel("Comparison of California Low Birth Weight and Pesticide use by County", icon = icon("chart-bar"),
-                 sidebarPanel(
-                     selectizeInput("countyInput", "Choose a County", choices = unique(pesticide_averagebw_join$County), multiple = TRUE, options = list(maxItems = 6)),
-                     sliderInput("year2Input", "Year", min = 2007, max = 2014, value = 2007, step = 1, 
+                 sidebarPanel( 
+                     p("We compared uses of pesticide and low birth weight/preterm birth outcomes by county in California. The data spans from 2007 to 2016 
+                       and we have only included counties that have a county population of >100,000."),
+                     br(),
+                     radioButtons("outcome2input", "Select a variable to display:", 
+                                  choiceNames = list("% Low Birth Weight", "% Preterm Birth"), 
+                                  choiceValues = list("Rate", "rate_pt")),
+                     #selectizeInput("countyInput", "Choose a County", choices = unique(pesticide_averagebw_join$County), multiple = TRUE, options = list(maxItems = 6)),
+                     sliderInput("year2Input", "Year", min = 2007, max = 2016, value = 2007, step = 1, 
                                  sep = "", ticks = FALSE, animate = TRUE),
                  ), #closing sidebarpanel 
                 mainPanel(
                     plotOutput("bargraph"),
-                          plotOutput("bargraph_pesticide"), 
-                               tableOutput("descriptiontable")
-                 )#closing mainpanel
+                    plotOutput("bargraph_pesticide")
+                    )#closing mainpanel
                  )#closing tabpanel
-    )
+    )#closing tabsetpanel
 )#closing fluidpage
 
 server <- function(input, output) {
-    
-    summary <- reactive({
-        california_map %>% 
-            filter(Year %in% input$yearInput)})
-    
-    # 5-year trend in heatmap (2014-2018)       
-    output$lbwheatmap <- renderPlot (
-        summary() %>%
-            ggplot(aes(long, lat, group = group)) + 
-            geom_polygon(aes(fill = Rate), color = "black") +
-            scale_fill_viridis_c(name = "% Low Birth Weight \n(<2500g)", option = "B", limits=c(0,15), breaks = c(2,4,6,8,10,12,14)) +
-            theme(panel.grid.major = element_blank(), 
-                  panel.background = element_blank(),
-                  axis.title = element_blank(), 
-                  axis.text = element_blank(),
-                  axis.ticks = element_blank()) +
-            coord_fixed(1.3) 
-    )
     
     summary_2 <- reactive({
         pesticide_averagebw_join %>% 
             filter(Year %in% input$year2Input)})
     
+    summary <- reactive({
+        pesticide_averagept_join %>% 
+            filter(Year %in% input$year2Input)})
+    
     output$bargraph <- renderPlot(
-        summary_2() %>% 
-            ggplot(aes(County, rate)) + geom_col() + ylab("Low Birth Weight Rate (%)") +xlab("") + 
-            theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 1/2))) 
+        if(input$outcome2input == "Rate"){
+            summary_2() %>% 
+                ggplot(aes(County, rate)) + geom_col() + ylab("Low Birth Weight Rate (%)") +xlab("") +
+                theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 1/2)) 
+            
+        }else{
+            summary() %>% 
+                ggplot(aes(County, rate)) + geom_col() + ylab("Preterm Birth Rate (%)") +xlab("") +
+                theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 1/2)) 
+        }
+            
+        )
+       
     
     output$bargraph_pesticide <- renderPlot(
         summary_2 () %>% 
             ggplot(aes(County, value)) + geom_col() + ylab("Pesticide Use (Pounds)") +xlab("") + 
-            theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 1/2))) 
+            theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 1/2)))
 
-    a <- reactive({
-        pesticide_averagebw_join %>% 
-            filter(County %in% input$countyInput,
-                   Year %in% input$yearInput)})
     
-    output$descriptiontable <- renderTable({a() %>% select("County" = County, "Low Birth Weight Infants(%)" = rate, "Pesticide Use (Pounds)" = value)
-    })
-    
- 
     output$leafletmap <- renderLeaflet({
-        leaflet(SingleState, options = leafletOptions(zoomControl = TRUE, zoomLevelFixed = FALSE, dragging=TRUE, minZoom = 5.3, maxZoom = 9)) %>% 
+        if(input$outcomeinput == "Rate"){
+        
+        leaflet(spatial_lbw, options = leafletOptions(zoomControl = TRUE, zoomLevelFixed = FALSE, dragging=TRUE, minZoom = 5.3, maxZoom = 9)) %>% 
             setView(lat = 36.778259, lng = -119.417931, zoom = 6) %>%
             addPolygons(color = "Black", weight = 1, smoothFactor = 0.5, 
                         opacity = 1.0, fillOpacity = 0.5, layerId = ~NAME,
                         fillColor = ~pal(Rate), 
-                        popup = ~as.factor(paste0("<b><font size=\"4\"><center>County: </b>",SingleState$NAME,"</font></center>","<b>% of Low Birth Weight Births: </b>", sprintf("%1.2f%%", SingleState$Rate),"<br/>"))) %>%
-            addLegend(pal = pal, values = SingleState$Rate, opacity = 1, title="% Low Birth Weight")
-        
+                        popup = ~as.factor(paste0("<b><font size=\"4\"><center>County: </b>",spatial_lbw$NAME,"</font></center>","<b>% of Low Birth Weight Births: </b>", sprintf("%1.2f%%", spatial_lbw$Rate),"<br/>"))) %>%
+            addLegend(pal = pal, values = spatial_lbw$Rate, opacity = 1, title="% Low Birth Weight (Quartiles)")
+        }else {
+                leaflet(spatial_pt, options = leafletOptions(zoomControl = TRUE, zoomLevelFixed = FALSE, dragging=TRUE, minZoom = 5.3, maxZoom = 9)) %>% 
+                    setView(lat = 36.778259, lng = -119.417931, zoom = 6) %>%
+                    addPolygons(color = "Black", weight = 1, smoothFactor = 0.5, 
+                                opacity = 1.0, fillOpacity = 0.5, layerId = ~NAME,
+                                fillColor = ~pal2(rate_pt), 
+                                popup = ~as.factor(paste0("<b><font size=\"4\"><center>County: </b>",spatial_pt$NAME,"</font></center>","<b>% of Preterm Birth: </b>", sprintf("%1.2f%%", spatial_pt$rate_pt),"<br/>"))) %>%
+                    addLegend(pal = pal2, values = spatial_pt$rate_pt, opacity = 1, title="% Preterm Birth (Quartiles)")
+            
+        }
     })
 
     output$caption1 <- renderText({"2016 Choropleth Map of California County"})    
-    output$caption2 <- renderText({"2014-2018 HeatMap of California County"})    
+       
+    
     
 
     
