@@ -141,13 +141,18 @@ all_dat <- list(read_csv("table1_2007.csv")[1:3],
 
 table1 <- Reduce(function(x, y) left_join(x, y, by = "county"), all_dat)
 
-
 long_table1 <- table1 %>% pivot_longer(!county, names_to = 'usage', values_to = "value")
 table1_ranks <- long_table1 %>% filter(str_starts(usage, "rank"))
 table1_lbs <- long_table1 %>% filter(str_starts(usage, "lbs"))
 table1_lbs$usage <- as.numeric(gsub("[^[:digit:]]+", "", table1_lbs$usage))
+table1_lbs_1516$usage <- as.numeric(gsub("[^[:digit:]]+", "", table1_lbs_1516$usage))
+combined_pesticide_use <- table1_lbs %>% full_join(table1_lbs_1516) 
+combined_pesticide_use <- combined_pesticide_use %>% group_by(usage) 
+combined_pesticide_use <- combined_pesticide_use %>% arrange(usage)
+
 averagebw <-df2 %>% select("County", "Year", "rate")
-pesticide_averagebw_join <- averagebw %>% inner_join(table1_lbs, by = c("County" = "county", "Year" = "usage")) %>% filter(Year %in% c("2007", "2008", "2009", "2010", "2011", "2012", "2013", "2014"))
+pesticide_averagebw_join <- averagebw %>% inner_join(combined_pesticide_use, by = c("County" = "county", "Year" = "usage")) 
+
 
 #shinyapp 
 ui <- fluidPage(
@@ -185,9 +190,13 @@ ui <- fluidPage(
         
         #SECOND TAB- BAR GRAPH comparing LBW and pesticide use by county 
         tabPanel("Comparison of California Low Birth Weight and Pesticide use by County", icon = icon("chart-bar"),
-                 sidebarPanel(
+                 sidebarPanel( 
+                     p("We compared uses of pesticide and low birth weight outcomes by county in California. The data spans from 2007 to 2016 
+                       and we have only included counties that have a county population of >100,000."),
+                     br(),
+                     p("Note: The county-specific rates and values are displayed in the table below"),
                      selectizeInput("countyInput", "Choose a County", choices = unique(pesticide_averagebw_join$County), multiple = TRUE, options = list(maxItems = 6)),
-                     sliderInput("year2Input", "Year", min = 2007, max = 2014, value = 2007, step = 1, 
+                     sliderInput("year2Input", "Year", min = 2007, max = 2016, value = 2007, step = 1, 
                                  sep = "", ticks = FALSE, animate = TRUE),
                  ), #closing sidebarpanel 
                 mainPanel(

@@ -205,6 +205,17 @@ table1 <- Reduce(function(x, y) left_join(x, y, by = "county"), all_dat)
 long_table1 <- table1 %>% pivot_longer(!county, names_to = 'usage', values_to = "value")
 table1_ranks <- long_table1 %>% filter(str_starts(usage, "rank"))
 table1_lbs <- long_table1 %>% filter(str_starts(usage, "lbs"))
+
+long_table2 <- table1_2016 %>% pivot_longer(!county, names_to = 'usage', values_to = "value")
+table1_ranks_1516 <- long_table2 %>% filter(str_starts(usage, "rank"))
+table1_lbs_1516<- long_table2 %>% filter(str_starts(usage, "lbs"))
+
+table1_lbs$usage <- as.numeric(gsub("[^[:digit:]]+", "", table1_lbs$usage))
+table1_lbs_1516$usage <- as.numeric(gsub("[^[:digit:]]+", "", table1_lbs_1516$usage))
+combined_pesticide_use <- table1_lbs %>% full_join(table1_lbs_1516) 
+class(combined_pesticide_use$usage) 
+combined_pesticide_use <- combined_pesticide_use %>% group_by(usage) 
+combined_pesticide_use <- combined_pesticide_use %>% arrange(usage)
 ```
 
 Sonia's Work with LBW Data
@@ -315,6 +326,8 @@ leafletmap <- leaflet(SingleState,options = leafletOptions(zoomControl = FALSE, 
                                                     bringToFront = TRUE), 
                 popup = ~as.factor(paste0("<b><font size=\"4\"><center>County: </b>",SingleState$NAME,"</font></center>","<b>% of Low Birth Weight Births: </b>", sprintf("%1.2f%%", SingleState$Rate),"<br/>"))) %>%
     addLegend(pal = pal, values = SingleState$Rate, opacity = 1)
+
+pesticide_averagebw_join %>% filter(County %in% c("Madera", "San Joaquin", "Fresno", "Kern")) %>% ggplot(aes(Year, rate, color=County)) + geom_line()
 
 #see Sonia's app for the shiny app 
 ```
