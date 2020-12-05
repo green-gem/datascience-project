@@ -107,8 +107,8 @@ df1_pt[df1_pt$County == "Yolo County, CA", "County"] <-"yolo"
 df1_pt <- df1_pt %>% mutate(County = str_to_title(County))
 df1_pt <- df1_pt %>% filter(!is.na("total_birth")) %>% filter(!is.na(Events)) %>% mutate(rate = Events/total_birth * 10^2)
 
-averagept <-df1_pt %>% select("County", "Year", "rate")
-pesticide_averagept_join <- averagept %>% inner_join(combined_pesticide_use, by = c("County" = "county", "Year" = "usage")) 
+# averagept <-df1_pt %>% select("County", "Year", "rate")
+# pesticide_averagept_join <- averagept %>% inner_join(combined_pesticide_use, by = c("County" = "county", "Year" = "usage")) 
 
 
 #Creating Leaflet
@@ -214,6 +214,12 @@ long_table1 <- table1 %>% pivot_longer(!county, names_to = 'usage', values_to = 
 table1_ranks <- long_table1 %>% filter(str_starts(usage, "rank"))
 table1_lbs <- long_table1 %>% filter(str_starts(usage, "lbs"))
 table1_lbs$usage <- as.numeric(gsub("[^[:digit:]]+", "", table1_lbs$usage))
+
+long_table2 <- table1_2016 %>% pivot_longer(!county, names_to = 'usage', values_to = "value")
+table1_ranks_1516 <- long_table2 %>% filter(str_starts(usage, "rank"))
+table1_lbs_1516<- long_table2 %>% filter(str_starts(usage, "lbs"))
+
+
 table1_lbs_1516$usage <- as.numeric(gsub("[^[:digit:]]+", "", table1_lbs_1516$usage))
 combined_pesticide_use <- table1_lbs %>% full_join(table1_lbs_1516) 
 combined_pesticide_use <- combined_pesticide_use %>% group_by(usage) 
@@ -221,6 +227,9 @@ combined_pesticide_use <- combined_pesticide_use %>% arrange(usage)
 
 averagebw <-df2 %>% select("County", "Year", "rate")
 pesticide_averagebw_join <- averagebw %>% inner_join(combined_pesticide_use, by = c("County" = "county", "Year" = "usage")) 
+
+averagept <-df1_pt %>% select("County", "Year", "rate")
+pesticide_averagept_join <- averagept %>% inner_join(combined_pesticide_use, by = c("County" = "county", "Year" = "usage")) 
 
 
 #shinyapp 
