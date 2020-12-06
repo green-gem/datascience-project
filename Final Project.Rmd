@@ -44,7 +44,7 @@ lbwdata <- lbwdata %>% filter(!County == "california")#removing the total count
 lbwdata <- lbwdata %>% mutate(rate = Events/Total.Births * 100)
 ``` 
 
-MCH Data Wranling *preterm birth only (for map)
+MCH Data Wrangling *preterm birth only (for map)
 ```{r}
 ptbirthdata<- read.csv("preterm-and-very-preterm-births-by-county-2010-2018-3.csv", header = TRUE, stringsAsFactors = FALSE)
 ptbirthdata$Events[is.na(ptbirthdata$Events)] <- 0
@@ -197,7 +197,6 @@ Birth Rate = The number of births divided by total population in the given year(
 
 Lara's Plots with CDC MCH Data
 ```{r eval=FALSE, include=FALSE}
-
 #can delete this code chunk, it set it not to run bc when it did, it would pop up the 3 mcf tables -- zainab
 View(MCH.CDC.Data)
 View(MCH.CDC.Data_Race) 
@@ -207,12 +206,16 @@ View(MCH.CDC.Data_Care)
 ```{r}
 #Fertility Rate GGPLOTS
 MCH.CDC.Data %>% group_by(County) %>% ggplot(aes(Year, Fertility.Rate, color = County)) + geom_line() + labs( y="Fertility Rate", title = "Fertility Rate by County", subtitle = "2007-2019", color = "County", caption = "Data Source: CDC WONDER Online Database")
+#Look at HW 2 Vaccine stuff to see how to best look at this. (Heat map, box plot)
 
 MCH.CDC.Data %>% group_by(County) %>% filter(County == "Fresno") %>% ggplot(aes(Year, Fertility.Rate, color = County)) + geom_line() + labs( y="Fertility Rate", title = "Fertility Rate in Fresno County", subtitle = "2007-2019", color = "County", caption = "Data Source: CDC WONDER Online Database")
 
 MCH.CDC.Data %>% group_by(County) %>% filter(County == "Kern") %>% ggplot(aes(Year, Fertility.Rate, color = County)) + geom_line() + labs( y="Fertility Rate", title = "Fertility Rate in Kern County", subtitle = "2007-2019", color = "County", caption = "Data Source: CDC WONDER Online Database")
 
 MCH.CDC.Data %>% group_by(County) %>% filter(County == "San Joaquin") %>% ggplot(aes(Year, Fertility.Rate, color = County)) + geom_line() + labs( y="Fertility Rate", title = "Fertility Rate in San Joaquin County", subtitle = "2007-2019", color = "County", caption = "Data Source: CDC WONDER Online Database")
+
+#facetgrid 
+#compare to non-agricultural areas 
 ```
 NOTE: Need to figure out a better way to do all county data visualization ... 
 
@@ -233,8 +236,14 @@ MCH.CDC.Data_Race %>% group_by(County) %>% filter(County == "Kern") %>%  ggplot(
 MCH.CDC.Data_Race %>% group_by(County) %>% filter(County == "San Joaquin") %>%  ggplot(aes(Year, Total.Population, color = Mothers.Race)) + geom_line() + labs( y="Total Population", title = "Racial Demographics in San Joaquin County", subtitle = "2007-2019", color = "Mother's Race", caption = "Data Source: CDC WONDER Online Database") 
 
 MCH.CDC.Data_Race %>% group_by(County) %>% filter(County == "San Joaquin") %>%  ggplot(aes(Year, Total.Population, color = Mothers.Race)) + geom_line()  + scale_y_log10() + labs( y="Total Population (Log 10 Transformation)", title = "Racial Demographics in San Joaquin County (Transformed Y Axis)", subtitle = "2007-2019", color = "Mother's Race", caption = "Data Source: CDC WONDER Online Database") 
+
+#hispanic & non-hispanic ?
+#keep transformed versions
+#non-agricultural counties 
+
 ```
 NOTE: Need to figure out a better way to do all county data visualization ... 
+NOTE: Pick one year and do bar plot (2016) or ()
 
 ```{r}
 #Race and Preterm Birth GGPLOTS
@@ -251,6 +260,8 @@ MCH.CDC.Data_Race %>% filter(County == "San Bernardino") %>% ggplot(aes(Year, Av
 MCH.CDC.Data_Race %>% filter(County == "Los Angeles") %>% ggplot(aes(Year, Average.LMP.Gestational.Age, color = Mothers.Race)) + geom_line() + labs( y="Average LMP Gestational Age (Weeks)", title = "Preterm Birth in Los Angeles County", subtitle = "2007-2019", color = "Mother's Race", caption = "Data Source: CDC WONDER Online Database") 
 
 MCH.CDC.Data_Race %>% filter(County == "San Diego") %>% ggplot(aes(Year, Average.LMP.Gestational.Age, color = Mothers.Race)) + geom_line() + labs( y="Average LMP Gestational Age (Weeks)", title = "Preterm Birth in San Diego", subtitle = "2007-2019", color = "Mother's Race", caption = "Data Source: CDC WONDER Online Database") 
+
+#add Tulare 
 ``` 
 NOTE: Need to figure out a better way to do all county data visualization ... 
 NOTE: Add Horizontal Line for Preterm Birth Cutoffs 
@@ -286,6 +297,8 @@ MCH.CDC.Data_Care %>% filter(County == "Los Angeles") %>% ggplot(aes(Year, Month
 MCH.CDC.Data_Care %>% filter(County == "San Diego") %>% ggplot(aes(Year, Month.Prenatal.Care.Began, color = Mothers.Race)) + geom_line() + labs( y="Month Prenatal Care Began", title = "Race and Prenatal Care Data in San Diego County", subtitle = "2007-2019", color = "Mother's Race", caption = "Data Source: CDC WONDER Online Database")
 ```
 NOTE: Fix all these graphs... 
+
+NOTE: ADD BIRTHWEIGHT AND RACE ANALYSIS 
 
 Pesticide Data Wrangling
 ```{r}
