@@ -10,6 +10,18 @@ library(pdftools)
 library(readr)
 library(stringr)
 library(ggthemes)
+
+library(shiny)
+library(shinyBS)
+library(RColorBrewer)
+library(shinydashboard)
+library(sp)
+library(rgeos)
+library(rgdal)
+library(maptools)
+library(leaflet)
+library(scales)
+library(maps)
 ```
 
 MCH Data Wrangling *Low BW Only (for map)
@@ -174,7 +186,9 @@ Variable Key:
 Birth Rate = The number of births divided by total population in the given year(s) [Per 1,000] 
 
 Lara's Plots with CDC MCH Data
-```{r}
+```{r eval=FALSE, include=FALSE}
+
+#can delete this code chunk, it set it not to run bc when it did, it would pop up the 3 mcf tables -- zainab
 View(MCH.CDC.Data)
 View(MCH.CDC.Data_Race) 
 View(MCH.CDC.Data_Care)
@@ -293,11 +307,11 @@ table1 <- Reduce(function(x, y) left_join(x, y, by = "county"), all_dat)
 
 
 long_table1 <- table1 %>% pivot_longer(!county, names_to = 'usage', values_to = "value")
-table1_ranks <- long_table1 %>% filter(str_starts(usage, "rank"))
+#table1_ranks <- long_table1 %>% filter(str_starts(usage, "rank"))
 table1_lbs <- long_table1 %>% filter(str_starts(usage, "lbs"))
 
 long_table2 <- table1_2016 %>% pivot_longer(!county, names_to = 'usage', values_to = "value")
-table1_ranks_1516 <- long_table2 %>% filter(str_starts(usage, "rank"))
+#table1_ranks_1516 <- long_table2 %>% filter(str_starts(usage, "rank"))
 table1_lbs_1516<- long_table2 %>% filter(str_starts(usage, "lbs"))
 
 table1_lbs$usage <- as.numeric(gsub("[^[:digit:]]+", "", table1_lbs$usage))
@@ -417,7 +431,8 @@ leafletmap <- leaflet(SingleState,options = leafletOptions(zoomControl = FALSE, 
                 popup = ~as.factor(paste0("<b><font size=\"4\"><center>County: </b>",SingleState$NAME,"</font></center>","<b>% of Low Birth Weight Births: </b>", sprintf("%1.2f%%", SingleState$Rate),"<br/>"))) %>%
     addLegend(pal = pal, values = SingleState$Rate, opacity = 1)
 
-pesticide_averagebw_join %>% ggplot(aes(value, rate, color=County)) + geom_point()
+#pesticide_averagebw_join %>% ggplot(aes(value, rate, color=County)) + geom_point() 
+#commenting out so zainab can knit,
 
 #see Sonia's app for the shiny app 
 ```
@@ -475,9 +490,10 @@ df1_pt <- df1_pt %>% filter(!is.na("total_birth")) %>% filter(!is.na(Events)) %>
 ```
 SCATTERPLOT EXPLORATION 
 ```{r}
-pesticide_averagebw_join %>% ggplot(aes(rate, value)) + geom_point(aes(color=County))
+#commenting out so zainab can knit
+#pesticide_averagebw_join %>% ggplot(aes(rate, value)) + geom_point(aes(color=County))
 
-pesticide_averagebw_join %>% filter(County %in% c("Fresno","Kern","San Joaquin", "Kings", "Madera", "Tulare")) %>% ggplot(aes(rate, value)) + geom_point(aes(color=County))
-pesticide_averagept_join %>% filter(County %in% c("Fresno","Kern","San Joaquin", "Kings", "Madera", "Tulare")) %>% ggplot(aes(rate, value)) + geom_point(aes(color=County))
+#pesticide_averagebw_join %>% filter(County %in% c("Fresno","Kern","San Joaquin", "Kings", "Madera", "Tulare")) %>% ggplot(aes(rate, value)) + geom_point(aes(color=County))
+#pesticide_averagept_join %>% filter(County %in% c("Fresno","Kern","San Joaquin", "Kings", "Madera", "Tulare")) %>% ggplot(aes(rate, value)) + geom_point(aes(color=County))
 
 ```
