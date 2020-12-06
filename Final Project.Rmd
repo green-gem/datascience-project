@@ -1,9 +1,19 @@
 ---
-title: "Final Project BST 260: The Effects of Pesticide Exposure on Maternal and Child Health (Lara, Sonia, Zainab)"
+title: "The Effects of Pesticide Exposure on Maternal and Child Health"
+subtitle: "Final Project BST 260 Fall 2020"
+author:
+  - Lara Rostomian
+  - Sonia Kim
+  - Zainab Soetan
 output: html_document
 ---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
 Load Packages
-```{r}
+```{r warning=FALSE}
 library(dplyr)
 library(tidyverse)
 library(pdftools)
