@@ -35,28 +35,87 @@ library(gridExtra)
 library(grid)
 ```
 
-MCH Data Wrangling *Low BW Only (for map)
+#MCH Data Wrangling *Low BW Only (for Map)
+We wanted to create a map to visualize the pattern of low birth weight in California. I initially used CDC WONDER database but it had very limited information, where it grouped rural and small county-level data to "unidentified counties." Thus, I consulted another data source from California Open Data Portal (https://data.ca.gov/dataset/live-births-with-low-and-very-low-birthweight). Following is the data cleaning process. 
 ```{r}
 #Data Wrangling for Year 2014-2018 Data for Map.  
-lbwdata<- read.csv("low-and-very-low-birthweight-by-county-2014-2018 (1).csv", header = TRUE, stringsAsFactors = FALSE)
+lbwdata<-read.csv("./low-and-very-low-birthweight-by-county-2014-2018 (1).csv", header = TRUE, stringsAsFactors = FALSE)
+lbwdata <- lbwdata %>% mutate(County = str_to_title(County))
 lbwdata$Events[is.na(lbwdata$Events)] <- 0
 lbwdata <- lbwdata %>% group_by(Year, County, Total.Births) %>% summarize(Events = sum(Events)) 
-lbwdata <- lbwdata %>% filter(!County == "california")#removing the total count
-lbwdata <- lbwdata %>% mutate(rate = Events/Total.Births * 100)
+lbwdata <- lbwdata %>% filter(!County == "california") 
+lbwdata <- lbwdata %>% mutate(Rate = Events/Total.Births)
 ``` 
 
-MCH Data Wrangling *preterm birth only (for map)
+#MCH Data Wrangling *preterm birth only (for map)
+We also wanted to create another map to visualize the pattern of preterm birth in California. Again, I ran into a similar problem using CDC WONDER database. Thus, I consulted the following database: https://data.chhs.ca.gov/dataset/preterm-and-very-preterm-live-births/resource/cff79e2d-6ecf-4158-9e4f-7078632220ee Following is the cleaning process
 ```{r}
 ptbirthdata<- read.csv("preterm-and-very-preterm-births-by-county-2010-2018-3.csv", header = TRUE, stringsAsFactors = FALSE)
 ptbirthdata$Events[is.na(ptbirthdata$Events)] <- 0
 ptbirthdata <- ptbirthdata[,-c(7,8)]
 ptbirthdata <- ptbirthdata %>% group_by(Year, County, Total.Births) %>% summarize(Events = sum(Events)) 
 ptbirthdata <- ptbirthdata %>% filter(!County == "california")#removing the total count
-ptbirthdata <- ptbirthdata %>% mutate(rate = Events/Total.Births * 100)
+ptbirthdata <- ptbirthdata %>% mutate(rate_pt = Events/Total.Births * 100)
 
 ```
 
-MCH Data Wrangling *New CDC Data (Lara)
+#Code for creating the map- leaflet map using lbw data (See Shiny app for the final result) 
+After cleaning the dataset, I then looked at creating a "spatial" map. Following is the wrangling process of generating a map that shapes the map of California, and merging that spatial object with low birth weight data that I wrangled earlier to generate a leaflet map. My main motivation of using a leaflet map was because I wanted to create a map where the user can see which county is which and is able to zoom in and out. Note that there are counties that had NA cases (perhaps for counties that had a very small population)  
+```{r}
+map <- readOGR(path.expand("cb_2018_us_county_20m.shp"),
+               layer = "cb_2018_us_county_20m", stringsAsFactors = FALSE)
+Statekey<-read.csv('./STATEFPtoSTATENAME_Key.csv', colClasses=c('character'))
+map<-merge(x=map, y=Statekey, by="STATEFP", all=TRUE)
+SingleState <- subset(map, map$STATENAME %in% c(
+    "California"
+))
+
+lbwdata_2016 <- lbwdata %>% filter(Year == "2016") %>% mutate(Rate = Events/Total.Births*100)
+spatial_lbw <-sp::merge(x=SingleState, y=lbwdata_2016, by.x="NAME", by.y="County", by=x)
+
+bins <- c(4.0,6.3,7.6,8.1, Inf)
+pal <- colorBin(
+    palette = "viridis",
+    domain = spatial_lbw$Rate, n=7, bins=bins)
+
+leaflet(spatial_lbw, options = leafletOptions(zoomControl = TRUE, zoomLevelFixed = FALSE, dragging=TRUE, minZoom = 5.3, maxZoom = 9)) %>% 
+            setView(lat = 36.778259, lng = -119.417931, zoom = 6) %>%
+            addPolygons(color = "Black", weight = 1, smoothFactor = 0.5, 
+                        opacity = 1.0, fillOpacity = 0.5, layerId = ~NAME,
+                        fillColor = ~pal(Rate), 
+                        popup = ~as.factor(paste0("<b><font size=\"4\"><center>County: </b>",spatial_lbw$NAME,"</font></center>","<b>% of Low Birth Weight Births: </b>", sprintf("%1.2f%%", spatial_lbw$Rate),"<br/>"))) %>%
+            addLegend(pal = pal, values = spatial_lbw$Rate, opacity = 1, title="% Low Birth Weight (Quartiles)")
+```
+
+#Code for creating the map- leaflet map using preterm birth data I wrangled earlier (See Shiny app for the final result) 
+This is a similar spatial map but for pre-term birth. Following is the wrangling process of generating a map that shapes the map of California, and merging that spatial object with pre-term birth data that I wrangled earlier to generate a leaflet map. Note that there are counties that had NA cases (perhaps for counties that had a very small population)  
+```{r}
+map <- readOGR(path.expand("cb_2018_us_county_20m.shp"),
+               layer = "cb_2018_us_county_20m", stringsAsFactors = FALSE)
+Statekey<-read.csv('./STATEFPtoSTATENAME_Key.csv', colClasses=c('character'))
+map<-merge(x=map, y=Statekey, by="STATEFP", all=TRUE)
+SingleState <- subset(map, map$STATENAME %in% c(
+    "California"
+))
+
+ptbirthdata_2016 <- ptbirthdata %>% filter(Year == "2016") 
+spatial_pt <-sp::merge(x=SingleState, y=ptbirthdata_2016, by.x="NAME", by.y="County", by=x)
+
+bin <- c(5.5, 8.2, 9.1, 9.9, Inf)
+pal2 <- colorBin(
+    palette = "plasma",
+    domain = spatial_pt$rate_pt, n=7, bins=bin)
+
+leaflet(spatial_pt, options = leafletOptions(zoomControl = TRUE, zoomLevelFixed = FALSE, dragging=TRUE, minZoom = 5.3, maxZoom = 9)) %>% 
+                    setView(lat = 36.778259, lng = -119.417931, zoom = 6) %>%
+                    addPolygons(color = "Black", weight = 1, smoothFactor = 0.5, 
+                                opacity = 1.0, fillOpacity = 0.5, layerId = ~NAME,
+                                fillColor = ~pal2(rate_pt), 
+                                popup = ~as.factor(paste0("<b><font size=\"4\"><center>County: </b>",spatial_pt$NAME,"</font></center>","<b>% of Preterm Birth: </b>", sprintf("%1.2f%%", spatial_pt$rate_pt),"<br/>"))) %>% addLegend(pal = pal2, values = spatial_pt$rate_pt, opacity = 1, title="% Preterm Birth (Quartiles)")
+            
+```
+
+#MCH Data Wrangling *New CDC Data (Lara)
 ```{r}
 #Data Wrangling for CDC Data (COMPLETE)
 MCH.CDC.Data <- read.delim("NatalityTOTAL.txt",  sep ="\t", dec=".", header = TRUE, stringsAsFactors = FALSE)
@@ -197,7 +256,7 @@ Variable Key:
 Birth Rate = The number of births divided by total population in the given year(s) [Per 1,000] 
 
 
-Lara's Plots with CDC Data (Exploratory Analysis)
+#Lara's Plots with CDC Data (Exploratory Analysis)
 ```{r}
 #Fertility Rate GGPLOTS
 MCH.CDC.Data %>% 
@@ -501,7 +560,7 @@ MCH.CDC.Data_Race %>% filter(County == "Tulare") %>% ggplot(aes(Year, Average.Bi
 
 ```
 
-Pesticide Data Wrangling
+#Pesticide Data Wrangling
 ```{r}
 county_ranks16 <- read_delim("table1_county_rank_2016.txt", "\t", escape_double = FALSE, trim_ws = TRUE)
 repro_lbs16 <- read_delim("table3_reproductive_lbs_2016.txt", "\t", escape_double = FALSE, trim_ws = TRUE)
@@ -546,7 +605,8 @@ combined_pesticide_use <- combined_pesticide_use %>% group_by(usage)
 combined_pesticide_use <- combined_pesticide_use %>% arrange(usage)
 ```
 
-Sonia's Work with LBW Data
+#Sonia's Work with LBW Data
+This is my data wrangling process for low birth weight for the CDC WONDER database. By default, CDC WONDER live birth database only displayed counties that had a county population >100,000. I only looked at low birth rate here and this is for my shiny app bar graph. 
 ```{r}
 #MCH_CDC Data for low birth weight 
 #data wrangling mch cdc data
@@ -604,63 +664,10 @@ df2[df2$County == "Tulare County, CA", "County"] <-"tulare"
 df2[df2$County == "Ventura County, CA", "County"] <-"ventura"
 df2[df2$County == "Yolo County, CA", "County"] <-"yolo"
 df2 <- df2 %>% filter(!is.na(total_births)) %>% filter(!is.na(cases)) %>% mutate(rate = cases/total_births * 10^2)
-
-
-#Histogram by county  
-lbwdata %>% 
-  filter(Year == 2014 & !is.na(rate)) %>% 
-  ggplot(aes(County, rate)) +
-  geom_bar(stat = "identity") +
-  theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 1/2))
- 
-#Heatmap 
-library(maps)
-CaliforniaCounty <- map_data("county", "california")
-head(CaliforniaCounty)
-
-CaliforniaCounty %>% ggplot(aes(x = long, y = lat, group = group)) + 
-                  geom_polygon(fill = "white", color = "black") +
-                  theme(panel.grid.major = element_blank(), 
-                        panel.background = element_blank(),
-                        axis.title = element_blank(), 
-                        axis.text = element_blank(),
-                        axis.ticks = element_blank()) +
-                  coord_fixed(1.3)
-
-california_map <- lbwdata %>% full_join(CaliforniaCounty, by = c("County" = "subregion")) %>% mutate(rate = Events/Total.Births * 10^2)
-
-#Creating Leaflet map data wrangling
-map <- readOGR(path.expand("cb_2018_us_county_20m.shp"),
-               layer = "cb_2018_us_county_20m", stringsAsFactors = FALSE)
-Statekey<-read.csv(paste0(getwd(),'/STATEFPtoSTATENAME_Key.csv'), colClasses=c('character'))
-map<-merge(x=map, y=Statekey, by="STATEFP", all=TRUE)
-SingleState <- subset(map, map$STATENAME %in% c(
-    "California"
-))
-
-lbwdata_2018 <- lbwdata %>% filter(Year == "2018") %>% mutate(Rate = Events/Total.Births*100)
-SingleState<-sp::merge(x=SingleState, y=lbwdata_2018, by.x="NAME", by.y="County", by=x)
-
-pal <- colorNumeric(
-    palette = "Spectral",
-    domain = SingleState$Rate, n=7)
-
-leafletmap <- leaflet(SingleState,options = leafletOptions(zoomControl = FALSE, zoomLevelFixed = FALSE, dragging=TRUE, minZoom = 3, maxZoom = 6)) %>% 
-    setView(lat = 36.778259, lng = -119.417931, zoom = 5) %>%
-    addPolygons(color = "#444444", weight = 1, smoothFactor = 0.5, 
-                opacity = 1.0, fillOpacity = 0.5, layerId = ~NAME,
-                fillColor = ~pal(Rate),
-                highlightOptions = highlightOptions(color = "white", weight = 2,
-                                                    bringToFront = TRUE), 
-                popup = ~as.factor(paste0("<b><font size=\"4\"><center>County: </b>",SingleState$NAME,"</font></center>","<b>% of Low Birth Weight Births: </b>", sprintf("%1.2f%%", SingleState$Rate),"<br/>"))) %>%
-    addLegend(pal = pal, values = SingleState$Rate, opacity = 1)
-
-#pesticide_averagebw_join %>% ggplot(aes(value, rate, color=County)) + geom_point() 
-#commenting out so zainab can knit,
-
-#see Sonia's app for the shiny app 
+df2$County <- df2$County %>% str_to_title()
 ```
-Sonia's work with Preterm birth 
+#Sonia's CDC WONDER database work with Preterm birth 
+This is my data wrangling process for preterm birth for the CDC WONDER database. By default, CDC WONDER live birth database only displayed counties that had a county population >100,000. I only looked at preterm birth here and this is for my shiny app bar graph. 
 ```{r}
 cdc_pretermbirth <- read.delim("Preterm birth.txt",  sep ="\t", dec=".", header = TRUE, stringsAsFactors = FALSE)
 cdc_pretermbirth  <- cdc_pretermbirth [-c(422:472), ]
@@ -712,12 +719,89 @@ df1_pt <- df1_pt %>% mutate(County = str_to_title(County))
 df1_pt <- df1_pt %>% filter(!is.na("total_birth")) %>% filter(!is.na(Events)) %>% mutate(rate = Events/total_birth * 10^2)
 
 ```
-SCATTERPLOT EXPLORATION 
+
+#Sonia's data joining of CDC WONDER live birth data (low birth weight and pre-term birth) and pesticide data 
+I then joined the CDC WONDER data (low birth weight and preterm birth) and Zainab's wrangled pesticide daa to come up with a joint data. I then generated bargraphs to visualize the trend across a span of 2007-2016 (Please see shiny app). We noticed that Fresno and Kern county were the two top counties that used the highest amounts of pesticide and found out that San Joaquin Valley is a region that's agriculturally productive. 
 ```{r}
-#commenting out so zainab can knit
-#pesticide_averagebw_join %>% ggplot(aes(rate, value)) + geom_point(aes(color=County))
+county_ranks16 <- read_delim("table1_county_rank_2016.txt", "\t", escape_double = FALSE, trim_ws = TRUE)
+repro_lbs16 <- read_delim("table3_reproductive_lbs_2016.txt", "\t", escape_double = FALSE, trim_ws = TRUE)
+repro_acre16 <- read_delim("table4_reproductive_acres_2016.txt", "\t", escape_double = FALSE, trim_ws = TRUE)
 
-#pesticide_averagebw_join %>% filter(County %in% c("Fresno","Kern","San Joaquin", "Kings", "Madera", "Tulare")) %>% ggplot(aes(rate, value)) + geom_point(aes(color=County))
-#pesticide_averagept_join %>% filter(County %in% c("Fresno","Kern","San Joaquin", "Kings", "Madera", "Tulare")) %>% ggplot(aes(rate, value)) + geom_point(aes(color=County))
+table1_2016 <- county_ranks16 %>% transmute(county = COUNTY, 
+                                            lbs_2015 = LBS_2015, rank_2015 = RANK_2015, 
+                                            lbs_2016 = LBS_2016, rank_2016 = RANK_2016)
 
+all_dat <- list(read_csv("table1_2007.csv")[1:3],
+                read_csv("table1_2008.csv")[1:3],
+                read_csv("table1_2009.csv")[1:3],
+                read_csv("table1_2010.csv")[1:3],
+                read_csv("table1_2011.csv")[1:3],
+                read_csv("table1_2012.csv")[1:3],
+                read_csv("table1_2013.csv")[1:3],
+                read_csv("table1_2014.csv")[1:3],
+                read_csv("table1_2015.csv")[1:3])
+
+
+table1 <- Reduce(function(x, y) left_join(x, y, by = "county"), all_dat)
+
+long_table1 <- table1 %>% pivot_longer(!county, names_to = 'usage', values_to = "value")
+table1_ranks <- long_table1 %>% filter(str_starts(usage, "rank"))
+table1_lbs <- long_table1 %>% filter(str_starts(usage, "lbs"))
+table1_lbs$usage <- as.numeric(gsub("[^[:digit:]]+", "", table1_lbs$usage))
+
+long_table2 <- table1_2016 %>% pivot_longer(!county, names_to = 'usage', values_to = "value")
+table1_ranks_1516 <- long_table2 %>% filter(str_starts(usage, "rank"))
+table1_lbs_1516<- long_table2 %>% filter(str_starts(usage, "lbs"))
+
+
+table1_lbs_1516$usage <- as.numeric(gsub("[^[:digit:]]+", "", table1_lbs_1516$usage))
+combined_pesticide_use <- table1_lbs %>% full_join(table1_lbs_1516) 
+combined_pesticide_use <- combined_pesticide_use %>% group_by(usage) 
+combined_pesticide_use <- combined_pesticide_use %>% arrange(usage)
+
+averagebw <-df2 %>% select("County", "Year", "rate")
+pesticide_averagebw_join <- averagebw %>% inner_join(combined_pesticide_use, by = c("County" = "county", "Year" = "usage")) 
+
+averagept <-df1_pt %>% select("County", "Year", "rate")
+pesticide_averagept_join <- averagept %>% inner_join(combined_pesticide_use, by = c("County" = "county", "Year" = "usage")) 
+
+#bar graph of low birth weight
+pesticide_averagebw_join %>% ggplot(aes(County, rate)) + geom_col() + ylab("Low Birth Weight Rate (%)") +xlab("") +
+                theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 1/2)) 
+
+#bar graph of pesticide 
+pesticide_averagept_join %>% ggplot(aes(County, value)) + geom_col() + ylab("Pesticide Use (Pounds)") +xlab("") + 
+            theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 1/2))
+
+```
+#Code for creating the map- leaflet map using preterm birth data I wrangled earlier (See Shiny app for the final result) 
+This is a similar spatial map but for pesticide us. Following is the wrangling process of generating a map that shapes the map of California, and merging that spatial object with pesticide use that I wrangled earlier to generate a leaflet map. 
+```{r}
+averagept_df <- combined_pesticide_use %>% filter(usage == "2016")
+
+map <- readOGR(path.expand("cb_2018_us_county_20m.shp"),
+               layer = "cb_2018_us_county_20m", stringsAsFactors = FALSE)
+Statekey<-read.csv('./STATEFPtoSTATENAME_Key.csv', colClasses=c('character'))
+map<-merge(x=map, y=Statekey, by="STATEFP", all=TRUE)
+SingleState <- subset(map, map$STATENAME %in% c(
+    "California"
+))
+
+spatial_pesticide <-sp::merge(x=SingleState, y=averagept_df, by.x="NAME", by.y="county", by=x)
+
+binpes <- c(200, 100145, 1131454, 3345277, Inf)
+pal3 <- colorBin(
+    palette = "magma",
+    domain = spatial_pesticide$value, n=7, bins=binpes)
+
+leaflet(spatial_pesticide, options = leafletOptions(zoomControl = TRUE, zoomLevelFixed = FALSE, dragging=TRUE, minZoom = 5.3, maxZoom = 9)) %>% 
+                setView(lat = 36.778259, lng = -119.417931, zoom = 6) %>%
+                addPolygons(color = "Black", weight = 1, smoothFactor = 0.5, 
+                            opacity = 1.0, fillOpacity = 0.5, layerId = ~NAME,
+                            fillColor = ~pal3(value), 
+                            popup = ~as.factor(paste0("<b><font size=\"4\"><center>County: </b>",spatial_pesticide$NAME,"</font></center>","Amounts of Pesticides used </b>", sprintf("%1.2f", spatial_pesticide$value),"<br/>"))) %>%
+                addLegend(pal = pal3, values = spatial_pesticide$value, opacity = 1, title="Amounts of Pesticide Used (Pounds)")
+        
+    
+```
 ```
