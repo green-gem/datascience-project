@@ -7,6 +7,17 @@ author:
   - Zainab Soetan
 output: html_document
 ---
+Overview and Motivation: Provide an overview of the project goals and the motivation for it. Consider that this will be read by people who did not see your project proposal.
+
+Related Work: Anything that inspired you, such as a paper, a web site, or something we discussed in class.
+
+Initial Questions: What questions are you trying to answer? How did these questions evolve over the course of the project? What new questions did you consider in the course of your analysis?
+
+Data: Source, scraping method, cleanup, etc.
+
+Exploratory Analysis: What visualizations did you use to look at your data in different ways? What are the different statistical methods you considered? Justify the decisions you made, and show any major changes to your ideas. How did you reach these conclusions?
+
+Final Analysis: What did you learn about the data? How did you answer the questions? How can you justify your answers? Note that 1 type of analysis per team member is required. A Shiny app counts as a type of analysis.
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
@@ -35,7 +46,7 @@ library(gridExtra)
 library(grid)
 ```
 
-#MCH Data Wrangling *Low BW Only (for Map)
+MCH Data Wrangling *Low BW Only (for Map)
 We wanted to create a map to visualize the pattern of low birth weight in California. I initially used CDC WONDER database but it had very limited information, where it grouped rural and small county-level data to "unidentified counties." Thus, I consulted another data source from California Open Data Portal (https://data.ca.gov/dataset/live-births-with-low-and-very-low-birthweight). Following is the data cleaning process. 
 ```{r}
 #Data Wrangling for Year 2014-2018 Data for Map.  
@@ -47,7 +58,7 @@ lbwdata <- lbwdata %>% filter(!County == "california")
 lbwdata <- lbwdata %>% mutate(Rate = Events/Total.Births)
 ``` 
 
-#MCH Data Wrangling *preterm birth only (for map)
+MCH Data Wrangling *Preterm Birth Only (for map)
 We also wanted to create another map to visualize the pattern of preterm birth in California. Again, I ran into a similar problem using CDC WONDER database. Thus, I consulted the following database: https://data.chhs.ca.gov/dataset/preterm-and-very-preterm-live-births/resource/cff79e2d-6ecf-4158-9e4f-7078632220ee Following is the cleaning process
 ```{r}
 ptbirthdata<- read.csv("preterm-and-very-preterm-births-by-county-2010-2018-3.csv", header = TRUE, stringsAsFactors = FALSE)
@@ -59,7 +70,7 @@ ptbirthdata <- ptbirthdata %>% mutate(rate_pt = Events/Total.Births * 100)
 
 ```
 
-#Code for creating the map- leaflet map using lbw data (See Shiny app for the final result) 
+Code for Creating the Map - Leaflet Map Using LBW Data (See Shiny App for the Final Result) 
 After cleaning the dataset, I then looked at creating a "spatial" map. Following is the wrangling process of generating a map that shapes the map of California, and merging that spatial object with low birth weight data that I wrangled earlier to generate a leaflet map. My main motivation of using a leaflet map was because I wanted to create a map where the user can see which county is which and is able to zoom in and out. Note that there are counties that had NA cases (perhaps for counties that had a very small population)  
 ```{r}
 map <- readOGR(path.expand("cb_2018_us_county_20m.shp"),
@@ -87,8 +98,9 @@ leaflet(spatial_lbw, options = leafletOptions(zoomControl = TRUE, zoomLevelFixed
             addLegend(pal = pal, values = spatial_lbw$Rate, opacity = 1, title="% Low Birth Weight (Quartiles)")
 ```
 
-#Code for creating the map- leaflet map using preterm birth data I wrangled earlier (See Shiny app for the final result) 
+Code for Creating the Map - Leaflet Map Using Preterm Birth Data I Wrangled Earlier (See Shiny App for the Final Result) 
 This is a similar spatial map but for pre-term birth. Following is the wrangling process of generating a map that shapes the map of California, and merging that spatial object with pre-term birth data that I wrangled earlier to generate a leaflet map. Note that there are counties that had NA cases (perhaps for counties that had a very small population)  
+
 ```{r}
 map <- readOGR(path.expand("cb_2018_us_county_20m.shp"),
                layer = "cb_2018_us_county_20m", stringsAsFactors = FALSE)
@@ -115,7 +127,7 @@ leaflet(spatial_pt, options = leafletOptions(zoomControl = TRUE, zoomLevelFixed 
             
 ```
 
-#MCH Data Wrangling *New CDC Data (Lara)
+MCH Data Wrangling *New CDC Data (Lara)
 ```{r}
 #Data Wrangling for CDC Data (COMPLETE)
 MCH.CDC.Data <- read.delim("NatalityTOTAL.txt",  sep ="\t", dec=".", header = TRUE, stringsAsFactors = FALSE)
@@ -256,7 +268,7 @@ Variable Key:
 Birth Rate = The number of births divided by total population in the given year(s) [Per 1,000] 
 
 
-#Lara's Plots with CDC Data (Exploratory Analysis)
+Lara's Plots with CDC Data (Exploratory Analysis)
 ```{r}
 #Fertility Rate GGPLOTS
 MCH.CDC.Data %>% 
@@ -350,7 +362,6 @@ MCH.CDC.Data_Race %>% filter(County == "San Diego") %>% ggplot(aes(Year, Fertili
 MCH.CDC.Data_Race %>% filter(County == "Tulare") %>% ggplot(aes(Year, Fertility.Rate, color = Mothers.Race)) + geom_line() + labs( y="Fertility Rate", title = "Race and Fertility Data in Tulare County", subtitle = "2007-2019", color = "Mother's Race", caption = "Data Source: CDC WONDER Online Database")
 
 ```
-
 
 ```{r}
 #Racial Demographic GGPLOTS
@@ -560,7 +571,7 @@ MCH.CDC.Data_Race %>% filter(County == "Tulare") %>% ggplot(aes(Year, Average.Bi
 
 ```
 
-#Pesticide Data Wrangling
+Pesticide Data Wrangling
 ```{r}
 county_ranks16 <- read_delim("table1_county_rank_2016.txt", "\t", escape_double = FALSE, trim_ws = TRUE)
 repro_lbs16 <- read_delim("table3_reproductive_lbs_2016.txt", "\t", escape_double = FALSE, trim_ws = TRUE)
@@ -605,7 +616,7 @@ combined_pesticide_use <- combined_pesticide_use %>% group_by(usage)
 combined_pesticide_use <- combined_pesticide_use %>% arrange(usage)
 ```
 
-#Sonia's Work with LBW Data
+Sonia's Work with LBW Data:
 This is my data wrangling process for low birth weight for the CDC WONDER database. By default, CDC WONDER live birth database only displayed counties that had a county population >100,000. I only looked at low birth rate here and this is for my shiny app bar graph. 
 ```{r}
 #MCH_CDC Data for low birth weight 
@@ -666,7 +677,8 @@ df2[df2$County == "Yolo County, CA", "County"] <-"yolo"
 df2 <- df2 %>% filter(!is.na(total_births)) %>% filter(!is.na(cases)) %>% mutate(rate = cases/total_births * 10^2)
 df2$County <- df2$County %>% str_to_title()
 ```
-#Sonia's CDC WONDER database work with Preterm birth 
+
+Sonia's CDC WONDER Database Work With Preterm Birth:
 This is my data wrangling process for preterm birth for the CDC WONDER database. By default, CDC WONDER live birth database only displayed counties that had a county population >100,000. I only looked at preterm birth here and this is for my shiny app bar graph. 
 ```{r}
 cdc_pretermbirth <- read.delim("Preterm birth.txt",  sep ="\t", dec=".", header = TRUE, stringsAsFactors = FALSE)
@@ -720,8 +732,8 @@ df1_pt <- df1_pt %>% filter(!is.na("total_birth")) %>% filter(!is.na(Events)) %>
 
 ```
 
-#Sonia's data joining of CDC WONDER live birth data (low birth weight and pre-term birth) and pesticide data 
-I then joined the CDC WONDER data (low birth weight and preterm birth) and Zainab's wrangled pesticide daa to come up with a joint data. I then generated bargraphs to visualize the trend across a span of 2007-2016 (Please see shiny app). We noticed that Fresno and Kern county were the two top counties that used the highest amounts of pesticide and found out that San Joaquin Valley is a region that's agriculturally productive. 
+Sonia's Data Joining of CDC WONDER Live Birth Data (Low Birth Weight and Pre-Term Birth) and Pesticide Data 
+I then joined the CDC WONDER data (low birth weight and preterm birth) and Zainab's wrangled pesticide data to come up with a joint data. I then generated bar graphs to visualize the trend across a span of 2007-2016 (Please see shiny app). We noticed that Fresno and Kern county were the two top counties that used the highest amounts of pesticide and found out that San Joaquin Valley is a region that's agriculturally productive. 
 ```{r}
 county_ranks16 <- read_delim("table1_county_rank_2016.txt", "\t", escape_double = FALSE, trim_ws = TRUE)
 repro_lbs16 <- read_delim("table3_reproductive_lbs_2016.txt", "\t", escape_double = FALSE, trim_ws = TRUE)
@@ -774,7 +786,8 @@ pesticide_averagept_join %>% ggplot(aes(County, value)) + geom_col() + ylab("Pes
             theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 1/2))
 
 ```
-#Code for creating the map- leaflet map using preterm birth data I wrangled earlier (See Shiny app for the final result) 
+
+Code for Creating the Map - Leaflet Map Using Preterm Birth Data I Wrangled Earlier (See Shiny App for the Final Result) 
 This is a similar spatial map but for pesticide us. Following is the wrangling process of generating a map that shapes the map of California, and merging that spatial object with pesticide use that I wrangled earlier to generate a leaflet map. 
 ```{r}
 averagept_df <- combined_pesticide_use %>% filter(usage == "2016")
