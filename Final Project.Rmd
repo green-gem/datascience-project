@@ -20,7 +20,6 @@ library(pdftools)
 library(readr)
 library(stringr)
 library(ggthemes)
-
 library(shiny)
 library(shinyBS)
 library(RColorBrewer)
@@ -32,6 +31,8 @@ library(maptools)
 library(leaflet)
 library(scales)
 library(maps)
+library(gridExtra)
+library(grid)
 ```
 
 MCH Data Wrangling *Low BW Only (for map)
@@ -195,80 +196,87 @@ Data Key:
 Variable Key:
 Birth Rate = The number of births divided by total population in the given year(s) [Per 1,000] 
 
-Lara's Plots with CDC MCH Data
-```{r eval=FALSE, include=FALSE}
-#can delete this code chunk, it set it not to run bc when it did, it would pop up the 3 mcf tables -- zainab
-View(MCH.CDC.Data)
-View(MCH.CDC.Data_Race) 
-View(MCH.CDC.Data_Care)
-```
 
+Lara's Plots with CDC Data (Exploratory Analysis)
 ```{r}
 #Fertility Rate GGPLOTS
-MCH.CDC.Data %>% group_by(County) %>% ggplot(aes(Year, Fertility.Rate, color = County)) + geom_line() + labs( y="Fertility Rate", title = "Fertility Rate by County", subtitle = "2007-2019", color = "County", caption = "Data Source: CDC WONDER Online Database")
-#Look at HW 2 Vaccine stuff to see how to best look at this. (Heat map, box plot)
+MCH.CDC.Data %>% 
+    ggplot(aes(x = Year, y = County,  fill = Fertility.Rate)) +
+    geom_tile(color = "grey50") +
+    scale_x_continuous(expand = c(0,0)) +
+    scale_fill_gradientn("Fertility Rate", 
+                         colors = brewer.pal(9, "Reds")) +
+    theme_minimal() +  
+    theme(panel.grid = element_blank()) +
+    ggtitle("Fertility Rate by County") + 
+    ylab("") + xlab("")
 
-MCH.CDC.Data %>% group_by(County) %>% filter(County == "Fresno") %>% ggplot(aes(Year, Fertility.Rate, color = County)) + geom_line() + labs( y="Fertility Rate", title = "Fertility Rate in Fresno County", subtitle = "2007-2019", color = "County", caption = "Data Source: CDC WONDER Online Database")
+MCH.CDC.Data %>% group_by(County) %>% filter(County == "Fresno") %>% ggplot(aes(Year, Fertility.Rate, color = County)) + geom_line() + labs( y="Fertility Rate", title = "Fertility Rate in Fresno County", subtitle = "2007-2019", color = "County", caption = "Data Source: CDC WONDER Online Database") 
 
-MCH.CDC.Data %>% group_by(County) %>% filter(County == "Kern") %>% ggplot(aes(Year, Fertility.Rate, color = County)) + geom_line() + labs( y="Fertility Rate", title = "Fertility Rate in Kern County", subtitle = "2007-2019", color = "County", caption = "Data Source: CDC WONDER Online Database")
+MCH.CDC.Data %>% group_by(County) %>% filter(County == "Kern") %>% ggplot(aes(Year, Fertility.Rate, color = County)) + geom_line() + labs( y="Fertility Rate", title = "Fertility Rate in Kern County", subtitle = "2007-2019", color = "County", caption = "Data Source: CDC WONDER Online Database") 
 
-MCH.CDC.Data %>% group_by(County) %>% filter(County == "San Joaquin") %>% ggplot(aes(Year, Fertility.Rate, color = County)) + geom_line() + labs( y="Fertility Rate", title = "Fertility Rate in San Joaquin County", subtitle = "2007-2019", color = "County", caption = "Data Source: CDC WONDER Online Database")
+MCH.CDC.Data %>% group_by(County) %>% filter(County == "San Joaquin") %>% ggplot(aes(Year, Fertility.Rate, color = County)) + geom_line() + labs( y="Fertility Rate", title = "Fertility Rate in San Joaquin County", subtitle = "2007-2019", color = "County", caption = "Data Source: CDC WONDER Online Database") 
 
-#facetgrid 
-#compare to non-agricultural areas 
+MCH.CDC.Data %>% group_by(County) %>% filter(County == "Los Angeles") %>% ggplot(aes(Year, Fertility.Rate, color = County)) + geom_line() + labs( y="Fertility Rate", title = "Fertility Rate in Los Angeles County", subtitle = "2007-2019", color = "County", caption = "Data Source: CDC WONDER Online Database") 
+
+
+#Grid Plots
+p1 <- MCH.CDC.Data %>% group_by(County) %>% filter(County == "Fresno") %>% ggplot(aes(Year, Fertility.Rate, color = County)) + geom_line() + labs( y="Fertility Rate", title = "Fertility Rate in Fresno County", subtitle = "2007-2019", color = "County") + theme(legend.position = "none")
+
+p2 <- MCH.CDC.Data %>% group_by(County) %>% filter(County == "Kern") %>% ggplot(aes(Year, Fertility.Rate, color = County)) + geom_line() + labs( y="Fertility Rate", title = "Fertility Rate in Kern County", subtitle = "2007-2019", color = "County") + theme(legend.position = "none")
+
+p3 <-MCH.CDC.Data %>% group_by(County) %>% filter(County == "San Joaquin") %>% ggplot(aes(Year, Fertility.Rate, color = County)) + geom_line() + labs( y="Fertility Rate", title = "Fertility Rate in San Joaquin County", subtitle = "2007-2019", color = "County") + theme(legend.position = "none")
+
+p4 <-MCH.CDC.Data %>% group_by(County) %>% filter(County == "Los Angeles") %>% ggplot(aes(Year, Fertility.Rate, color = County)) + geom_line() + labs( y="Fertility Rate", title = "Fertility Rate in Los Angeles County", subtitle = "2007-2019", color = "County") + theme(legend.position = "none")
+
+grid.arrange(p1, p2, p3, p4, bottom = "Data Source: CDC WONDER Online Database")
 ```
-NOTE: Need to figure out a better way to do all county data visualization ... 
-
-```{r}
-#Racial Demographic GGPLOTS
-MCH.CDC.Data_Race %>% group_by(County) %>% ggplot(aes(Year, Total.Population, color = Mothers.Race)) + geom_line()  + labs( y="Total Population", title = "Racial Demographics by County", subtitle = "2007-2019", color = "Mother's Race", caption = "Data Source: CDC WONDER Online Database")
-
-MCH.CDC.Data_Race %>% group_by(County) %>% ggplot(aes(Year, Total.Population, color = Mothers.Race)) + geom_line() + scale_y_log10() + labs( y="Total Population (Log 10 Transformation)", title = "Racial Demographics by County (Transformed Y Axis)", subtitle = "2007-2019", color = "Mother's Race", caption = "Data Source: CDC WONDER Online Database")
-
-MCH.CDC.Data_Race %>% group_by(County) %>% filter(County == "Fresno") %>% ggplot(aes(Year, Total.Population, color = Mothers.Race)) + geom_line() + labs( y="Total Population", title = "Racial Demographics in Fresno County", subtitle = "2007-2019", color = "Mother's Race", caption = "Data Source: CDC WONDER Online Database") 
-
-MCH.CDC.Data_Race %>% group_by(County) %>% filter(County == "Fresno") %>% ggplot(aes(Year, Total.Population, color = Mothers.Race)) + geom_line() + scale_y_log10() + labs( y="Total Population (Log 10 Transformation)", title = "Racial Demographics in Fresno County (Transformed Y Axis)", subtitle = "2007-2019", color = "Mother's Race", caption = "Data Source: CDC WONDER Online Database") 
-
-MCH.CDC.Data_Race %>% group_by(County) %>% filter(County == "Kern") %>%  ggplot(aes(Year, Total.Population, color = Mothers.Race)) + geom_line() + labs( y="Total Population", title = "Racial Demographics in Kern County", subtitle = "2007-2019", color = "Mother's Race", caption = "Data Source: CDC WONDER Online Database") 
-
-MCH.CDC.Data_Race %>% group_by(County) %>% filter(County == "Kern") %>%  ggplot(aes(Year, Total.Population, color = Mothers.Race)) + geom_line()  + scale_y_log10() + labs( y="Total Population (Log 10 Transformation)", title = "Racial Demographics in Kern County (Transformed Y Axis)", subtitle = "2007-2019", color = "Mother's Race", caption = "Data Source: CDC WONDER Online Database") 
-
-MCH.CDC.Data_Race %>% group_by(County) %>% filter(County == "San Joaquin") %>%  ggplot(aes(Year, Total.Population, color = Mothers.Race)) + geom_line() + labs( y="Total Population", title = "Racial Demographics in San Joaquin County", subtitle = "2007-2019", color = "Mother's Race", caption = "Data Source: CDC WONDER Online Database") 
-
-MCH.CDC.Data_Race %>% group_by(County) %>% filter(County == "San Joaquin") %>%  ggplot(aes(Year, Total.Population, color = Mothers.Race)) + geom_line()  + scale_y_log10() + labs( y="Total Population (Log 10 Transformation)", title = "Racial Demographics in San Joaquin County (Transformed Y Axis)", subtitle = "2007-2019", color = "Mother's Race", caption = "Data Source: CDC WONDER Online Database") 
-
-#hispanic & non-hispanic ?
-#keep transformed versions
-#non-agricultural counties 
-
-```
-NOTE: Need to figure out a better way to do all county data visualization ... 
-NOTE: Pick one year and do bar plot (2016) or ()
-
-```{r}
-#Race and Preterm Birth GGPLOTS
-MCH.CDC.Data_Race %>% group_by(County) %>% ggplot(aes(Year, Average.LMP.Gestational.Age, color = Mothers.Race)) + geom_line() + labs( y="Average LMP Gestational Age (Weeks)", title = "Preterm Birth", subtitle = "2007-2019", color = "Mother's Race", caption = "Data Source: CDC WONDER Online Database") 
-
-MCH.CDC.Data_Race %>% filter(County == "Fresno") %>% ggplot(aes(Year, Average.LMP.Gestational.Age, color = Mothers.Race)) + geom_line() + labs( y="Average LMP Gestational Age (Weeks)", title = "Preterm Birth in Fresno County", subtitle = "2007-2019", color = "Mother's Race", caption = "Data Source: CDC WONDER Online Database") 
-
-MCH.CDC.Data_Race %>% filter(County == "San Joaquin") %>% ggplot(aes(Year, Average.LMP.Gestational.Age, color = Mothers.Race)) + geom_line() + labs( y="Average LMP Gestational Age (Weeks)", title = "Preterm Birth in San Joaquin County", subtitle = "2007-2019", color = "Mother's Race", caption = "Data Source: CDC WONDER Online Database") 
-
-MCH.CDC.Data_Race %>% filter(County == "Kern") %>% ggplot(aes(Year, Average.LMP.Gestational.Age, color = Mothers.Race)) + geom_line() + labs( y="Average LMP Gestational Age (Weeks)", title = "Preterm Birth in Kern County", subtitle = "2007-2019", color = "Mother's Race", caption = "Data Source: CDC WONDER Online Database") 
-
-MCH.CDC.Data_Race %>% filter(County == "San Bernardino") %>% ggplot(aes(Year, Average.LMP.Gestational.Age, color = Mothers.Race)) + geom_line() + labs( y="Average LMP Gestational Age (Weeks)", title = "Preterm Birth in San Bernardino County", subtitle = "2007-2019", color = "Mother's Race", caption = "Data Source: CDC WONDER Online Database") 
-
-MCH.CDC.Data_Race %>% filter(County == "Los Angeles") %>% ggplot(aes(Year, Average.LMP.Gestational.Age, color = Mothers.Race)) + geom_line() + labs( y="Average LMP Gestational Age (Weeks)", title = "Preterm Birth in Los Angeles County", subtitle = "2007-2019", color = "Mother's Race", caption = "Data Source: CDC WONDER Online Database") 
-
-MCH.CDC.Data_Race %>% filter(County == "San Diego") %>% ggplot(aes(Year, Average.LMP.Gestational.Age, color = Mothers.Race)) + geom_line() + labs( y="Average LMP Gestational Age (Weeks)", title = "Preterm Birth in San Diego", subtitle = "2007-2019", color = "Mother's Race", caption = "Data Source: CDC WONDER Online Database") 
-
-#add Tulare 
-``` 
-NOTE: Need to figure out a better way to do all county data visualization ... 
-NOTE: Add Horizontal Line for Preterm Birth Cutoffs 
 
 ```{r}
 #Race and Fertility GGPLOTS
-MCH.CDC.Data_Race %>% group_by(County) %>% ggplot(aes(Year, Fertility.Rate, color = Mothers.Race)) + geom_line() + labs( y="Fertility Rate", title = "Race and Fertility Data", subtitle = "2007-2019", color = "Mother's Race", caption = "Data Source: CDC WONDER Online Database") 
+MCH.CDC.Data_Race %>% filter(Mothers.Race == "American Indian or Alaska Native") %>%
+ggplot(aes(x = Year, y = County,  fill = Fertility.Rate)) +
+    geom_tile(color = "grey50") +
+    scale_x_continuous(expand = c(0,0)) +
+    scale_fill_gradientn("Fertility Rate", 
+                         colors = brewer.pal(9, "Reds")) +
+    theme_minimal() +  
+    theme(panel.grid = element_blank()) +
+    ggtitle("Fertility Rate by County for American Indian or Alaska Native Pop.") + 
+    ylab("") + xlab("") 
+
+MCH.CDC.Data_Race %>% filter(Mothers.Race == "Asian or Pacific Islander") %>%
+ggplot(aes(x = Year, y = County,  fill = Fertility.Rate)) +
+    geom_tile(color = "grey50") +
+    scale_x_continuous(expand = c(0,0)) +
+    scale_fill_gradientn("Fertility Rate", 
+                         colors = brewer.pal(9, "Reds")) +
+    theme_minimal() +  
+    theme(panel.grid = element_blank()) +
+    ggtitle("Fertility Rate by County for Asian or Pacific Islander Pop.") + 
+    ylab("") + xlab("") 
+
+MCH.CDC.Data_Race %>% filter(Mothers.Race == "Black or African American") %>%
+ggplot(aes(x = Year, y = County,  fill = Fertility.Rate)) +
+    geom_tile(color = "grey50") +
+    scale_x_continuous(expand = c(0,0)) +
+    scale_fill_gradientn("Fertility Rate", 
+                         colors = brewer.pal(9, "Reds")) +
+    theme_minimal() +  
+    theme(panel.grid = element_blank()) +
+    ggtitle("Fertility Rate by County for Black or African American Pop.") + 
+    ylab("") + xlab("") 
+
+MCH.CDC.Data_Race %>% filter(Mothers.Race == "White") %>%
+ggplot(aes(x = Year, y = County,  fill = Fertility.Rate)) +
+    geom_tile(color = "grey50") +
+    scale_x_continuous(expand = c(0,0)) +
+    scale_fill_gradientn("Fertility Rate", 
+                         colors = brewer.pal(9, "Reds")) +
+    theme_minimal() +  
+    theme(panel.grid = element_blank()) +
+    ggtitle("Fertility Rate by County for White Pop.") + 
+    ylab("") + xlab("") 
 
 MCH.CDC.Data_Race %>% filter(County == "Fresno") %>% ggplot(aes(Year, Fertility.Rate, color = Mothers.Race)) + geom_line() + labs( y="Fertility Rate", title = "Race and Fertility Data in Fresno County", subtitle = "2007-2019", color = "Mother's Race", caption = "Data Source: CDC WONDER Online Database")
 
@@ -279,26 +287,219 @@ MCH.CDC.Data_Race %>% filter(County == "San Bernardino") %>% ggplot(aes(Year, Fe
 MCH.CDC.Data_Race %>% filter(County == "Los Angeles") %>% ggplot(aes(Year, Fertility.Rate, color = Mothers.Race)) + geom_line() + labs( y="Fertility Rate", title = "Race and Fertility Data in Los Angeles County", subtitle = "2007-2019", color = "Mother's Race", caption = "Data Source: CDC WONDER Online Database")
 
 MCH.CDC.Data_Race %>% filter(County == "San Diego") %>% ggplot(aes(Year, Fertility.Rate, color = Mothers.Race)) + geom_line() + labs( y="Fertility Rate", title = "Race and Fertility Data in San Diego County", subtitle = "2007-2019", color = "Mother's Race", caption = "Data Source: CDC WONDER Online Database")
+
+MCH.CDC.Data_Race %>% filter(County == "Tulare") %>% ggplot(aes(Year, Fertility.Rate, color = Mothers.Race)) + geom_line() + labs( y="Fertility Rate", title = "Race and Fertility Data in Tulare County", subtitle = "2007-2019", color = "Mother's Race", caption = "Data Source: CDC WONDER Online Database")
+
 ```
-NOTE: Need to figure out a better way to do all county data visualization ... 
+
 
 ```{r}
-#Race and Prenatal Care GGPLOTS
-MCH.CDC.Data_Care %>% group_by(County) %>% ggplot(aes(Year, Month.Prenatal.Care.Began, color = Mothers.Race)) + geom_line() + labs( y="Month Prenatal Care Began", title = "Race and Prenatal Care Data", subtitle = "2007-2019", color = "Mother's Race", caption = "Data Source: CDC WONDER Online Database") 
+#Racial Demographic GGPLOTS
+MCH.CDC.Data_Race %>% filter(Mothers.Race == "American Indian or Alaska Native") %>%
+    ggplot(aes(x = Year, y = County,  fill = Total.Population)) +
+    geom_tile(color = "grey50") +
+    scale_x_continuous(expand = c(0,0)) +
+    scale_fill_gradientn("American Indian or Alaska Native Population", 
+                         colors = brewer.pal(9, "Reds")) +
+    theme_minimal() +  
+    theme(panel.grid = element_blank()) +
+    ggtitle("Racial Demographics by County") + 
+    ylab("") + xlab("") 
 
-MCH.CDC.Data_Care %>% filter(County == "Fresno") %>% ggplot(aes(Year, Month.Prenatal.Care.Began, color = Mothers.Race)) + geom_line() + labs( y="Month Prenatal Care Began", title = "Race and Prenatal Care Data in Fresno County", subtitle = "2007-2019", color = "Mother's Race", caption = "Data Source: CDC WONDER Online Database")
+MCH.CDC.Data_Race %>% filter(Mothers.Race == "Asian or Pacific Islander") %>%
+    ggplot(aes(x = Year, y = County,  fill = Total.Population)) +
+    geom_tile(color = "grey50") +
+    scale_x_continuous(expand = c(0,0)) +
+    scale_fill_gradientn("Asian or Pacific Islander", 
+                         colors = brewer.pal(9, "Reds")) +
+    theme_minimal() +  
+    theme(panel.grid = element_blank()) +
+    ggtitle("Racial Demographics by County") + 
+    ylab("") + xlab("")
 
-MCH.CDC.Data_Care %>% filter(County == "Kern") %>% ggplot(aes(Year, Month.Prenatal.Care.Began, color = Mothers.Race)) + geom_line() + labs( y="Month Prenatal Care Began", title = "Race and Prenatal Care Data in Kern County", subtitle = "2007-2019", color = "Mother's Race", caption = "Data Source: CDC WONDER Online Database")
+MCH.CDC.Data_Race %>% filter(Mothers.Race == "Black or African American") %>%
+    ggplot(aes(x = Year, y = County,  fill = Total.Population)) +
+    geom_tile(color = "grey50") +
+    scale_x_continuous(expand = c(0,0)) +
+    scale_fill_gradientn("Black or African American Population", 
+                         colors = brewer.pal(9, "Reds")) +
+    theme_minimal() +  
+    theme(panel.grid = element_blank()) +
+    ggtitle("Racial Demographics by County") + 
+    ylab("") + xlab("")
 
-MCH.CDC.Data_Care %>% filter(County == "San Bernardino") %>% ggplot(aes(Year, Month.Prenatal.Care.Began, color = Mothers.Race)) + geom_line() + labs( y="Month Prenatal Care Began", title = "Race and Prenatal Care Data in San Bernardino County", subtitle = "2007-2019", color = "Mother's Race", caption = "Data Source: CDC WONDER Online Database")
+MCH.CDC.Data_Race %>% filter(Mothers.Race == "White") %>%
+    ggplot(aes(x = Year, y = County,  fill = Total.Population)) +
+    geom_tile(color = "grey50") +
+    scale_x_continuous(expand = c(0,0)) +
+    scale_fill_gradientn("White Population", 
+                         colors = brewer.pal(9, "Reds")) +
+    theme_minimal() +  
+    theme(panel.grid = element_blank()) +
+    ggtitle("Racial Demographics by County") + 
+    ylab("") + xlab("")
 
-MCH.CDC.Data_Care %>% filter(County == "Los Angeles") %>% ggplot(aes(Year, Month.Prenatal.Care.Began, color = Mothers.Race)) + geom_line() + labs( y="Month Prenatal Care Began", title = "Race and Prenatal Care Data in Los Angeles County", subtitle = "2007-2019", color = "Mother's Race", caption = "Data Source: CDC WONDER Online Database")
+MCH.CDC.Data_Race %>% group_by(County) %>% filter(County == "Fresno") %>% ggplot(aes(Year, Total.Population, color = Mothers.Race)) + geom_line() + scale_y_log10() + labs( y="Total Population (Log 10 Transformation)", title = "Racial Demographics in Fresno County (Transformed Y Axis)", subtitle = "2007-2019", color = "Mother's Race", caption = "Data Source: CDC WONDER Online Database") 
 
-MCH.CDC.Data_Care %>% filter(County == "San Diego") %>% ggplot(aes(Year, Month.Prenatal.Care.Began, color = Mothers.Race)) + geom_line() + labs( y="Month Prenatal Care Began", title = "Race and Prenatal Care Data in San Diego County", subtitle = "2007-2019", color = "Mother's Race", caption = "Data Source: CDC WONDER Online Database")
+MCH.CDC.Data_Race %>% group_by(County) %>% filter(County == "Fresno") %>% ggplot(aes(Year, Total.Population, color = Mothers.Race)) + geom_line() + scale_y_log10() + labs( y="Total Population (Log 10 Transformation)", title = "Racial Demographics in Fresno County (Transformed Y Axis)", subtitle = "2007-2019", color = "Mother's Race", caption = "Data Source: CDC WONDER Online Database") 
+
+MCH.CDC.Data_Race %>% group_by(County) %>% filter(County == "Kern") %>%  ggplot(aes(Year, Total.Population, color = Mothers.Race)) + geom_line()  + scale_y_log10() + labs( y="Total Population (Log 10 Transformation)", title = "Racial Demographics in Kern County (Transformed Y Axis)", subtitle = "2007-2019", color = "Mother's Race", caption = "Data Source: CDC WONDER Online Database") 
+
+MCH.CDC.Data_Race %>% group_by(County) %>% filter(County == "San Joaquin") %>%  ggplot(aes(Year, Total.Population, color = Mothers.Race)) + geom_line()  + scale_y_log10() + labs( y="Total Population (Log 10 Transformation)", title = "Racial Demographics in San Joaquin County (Transformed Y Axis)", subtitle = "2007-2019", color = "Mother's Race", caption = "Data Source: CDC WONDER Online Database") 
+
+MCH.CDC.Data_Race %>% group_by(County) %>% filter(County == "Los Angeles") %>%  ggplot(aes(Year, Total.Population, color = Mothers.Race)) + geom_line()  + scale_y_log10() + labs( y="Total Population (Log 10 Transformation)", title = "Racial Demographics in Los Angeles County (Transformed Y Axis)", subtitle = "2007-2019", color = "Mother's Race", caption = "Data Source: CDC WONDER Online Database")  
+
+MCH.CDC.Data_Race %>% group_by(County) %>% filter(County == "Tulare") %>%  ggplot(aes(Year, Total.Population, color = Mothers.Race)) + geom_line()  + scale_y_log10() + labs( y="Total Population (Log 10 Transformation)", title = "Racial Demographics in Tulare County (Transformed Y Axis)", subtitle = "2007-2019", color = "Mother's Race", caption = "Data Source: CDC WONDER Online Database")  
 ```
-NOTE: Fix all these graphs... 
 
-NOTE: ADD BIRTHWEIGHT AND RACE ANALYSIS 
+```{r}
+#Preterm Birth GGPLOTS (With Race)
+MCH.CDC.Data %>% 
+    ggplot(aes(x = Year, y = County,  fill = Average.LMP.Gestational.Age)) +
+    geom_tile(color = "grey50") +
+    scale_x_continuous(expand = c(0,0)) +
+    scale_fill_gradientn("Average Gestational Age (LMP) in Weeks", 
+                         colors = brewer.pal(9, "Reds")) +
+    theme_minimal() +  
+    theme(panel.grid = element_blank()) +
+    ggtitle("Average Gestational Age by County") + 
+    ylab("") + xlab("") 
+
+MCH.CDC.Data_Race %>% filter(Mothers.Race == "American Indian or Alaska Native") %>%
+ggplot(aes(x = Year, y = County,  fill = Average.LMP.Gestational.Age)) +
+    geom_tile(color = "grey50") +
+    scale_x_continuous(expand = c(0,0)) +
+    scale_fill_gradientn("Average Gestational Age (LMP) in Weeks", 
+                         colors = brewer.pal(9, "Reds")) +
+    theme_minimal() +  
+    theme(panel.grid = element_blank()) +
+    ggtitle("Average Gestational Age by County for American Indian or Alaska Native Pop.") + 
+    ylab("") + xlab("") 
+
+MCH.CDC.Data_Race %>% filter(Mothers.Race == "Asian or Pacific Islander") %>%
+ggplot(aes(x = Year, y = County,  fill = Average.LMP.Gestational.Age)) +
+    geom_tile(color = "grey50") +
+    scale_x_continuous(expand = c(0,0)) +
+    scale_fill_gradientn("Average Gestational Age (LMP) in Weeks", 
+                         colors = brewer.pal(9, "Reds")) +
+    theme_minimal() +  
+    theme(panel.grid = element_blank()) +
+    ggtitle("Average Gestational Age by County for Asian or Pacific Islander Pop.") + 
+    ylab("") + xlab("") 
+
+MCH.CDC.Data_Race %>% filter(Mothers.Race == "Black or African American") %>%
+ggplot(aes(x = Year, y = County,  fill = Average.LMP.Gestational.Age)) +
+    geom_tile(color = "grey50") +
+    scale_x_continuous(expand = c(0,0)) +
+    scale_fill_gradientn("Average Gestational Age (LMP) in Weeks", 
+                         colors = brewer.pal(9, "Reds")) +
+    theme_minimal() +  
+    theme(panel.grid = element_blank()) +
+    ggtitle("Average Gestational Age by County for Black or African American Pop.") + 
+    ylab("") + xlab("") 
+
+MCH.CDC.Data_Race %>% filter(Mothers.Race == "White") %>%
+ggplot(aes(x = Year, y = County,  fill = Average.LMP.Gestational.Age)) +
+    geom_tile(color = "grey50") +
+    scale_x_continuous(expand = c(0,0)) +
+    scale_fill_gradientn("Average Gestational Age (LMP) in Weeks", 
+                         colors = brewer.pal(9, "Reds")) +
+    theme_minimal() +  
+    theme(panel.grid = element_blank()) +
+    ggtitle("Average Gestational Age by County for White Pop.") + 
+    ylab("") + xlab("") 
+
+MCH.CDC.Data_Race %>% filter(County == "Fresno") %>% ggplot(aes(Year, Average.LMP.Gestational.Age, color = Mothers.Race)) + geom_line() + labs( y="Average LMP Gestational Age (Weeks)", title = "Preterm Birth in Fresno County", subtitle = "2007-2019", color = "Mother's Race", caption = "Data Source: CDC WONDER Online Database") + geom_hline(yintercept = 37, size =2)
+
+MCH.CDC.Data_Race %>% filter(County == "San Joaquin") %>% ggplot(aes(Year, Average.LMP.Gestational.Age, color = Mothers.Race)) + geom_line() + labs( y="Average LMP Gestational Age (Weeks)", title = "Preterm Birth in San Joaquin County", subtitle = "2007-2019", color = "Mother's Race", caption = "Data Source: CDC WONDER Online Database") + geom_hline(yintercept = 37, size =2)
+
+MCH.CDC.Data_Race %>% filter(County == "Kern") %>% ggplot(aes(Year, Average.LMP.Gestational.Age, color = Mothers.Race)) + geom_line() + labs( y="Average LMP Gestational Age (Weeks)", title = "Preterm Birth in Kern County", subtitle = "2007-2019", color = "Mother's Race", caption = "Data Source: CDC WONDER Online Database")  + geom_hline(yintercept = 37, size =2)
+
+MCH.CDC.Data_Race %>% filter(County == "San Bernardino") %>% ggplot(aes(Year, Average.LMP.Gestational.Age, color = Mothers.Race)) + geom_line() + labs( y="Average LMP Gestational Age (Weeks)", title = "Preterm Birth in San Bernardino County", subtitle = "2007-2019", color = "Mother's Race", caption = "Data Source: CDC WONDER Online Database")  + geom_hline(yintercept = 37, size =2)
+
+MCH.CDC.Data_Race %>% filter(County == "Los Angeles") %>% ggplot(aes(Year, Average.LMP.Gestational.Age, color = Mothers.Race)) + geom_line() + labs( y="Average LMP Gestational Age (Weeks)", title = "Preterm Birth in Los Angeles County", subtitle = "2007-2019", color = "Mother's Race", caption = "Data Source: CDC WONDER Online Database")  + geom_hline(yintercept = 37, size =2)
+
+MCH.CDC.Data_Race %>% filter(County == "San Diego") %>% ggplot(aes(Year, Average.LMP.Gestational.Age, color = Mothers.Race)) + geom_line() + labs( y="Average LMP Gestational Age (Weeks)", title = "Preterm Birth in San Diego", subtitle = "2007-2019", color = "Mother's Race", caption = "Data Source: CDC WONDER Online Database")  + geom_hline(yintercept = 37, size =2)
+
+MCH.CDC.Data_Race %>% filter(County == "Tulare") %>% ggplot(aes(Year, Average.LMP.Gestational.Age, color = Mothers.Race)) + geom_line() + labs( y="Average LMP Gestational Age (Weeks)", title = "Preterm Birth in Tulare", subtitle = "2007-2019", color = "Mother's Race", caption = "Data Source: CDC WONDER Online Database")  + geom_hline(yintercept = 37, size =2)
+
+#Preterm Birth Cutoff is 37 Weeks (Horizontal Line)
+``` 
+
+```{r}
+#Birth weight GGPLOTS (With Race)
+MCH.CDC.Data %>% 
+    ggplot(aes(x = Year, y = County,  fill = Average.Birth.Weight)) +
+    geom_tile(color = "grey50") +
+    scale_x_continuous(expand = c(0,0)) +
+    scale_fill_gradientn("Average Birth Weight in Grams", 
+                         colors = brewer.pal(9, "Reds")) +
+    theme_minimal() +  
+    theme(panel.grid = element_blank()) +
+    ggtitle("Average Birth Weight by County") + 
+    ylab("") + xlab("") 
+
+MCH.CDC.Data_Race %>% filter(Mothers.Race == "American Indian or Alaska Native") %>%
+ggplot(aes(x = Year, y = County,  fill = Average.Birth.Weight)) +
+    geom_tile(color = "grey50") +
+    scale_x_continuous(expand = c(0,0)) +
+    scale_fill_gradientn("Average Birth Weight in Grams", 
+                         colors = brewer.pal(9, "Reds")) +
+    theme_minimal() +  
+    theme(panel.grid = element_blank()) +
+    ggtitle("Average Birth Weight by County for American Indian or Alaska Native Pop.") + 
+    ylab("") + xlab("") 
+
+MCH.CDC.Data_Race %>% filter(Mothers.Race == "Asian or Pacific Islander") %>%
+ggplot(aes(x = Year, y = County,  fill = Average.Birth.Weight)) +
+    geom_tile(color = "grey50") +
+    scale_x_continuous(expand = c(0,0)) +
+    scale_fill_gradientn("Average Birth Weight in Grams", 
+                         colors = brewer.pal(9, "Reds")) +
+    theme_minimal() +  
+    theme(panel.grid = element_blank()) +
+    ggtitle("Average Birth Weight by County for Asian or Pacific Islander Pop.") + 
+    ylab("") + xlab("") 
+
+MCH.CDC.Data_Race %>% filter(Mothers.Race == "Black or African American") %>%
+ggplot(aes(x = Year, y = County,  fill = Average.Birth.Weight)) +
+    geom_tile(color = "grey50") +
+    scale_x_continuous(expand = c(0,0)) +
+    scale_fill_gradientn("Average Birth Weight Grams", 
+                         colors = brewer.pal(9, "Reds")) +
+    theme_minimal() +  
+    theme(panel.grid = element_blank()) +
+    ggtitle("Average Birth Weight by County for Black or African American Pop.") + 
+    ylab("") + xlab("") 
+
+MCH.CDC.Data_Race %>% filter(Mothers.Race == "White") %>%
+ggplot(aes(x = Year, y = County,  fill = Average.Birth.Weight)) +
+    geom_tile(color = "grey50") +
+    scale_x_continuous(expand = c(0,0)) +
+    scale_fill_gradientn("Average Birth Weight in Grams", 
+                         colors = brewer.pal(9, "Reds")) +
+    theme_minimal() +  
+    theme(panel.grid = element_blank()) +
+    ggtitle("Average Birth Weight by County for White Pop.") + 
+    ylab("") + xlab("") 
+
+MCH.CDC.Data_Race %>% filter(County == "Fresno") %>% ggplot(aes(Year, Average.Birth.Weight, color = Mothers.Race)) + geom_line() + labs( y="Average Birth Weight (Grams)", title = "Birth Weight Data in Fresno County", subtitle = "2007-2019", color = "Mother's Race", caption = "Data Source: CDC WONDER Online Database") + geom_hline(yintercept = 2500, size =2)
+
+MCH.CDC.Data_Race %>% filter(County == "San Joaquin") %>% ggplot(aes(Year, Average.Birth.Weight, color = Mothers.Race)) + geom_line() + labs( y="Average Birth Weight (Grams)", title = "Birth Weight Data in San Joaquin County", subtitle = "2007-2019", color = "Mother's Race", caption = "Data Source: CDC WONDER Online Database") + geom_hline(yintercept = 2500, size =2)
+
+MCH.CDC.Data_Race %>% filter(County == "Kern") %>% ggplot(aes(Year, Average.Birth.Weight, color = Mothers.Race)) + geom_line() + labs( y="Average Birth Weight (Grams)", title = "Birth Weight Data in Kern County", subtitle = "2007-2019", color = "Mother's Race", caption = "Data Source: CDC WONDER Online Database")  + geom_hline(yintercept = 2500, size =2)
+
+MCH.CDC.Data_Race %>% filter(County == "San Bernardino") %>% ggplot(aes(Year, Average.Birth.Weight, color = Mothers.Race)) + geom_line() + labs( y="Average Birth Weight (Grams)", title = "Birth Weight Data in San Bernardino County", subtitle = "2007-2019", color = "Mother's Race", caption = "Data Source: CDC WONDER Online Database")  + geom_hline(yintercept = 2500, size =2)
+
+MCH.CDC.Data_Race %>% filter(County == "Los Angeles") %>% ggplot(aes(Year, Average.Birth.Weight, color = Mothers.Race)) + geom_line() + labs( y="Average Birth Weight (Grams)", title = "Birth Weight Data in Los Angeles County", subtitle = "2007-2019", color = "Mother's Race", caption = "Data Source: CDC WONDER Online Database")  + geom_hline(yintercept = 2500, size =2)
+
+MCH.CDC.Data_Race %>% filter(County == "San Diego") %>% ggplot(aes(Year, Average.Birth.Weight, color = Mothers.Race)) + geom_line() + labs( y="Average Birth Weight (Grams)", title = "Birth Weight Data in San Diego", subtitle = "2007-2019", color = "Mother's Race", caption = "Data Source: CDC WONDER Online Database")  + geom_hline(yintercept = 2500, size =2)
+
+MCH.CDC.Data_Race %>% filter(County == "Tulare") %>% ggplot(aes(Year, Average.Birth.Weight, color = Mothers.Race)) + geom_line() + labs( y="Average Birth Weight (Grams)", title = "Birth Weight Data in Tulare", subtitle = "2007-2019", color = "Mother's Race", caption = "Data Source: CDC WONDER Online Database")  + geom_hline(yintercept = 2500, size =2)
+
+#LBW Cutoff is 2500 Grams (Horizontal Line)
+
+```
 
 Pesticide Data Wrangling
 ```{r}
