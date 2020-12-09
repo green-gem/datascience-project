@@ -106,3 +106,44 @@ curve(dnorm,from=-4,to=4,add=TRUE)
 exstures3 <- rstudent(mod3)
 hist(exstures3, probability = TRUE, main = "Histogram of Externally Studentized Residuals", col = "pink")
 curve(dnorm,from=-4,to=4,add=TRUE)
+
+# White mothers
+white_mod1 <- lm(Average.Birth.Weight ~ factor(agricultural) + Average.LMP.Gestational.Age + factor(agricultural)*Average.LMP.Gestational.Age, filter(mch_regression, Mothers.Race == "White"))
+summary(white_mod1)
+
+mch_regression %>%
+  filter(Mothers.Race == "White") %>%
+  ggplot(aes(Average.LMP.Gestational.Age, Average.Birth.Weight, color = factor(agricultural))) + 
+  geom_point() + geom_line(aes(y = predict(white_mod1)))
+
+#american indian/alaska native
+amerindian_mod1 <- lm(Average.Birth.Weight ~ factor(agricultural) + Average.LMP.Gestational.Age, filter(mch_regression, Mothers.Race == "American Indian or Alaska Native"))
+summary(amerindian_mod1)
+
+#parallel lines, Black and Asian/Pacific Island populations fare the worst
+mch_regression %>%
+  filter(Mothers.Race == "American Indian or Alaska Native") %>%
+  ggplot(aes(Average.LMP.Gestational.Age, Average.Birth.Weight, color = factor(agricultural))) + 
+  geom_point() + geom_line(aes(y = predict(amerindian_mod1)))
+
+#asian mothers
+asian_mod1 <- lm(Average.Birth.Weight ~ factor(agricultural) + Average.LMP.Gestational.Age+ factor(agricultural)*Average.LMP.Gestational.Age, filter(mch_regression, Mothers.Race == "Asian or Pacific Islander"))
+summary(asian_mod1)
+
+#parallel lines, Black and Asian/Pacific Island populations fare the worst
+mch_regression %>%
+  filter(Mothers.Race == "Asian or Pacific Islander") %>%
+  ggplot(aes(Average.LMP.Gestational.Age, Average.Birth.Weight, color = factor(agricultural))) + 
+  geom_point() + geom_line(aes(y = predict(asian_mod1)))
+
+# black mothers
+black_mod1 <- lm(Average.Birth.Weight ~ factor(agricultural) + Average.LMP.Gestational.Age+ factor(agricultural)*Average.LMP.Gestational.Age, filter(mch_regression, Mothers.Race == "Black or African American"))
+summary(black_mod1)
+
+#parallel lines, Black and Asian/Pacific Island populations fare the worst
+mch_regression %>%
+  filter(Mothers.Race == "Black or African American") %>%
+  ggplot(aes(Average.LMP.Gestational.Age, Average.Birth.Weight, color = factor(agricultural))) + 
+  geom_point() + geom_line(aes(y = predict(black_mod1)))
+
+
