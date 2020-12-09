@@ -345,6 +345,8 @@ server <- function(input, output) {
             addPolygons(color = "Black", weight = 1, smoothFactor = 0.5, 
                         opacity = 1.0, fillOpacity = 0.5, layerId = ~NAME,
                         fillColor = ~pal(Rate), 
+                        highlightOptions = highlightOptions(color = "white", weight = 2,
+                                                            bringToFront = TRUE), 
                         popup = ~as.factor(paste0("<b><font size=\"4\"><center>County: </b>",spatial_lbw$NAME,"</font></center>","<b>% of Low Birth Weight Births: </b>", sprintf("%1.2f%%", spatial_lbw$Rate),"<br/>"))) %>%
             addLegend(pal = pal, values = spatial_lbw$Rate, opacity = 1, title="% Low Birth Weight (Quartiles)")
         }else {
@@ -353,6 +355,8 @@ server <- function(input, output) {
                     addPolygons(color = "Black", weight = 1, smoothFactor = 0.5, 
                                 opacity = 1.0, fillOpacity = 0.5, layerId = ~NAME,
                                 fillColor = ~pal2(rate_pt), 
+                                highlightOptions = highlightOptions(color = "white", weight = 2,
+                                                                    bringToFront = TRUE), 
                                 popup = ~as.factor(paste0("<b><font size=\"4\"><center>County: </b>",spatial_pt$NAME,"</font></center>","<b>% of Preterm Birth: </b>", sprintf("%1.2f%%", spatial_pt$rate_pt),"<br/>"))) %>%
                     addLegend(pal = pal2, values = spatial_pt$rate_pt, opacity = 1, title="% Preterm Birth (Quartiles)")
             
@@ -370,6 +374,8 @@ server <- function(input, output) {
                 addPolygons(color = "Black", weight = 1, smoothFactor = 0.5, 
                             opacity = 1.0, fillOpacity = 0.5, layerId = ~NAME,
                             fillColor = ~pal3(value), 
+                            highlightOptions = highlightOptions(color = "white", weight = 2,
+                                                                bringToFront = TRUE), 
                             popup = ~as.factor(paste0("<b><font size=\"4\"><center>County: </b>",spatial_pesticide$NAME,"</font></center>","Amounts of Pesticides used </b>", sprintf("%1.2f", spatial_pesticide$value),"<br/>"))) %>%
                 addLegend(pal = pal3, values = spatial_pesticide$value, opacity = 1, title="Amounts of Pesticide Used (Pounds)")
         
