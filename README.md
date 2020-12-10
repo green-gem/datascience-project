@@ -5,7 +5,7 @@ Welcome to our github repository! Here are few quick guidance tips as to where e
 
 - Shiny app folder is where our shiny app lies. The finalized code for our shiny app is in "Sonias app.R"
 
-* background info on why we chose this topic, where all the data came from
+background info on why we chose this topic, where all the data came from
 
 This project requires the following packages. Please install before running.
 
