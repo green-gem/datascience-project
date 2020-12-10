@@ -572,7 +572,9 @@ MCH.CDC.Data_Race %>% filter(County == "Tulare") %>% ggplot(aes(Year, Average.Bi
 ```
 
 Pesticide Data Wrangling
-```{r}
+
+The 
+```{r warning=FALSE}
 county_ranks16 <- read_delim("table1_county_rank_2016.txt", "\t", escape_double = FALSE, trim_ws = TRUE)
 repro_lbs16 <- read_delim("table3_reproductive_lbs_2016.txt", "\t", escape_double = FALSE, trim_ws = TRUE)
 repro_acre16 <- read_delim("table4_reproductive_acres_2016.txt", "\t", escape_double = FALSE, trim_ws = TRUE)
@@ -817,4 +819,130 @@ leaflet(spatial_pesticide, options = leafletOptions(zoomControl = TRUE, zoomLeve
         
     
 ```
+
+
+### Regression Analysis
+```{r}
+#simple linear model more parsimonious than the one that has the interaction term for American Indian/Alaska Native Mothers
+#tho there are low populations for this group, so I don't really trust any of the models
+amerindian_mod <- lm(Average.Birth.Weight ~ Average.LMP.Gestational.Age, filter(mch_regression, Mothers.Race == "American Indian or Alaska Native"))
+summary(amerindian_mod)[4] #coefficients
+summary(amerindian_mod)[9] #adjusted r-squared
+
+q1 <- mch_regression %>%
+  filter(Mothers.Race == "American Indian or Alaska Native") %>%
+  ggplot(aes(Average.LMP.Gestational.Age, Average.Birth.Weight, color = factor(agricultural))) + 
+  geom_point() + geom_line(aes(y = predict(amerindian_mod)), size = 1) + 
+  xlab("Average LMP Gestational Age (weeks)") + 
+  ylab("Average Birth Weight (grams)") + 
+  scale_color_discrete(name = "Top Ten\nPesticide\nUse", labels = c('No', "Yes")) +
+  ggtitle("Birth Weight Outcome for American Indian and Alaska Native Mothers") + 
+  scale_y_continuous(breaks=seq(2980, 3520,20)) +
+  scale_x_continuous(breaks=seq(37.6, 39.6, .2))
 ```
+
+
+```{r}
+#even slr doesn't explain a lot of the errors for Asian mothers
+asian_mod <- lm(Average.Birth.Weight ~ Average.LMP.Gestational.Age, filter(mch_regression, Mothers.Race == "Asian or Pacific Islander"))
+summary(asian_mod)[4] #coefficients
+summary(asian_mod)[9] #adjusted r-squared
+
+q2 <- mch_regression %>%
+  filter(Mothers.Race == "Asian or Pacific Islander") %>%
+  ggplot(aes(Average.LMP.Gestational.Age, Average.Birth.Weight, color = factor(agricultural))) + 
+  geom_point() + 
+  geom_line(aes(y = predict(asian_mod)), size = 1) + 
+  xlab("Average LMP Gestational Age (weeks)") + 
+  ylab("Average Birth Weight (grams)") + 
+  scale_color_discrete(name = "Top Ten\nPesticide\nUse", labels = c('No', "Yes")) +
+  ggtitle("Birth Weight Outcome for Asian and Pacific Islander Mothers)") + 
+  scale_y_continuous(breaks=seq(2980, 3520,20)) +
+  scale_x_continuous(breaks=seq(37.6, 39.6, .2))
+
+#removed Imperial, the linear prediction improved a lot, and Imperial has a small population in general
+asian_mod_no7 <- lm(Average.Birth.Weight ~ Average.LMP.Gestational.Age, filter(mch_regression, Mothers.Race == "Asian or Pacific Islander" & County != "Imperial"))
+summary(asian_mod_no7)[4]
+summary(asian_mod_no7)[9]
+
+mch_regression %>%
+  filter(Mothers.Race == "Asian or Pacific Islander") %>%
+  ggplot(aes(Average.LMP.Gestational.Age, Average.Birth.Weight, color = factor(agricultural))) + 
+  geom_point() + 
+  geom_line(aes(y = predict(asian_mod)), size = 1) + 
+  xlab("Average LMP Gestational Age (weeks)") + 
+  ylab("Average Birth Weight (grams)") + 
+  scale_color_discrete(name = "Top Ten\nPesticide\nUse", labels = c('No', "Yes")) +
+  ggtitle("Birth Weight Outcome for Asian and Pacific Islander Mothers (no Imperial)") +
+  scale_y_continuous(breaks=seq(2980, 3520,20)) +
+  scale_x_continuous(breaks=seq(37.6, 39.6, .2))
+```
+
+
+```{r}
+#simple linear model best for Black mothers
+black_mod <- lm(Average.Birth.Weight ~ Average.LMP.Gestational.Age, filter(mch_regression, Mothers.Race == "Black or African American"))
+summary(black_mod)[4] #coefficients
+summary(black_mod)[9] #adjusted r-squared
+
+q3 <- mch_regression %>%
+  filter(Mothers.Race == "Black or African American") %>%
+  ggplot(aes(Average.LMP.Gestational.Age, Average.Birth.Weight, color = factor(agricultural))) + 
+  geom_point() + geom_line(aes(y = predict(black_mod)), size = 1) + 
+  xlab("Average LMP Gestational Age (weeks)") + 
+  ylab("Average Birth Weight (grams)") + 
+  scale_color_discrete(name = "Top Ten\nPesticide\nUse", labels = c('No', "Yes")) +
+  ggtitle("Birth Weight Outcome for Black Mothers") +
+  scale_y_continuous(breaks=seq(2980, 3520,20)) +
+  scale_x_continuous(breaks=seq(37.6, 39.6, .2))
+
+# Simple Linear Regression best shows relationship for White mothers
+white_mod <- lm(Average.Birth.Weight ~ Average.LMP.Gestational.Age, filter(mch_regression, Mothers.Race == "White"))
+summary(white_mod)[4] #coefficients
+summary(white_mod)[9] #adjusted r-squared
+
+q4 <- mch_regression %>%
+  filter(Mothers.Race == "White" ) %>%
+  ggplot(aes(Average.LMP.Gestational.Age, Average.Birth.Weight, color = factor(agricultural))) + 
+  geom_point() + geom_line(aes(y = predict(white_mod)), size = 1) + 
+  xlab("Average LMP Gestational Age (weeks)") + 
+  ylab("Average Birth Weight (grams)") + 
+  scale_color_discrete(name = "Top Ten\nPesticide\nUse", labels = c('No', "Yes")) +
+  ggtitle("Birth Weight Outcome for White Mothers") +
+  scale_y_continuous(breaks=seq(2980, 3520,20)) +
+  scale_x_continuous(breaks=seq(37.6, 39.6, .2))
+```
+
+
+```{r}
+grid.arrange(q1, q2, q3, q4)
+
+```
+
+
+#### Checking Assumptions for Linear Models
+```{r}
+
+plot(asian_mod)
+hist(rstudent(asian_mod), probability = TRUE, main = "Histogram of Externally Studentized Residuals", col = "pink")
+curve(dnorm,from=-4,to=4,add=TRUE)
+
+plot(asian_mod_no7)
+hist(rstudent(asian_mod_no7), probability = TRUE, main = "Histogram of Externally Studentized Residuals", col = "pink")
+curve(dnorm,from=-4,to=4,add=TRUE)
+
+plot(amerindian_mod)
+hist(rstudent(amerindian_mod), probability = TRUE, main = "Histogram of Externally Studentized Residuals", col = "pink")
+curve(dnorm,from=-4,to=4,add=TRUE)
+
+plot(black_mod)
+hist(rstudent(black_mod), probability = TRUE, main = "Histogram of Externally Studentized Residuals", col = "pink")
+curve(dnorm,from=-4,to=4,add=TRUE)
+
+plot(white_mod)
+hist(rstudent(white_mod), probability = TRUE, main = "Histogram of Externally Studentized Residuals", col = "pink")
+curve(dnorm,from=-4,to=4,add=TRUE)
+
+
+```
+

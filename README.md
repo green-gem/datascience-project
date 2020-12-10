@@ -9,7 +9,7 @@ background info on why we chose this topic, where all the data came from
 
 This project requires the following packages. Please install before running.
 
-dplyr, ggthemes, leaflet, maptools, pdftools, RColorBrewer, readr, rgdal, rgeos, scales, shiny, shinyBS, shinydashboard, sp, stringr, tidyverse
+dplyr, ggthemes, grid, gridExtra leaflet, maps,  maptools, pdftools, RColorBrewer, readr, rgdal, rgeos, scales, shiny, shinyBS, shinydashboard, sp, stringr, tidyverse
 
 
 Final Project.Rmd is where the main data wrangling occurs.

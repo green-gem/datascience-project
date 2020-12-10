@@ -1,16 +1,9 @@
-# California Department of Food and Agriculture 
-# California Agriculture Statistics Review
-# Top 10 Agriculture Counties
 
-agro <- c("Kern", "Tulare", "Fresno", "Monetery", "Merced", "Stanislaus", 
-          "San Joaquin", "Ventura", "Imperial")
+library(tidyverse)
+agro <- c("Kern", "Tulare", "Fresno", "Monterey", "Merced", "Stanislaus", 
+          "San Joaquin", "Ventura", "Madera", "Kings")
 
-#the top 10 agriculture counties acts as a proxy for pesticide usage
-#almost all of the top 10 counties in the list were the highest ranked in pesticide
-#usage, and most are located in the San Jaoquin Vallry
 
-#only focused on 2019 to be consistent with other analyses
-#don't have the knowledge to deal with longitudinal data yet
 
 mch_regression <- MCH.CDC.Data_Race %>% 
   filter(Year == 2016) %>%
@@ -80,7 +73,7 @@ mch_regression %>%
   geom_point() + geom_line(aes(y = predict(avg_bw_mod2016)))
 
 df2 %>% mutate(agricultural = ifelse(County %in% agro, 1, 0)) %>%
-  filter(Year == 2019) %>%
+  filter(Year == 2016) %>%
   ggplot(aes(Average.LMP.Gestational.Age, Average.Birth.Weight, color = factor(agricultural))) + 
   geom_point()
 
@@ -106,44 +99,4 @@ curve(dnorm,from=-4,to=4,add=TRUE)
 exstures3 <- rstudent(mod3)
 hist(exstures3, probability = TRUE, main = "Histogram of Externally Studentized Residuals", col = "pink")
 curve(dnorm,from=-4,to=4,add=TRUE)
-
-# White mothers
-white_mod1 <- lm(Average.Birth.Weight ~ factor(agricultural) + Average.LMP.Gestational.Age + factor(agricultural)*Average.LMP.Gestational.Age, filter(mch_regression, Mothers.Race == "White"))
-summary(white_mod1)
-
-mch_regression %>%
-  filter(Mothers.Race == "White") %>%
-  ggplot(aes(Average.LMP.Gestational.Age, Average.Birth.Weight, color = factor(agricultural))) + 
-  geom_point() + geom_line(aes(y = predict(white_mod1)))
-
-#american indian/alaska native
-amerindian_mod1 <- lm(Average.Birth.Weight ~ factor(agricultural) + Average.LMP.Gestational.Age, filter(mch_regression, Mothers.Race == "American Indian or Alaska Native"))
-summary(amerindian_mod1)
-
-#parallel lines, Black and Asian/Pacific Island populations fare the worst
-mch_regression %>%
-  filter(Mothers.Race == "American Indian or Alaska Native") %>%
-  ggplot(aes(Average.LMP.Gestational.Age, Average.Birth.Weight, color = factor(agricultural))) + 
-  geom_point() + geom_line(aes(y = predict(amerindian_mod1)))
-
-#asian mothers
-asian_mod1 <- lm(Average.Birth.Weight ~ factor(agricultural) + Average.LMP.Gestational.Age+ factor(agricultural)*Average.LMP.Gestational.Age, filter(mch_regression, Mothers.Race == "Asian or Pacific Islander"))
-summary(asian_mod1)
-
-#parallel lines, Black and Asian/Pacific Island populations fare the worst
-mch_regression %>%
-  filter(Mothers.Race == "Asian or Pacific Islander") %>%
-  ggplot(aes(Average.LMP.Gestational.Age, Average.Birth.Weight, color = factor(agricultural))) + 
-  geom_point() + geom_line(aes(y = predict(asian_mod1)))
-
-# black mothers
-black_mod1 <- lm(Average.Birth.Weight ~ factor(agricultural) + Average.LMP.Gestational.Age+ factor(agricultural)*Average.LMP.Gestational.Age, filter(mch_regression, Mothers.Race == "Black or African American"))
-summary(black_mod1)
-
-#parallel lines, Black and Asian/Pacific Island populations fare the worst
-mch_regression %>%
-  filter(Mothers.Race == "Black or African American") %>%
-  ggplot(aes(Average.LMP.Gestational.Age, Average.Birth.Weight, color = factor(agricultural))) + 
-  geom_point() + geom_line(aes(y = predict(black_mod1)))
-
 
