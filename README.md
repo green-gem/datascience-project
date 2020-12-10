@@ -1,6 +1,9 @@
 # Final Project BST 260: The Effects of Pesticide Exposure on Maternal and Child Health by Lara Rostomian, Sonia Kim, and Zainab Soetan
 
+Welcome to our github repository! Here are few quick guidance tips as to where each file is located. 
+- Dataprep folder is where all of our data wrangling occurred. "Final Project.rmd" is an accumulation of all of our codes and visualizations. We have added detailed descriptions for each chunk of codes. 
 
+- Shiny app folder is where our shiny app lies. The finalized code for our shiny app is in "Sonias app.R"
 
 * background info on why we chose this topic, where all the data came from
 
