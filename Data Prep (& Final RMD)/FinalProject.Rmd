@@ -74,6 +74,7 @@ library(grid)
 ```
 
 #### MCH Data Wrangling *Low BW Only (for map) 
+
 We wanted to create a map to visualize the pattern of low birth weight in California. I initially used CDC WONDER database but it had very limited information, where it grouped rural and small county-level data to "unidentified counties." Thus, I consulted another data source from [California Open Data Portal](https://data.ca.gov/dataset/live-births-with-low-and-very-low-birthweight). Following is the data cleaning process:
 
 ```{r}
@@ -87,6 +88,7 @@ lbwdata <- lbwdata %>% mutate(Rate = Events/Total.Births)
 ``` 
 
 #### MCH Data Wrangling *Preterm Birth Only (for map) 
+
 We also wanted to create another map to visualize the pattern of preterm birth in California. Again, I ran into a similar problem using CDC WONDER database. Thus, I consulted the [CHHS database](https://data.chhs.ca.gov/dataset/preterm-and-very-preterm-live-births/resource/cff79e2d-6ecf-4158-9e4f-7078632220ee) Following is the data cleaning process:
 
 ```{r}
