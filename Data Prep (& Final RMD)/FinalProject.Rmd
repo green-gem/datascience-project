@@ -51,7 +51,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 **Load Packages**
-```{r message=TRUE, warning=FALSE}
+```{r message=FALSE, warning=FALSE}
 library(dplyr)
 library(tidyverse)
 library(pdftools)
@@ -586,10 +586,10 @@ MCH.CDC.Data_Race %>% filter(County == "Los Angeles") %>% ggplot(aes(Year, Avera
 
 ```
 
-####Pesticide Data Wrangling
+#### Pesticide Data Wrangling
 
-The 
-```{r warning=FALSE}
+The [CDPR](https://www.cdpr.ca.gov/) creates a **Summary of Pesticide Use Data** every year that details pesticide usage throughout the state. Data from the 2016 report onward were available directly from a database linked in the report. For data prior to 2016, the one would need to navigate multiple large zip files before being able to find what they need. After many fruitless attempts to navigate the file system linked in the documents, I decided to get the desired table (Table 1, which shows the total pounds of pesticide active ingredients reported in each county and that county's rank in the current year and the previous year) directly from the documents using the *pdftools* package and string processing. I read in the pages from each pdf and wrote the tables to csv file ("table1_YEAR.csv") using the code in **import_data2.R**. These csv files were then combined to create a single table for pesticide usage from 2007 to 2016. I also imported a table of all the pesticides determined to cause reproductive harm according to Proposition 65. We were not able to find a use for that information.
+```{r message=FALSE, warning=FALSE}
 county_ranks16 <- read_delim("table1_county_rank_2016.txt", "\t", escape_double = FALSE, trim_ws = TRUE)
 repro_lbs16 <- read_delim("table3_reproductive_lbs_2016.txt", "\t", escape_double = FALSE, trim_ws = TRUE)
 repro_acre16 <- read_delim("table4_reproductive_acres_2016.txt", "\t", escape_double = FALSE, trim_ws = TRUE)
@@ -643,9 +643,8 @@ cdc_lowbirthweight  <- cdc_lowbirthweight [-c(482:538), ]
 cdc_lowbirthweight  <- cdc_lowbirthweight [ ,-c(1, 3, 5, 7)]
 MCH.CDC.Data.Total <- read.delim("MCH CDC Data Total.txt",  sep ="\t", dec=".", header = TRUE, stringsAsFactors = FALSE)
 MCH.CDC.Data.Total <- MCH.CDC.Data.Total[,-c(1, 3, 5)]
-MCH.CDC.Data.Total %>% rename("Total Birth" = "Births")
 
-#I noticed that the data I downloaded did not include total # of births so merging two datasets (one that has total # of birth counts and the other with low birth wegiht +very low birth weight counts)
+#I noticed that the data I downloaded did not include total # of births so merging two datasets (one that has total # of birth counts and the other with low birth weight +very low birth weight counts)
 df1 <- full_join(cdc_lowbirthweight , MCH.CDC.Data.Total, by=c("Year", "County"))
 df1<- df1 %>% rename("cases" = "Births.x", "total_births" = "Births.y")
 
@@ -751,7 +750,7 @@ df1_pt <- df1_pt %>% filter(!is.na("total_birth")) %>% filter(!is.na(Events)) %>
 
 #### Data Joining of CDC WONDER Live Birth Data (Low Birth Weight and Pre-Term Birth) and Pesticide Data 
 I then joined the CDC WONDER data (low birth weight and preterm birth) and Zainab's wrangled pesticide data to come up with a joint data. I then generated bar graphs to visualize the trend across a span of 2007-2016 (Please see shiny app). We noticed that Fresno and Kern county were the two top counties that used the highest amounts of pesticide and found out that San Joaquin Valley is a region that's agriculturally productive. 
-```{r}
+```{r message=FALSE}
 county_ranks16 <- read_delim("table1_county_rank_2016.txt", "\t", escape_double = FALSE, trim_ws = TRUE)
 repro_lbs16 <- read_delim("table3_reproductive_lbs_2016.txt", "\t", escape_double = FALSE, trim_ws = TRUE)
 repro_acre16 <- read_delim("table4_reproductive_acres_2016.txt", "\t", escape_double = FALSE, trim_ws = TRUE)
@@ -838,7 +837,7 @@ leaflet(spatial_pesticide, options = leafletOptions(zoomControl = TRUE, zoomLeve
 
 #### Regression Analysis
 ```{r}
-#Top 10 Counties in term of pesticide usage
+#Top 10 Counties in term of pesticide usage, according to CFDA
 agro <- c("Kern", "Tulare", "Fresno", "Monterey", "Merced", "Stanislaus", 
           "San Joaquin", "Ventura", "Imperial", "Kings")
 
@@ -847,27 +846,30 @@ mch_regression <- MCH.CDC.Data_Race %>%
   mutate(agricultural = ifelse(County %in% agro, 1, 0))
 ```
 
-```{r , out.width = "50%"}
+First we fit a model, stratified by agricultural ranking.
+```{r}
+#best model in terms of p-values and adjusted R-squared, contains and interaction term between gestational age and top ten status
 linmod <- lm(Average.Birth.Weight ~ Average.LMP.Gestational.Age + factor(agricultural) + Average.LMP.Gestational.Age * factor(agricultural), mch_regression)
 summary(linmod)[4]
 summary(linmod)[9]
 
+#On average, babies born to mothers living in a top ten agricultural county have an average birth weight less than those born to mothers that do not live in a top ten agricultural county, for a given LMP gestational age. As average LMP gestational age increases, average birth weight also increases.
 mch_regression %>%
   ggplot(aes(Average.LMP.Gestational.Age, Average.Birth.Weight, color = factor(agricultural))) + 
   geom_point() + 
   geom_line(aes(y = predict(linmod)))  + 
   xlab("Average LMP Gestational Age (weeks)") + 
   ylab("Average Birth Weight (grams)") + 
-  scale_color_discrete(name = "Top Ten\nAgriculture\nCounty", labels = c('No', "Yes")) +
+  scale_color_discrete(name = "Top Ten\nAgricultural\nCounty", labels = c('No', "Yes")) +
   ggtitle("Birth Weight Outcomes by Agriculture Category") + 
   ylim(2980, 3520) +
   xlim(37.6, 39.6)
 
 ```
 
-Pesticide use did not appear to affect much, but race did.
-```{r, out.width = "50%"}
-#parallel lines, Black and Asian/Pacific Island populations fare the worst
+Next we fit a models stratified by mother's race.
+```{r}
+#Black and Asian/Pacific Island populations tend to have lower average birth weights
 mch_regression %>%
   ggplot(aes(Average.LMP.Gestational.Age, Average.Birth.Weight, color = Mothers.Race)) + 
   geom_point() +  
@@ -879,7 +881,6 @@ mch_regression %>%
   xlim(37.6, 39.6)
 ```
 
-Pesticide use did not appear to affect much, but race did. So, we stratified by race.
 ```{r}
 #simple linear model more parsimonious than the one that has the interaction term for American Indian/Alaska Native Mothers
 #tho there are low populations for this group, so the numbers in the data may have a lot of variability among different years
@@ -893,7 +894,7 @@ q1 <- mch_regression %>%
   geom_point() + geom_line(aes(y = predict(amerindian_mod)), size = 1) + 
   xlab("Average LMP Gestational Age (weeks)") + 
   ylab("Average Birth Weight (grams)") + 
-  scale_color_discrete(name = "Top Ten\nAgriculture\nCounty", labels = c('No', "Yes")) +
+  scale_color_discrete(name = "Top Ten\nAgricultural\nCounty", labels = c('No', "Yes")) +
   ggtitle("Birth Weight Outcome for American Indian and Alaska Native Mothers") + 
   ylim(2980, 3520) +
   xlim(37.6, 39.6)
@@ -913,7 +914,7 @@ q2 <- mch_regression %>%
   geom_line(aes(y = predict(asian_mod)), size = 1) + 
   xlab("Average LMP Gestational Age (weeks)") + 
   ylab("Average Birth Weight (grams)") + 
-  scale_color_discrete(name = "Top Ten\nAgriculture\nCounty", labels = c('No', "Yes")) +
+  scale_color_discrete(name = "Top Ten\nAgricultural\nCounty", labels = c('No', "Yes")) +
   ggtitle("Birth Weight Outcome for Asian and Pacific Islander Mothers") + 
   ylim(2980, 3520) +
   xlim(37.6, 39.6)
@@ -930,7 +931,7 @@ q3 <- mch_regression %>%
   geom_point() + geom_line(aes(y = predict(black_mod)), size = 1) + 
   xlab("Average LMP Gestational Age (weeks)") + 
   ylab("Average Birth Weight (grams)") + 
-scale_color_discrete(name = "Top Ten\nAgriculture\nCounty", labels = c('No', "Yes")) +
+scale_color_discrete(name = "Top Ten\nAgricultural\nCounty", labels = c('No', "Yes")) +
   ggtitle("Birth Weight Outcome for Black Mothers") +
   ylim(2980, 3520) +
   xlim(37.6, 39.6)
@@ -947,14 +948,14 @@ q4 <- mch_regression %>%
   geom_point() + geom_line(aes(y = predict(white_mod)), size = 1) + 
   xlab("Average LMP Gestational Age (weeks)") + 
   ylab("Average Birth Weight (grams)") + 
-scale_color_discrete(name = "Top Ten\nAgriculture\nCounty", labels = c('No', "Yes")) +
+scale_color_discrete(name = "Top Ten\nAgricultural\nCounty", labels = c('No', "Yes")) +
   ggtitle("Birth Weight Outcome for White Mothers") +
   ylim(2980, 3520) +
   xlim(37.6, 39.6)
 ```
 
 
-```{r, out.width = "50%"}
+```{r}
 #Imperial appears to be an influential point in the plot for Asian, Black, and White mothers
 q1
 q2
@@ -963,20 +964,24 @@ q4
 ```
 
 
-#### Checking Assumptions for Linear Models by Checkign Residuals
+#### Checking Assumptions for Linear Models by Checking Residuals
+
+Our data set is small, about 50 counties total, so it was not feasible to divide the data into training and testing sets. I am checking the residuals to make sure the linear models are appropriate.
 ```{r, out.width = "40%"}
-#LINE assumptions met, Black mothers in Imperial appear to be influential
+#LINE assumptions met, Black mothers in Imperial (26) appear to be influential
 plot(linmod)
 
-# residuals definitely skewed, Imperial showing up again
+# residuals definitely skewed, Imperial (7) and Humboldt (6) cause problems
+#linear model not appropriate at all at all :(
 plot(asian_mod)
 
+#LINE assumptions satisfied
 plot(amerindian_mod)
 
 # Imperial
 plot(black_mod)
 
-# Imperial
+# Imperial (7), other than that it's good
 plot(white_mod)
 
 ```
