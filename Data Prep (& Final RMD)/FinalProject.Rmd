@@ -42,9 +42,59 @@ https://wonder.cdc.gov/natality-current.html
 
 ### Exploratory Analysis: 
 
+#### Exploratory Analysis via GGPlots (Lara): 
+
+For each of the variables of interest (Fertility Rate, Gestational Age, and Birth Weight) we first visualized the variable across all counties over the years in a tile plot. We then viewed the trend in our counties of interest by filtering by county and plotting the variable on a line plot. These counties include Fresno, Kern, Tulare, San Joaquin (since they are continuously ranked as the top 4 in highest use of pesticides), and Los Angeles (as a control/comparison county) since Los Angeles is one of the most populated and most diverse counties in California. Fresno, Kern, Tulare, and San Joaquin counties are also all a part of San Joaquin Valley which we mentioned in our background and related work section to be of special interest to us because it is California’s most productive agricultural region and has one of the highest amounts of pesticide use. Since confounding by race was of interest to us, we also analyzed the racial demographics across counties by visualizing the total population of each race across all counties in separate tile plots by race. We also visualized the racial demographics data in our counties of interest (Fresno, Kern, Tulare, San Joaquin and Los Angeles). After assessing the racial demographics, we continued to view the trends of our variables of interest (Fertility Rate, Gestational Age, and Birth Weight) across counties, stratified by race. We did this by visualizing each variable of interest for one specific race in a tile plot and repeated this for each race (so that each race had a tile plot of the variable over the years across all counties).  We also plotted the variables, stratified by race, in all our counties of interest (Fresno, Kern, Tulare, San Joaquin and Los Angeles) to identify any trends and outcome variables that vary across different races. 
+
+#### Exploratory Analysis via Shiny App (Sonia):
+
+We first created an interactive bar graph, allowing the users to visualize a pattern of low birth weight (<2500 g) and preterm birth (defined as <37 weeks LMP) across a span of years (2007-2016). The database is limited in that it does not show every county-level data for confidentiality reasons, suppressing values for counties that had a population of <100,000. We also created a Shiny map (using a leaflet function) to visualize a general pattern in pre-term births and low birth weight across the state of California. We initially used the WONDER CDC database and filtered it to year 2016. However, since the CDC database system excluded a great # of counties (population <100,000), the map did not come out informative as we had expected. Thus, we consulted additional data sources for preterm birth and low birth weight (California Open Data Portal; CHHS Data Open Portal). Using the leaflet map function, we were able to recognize a general pattern of prevalences in pre-term births and low birth weight across the state of California. However, we also saw that a relatively high rates in adverse perinatal outcomes occurred in the central region of the state. 
+
+#### Regression Analysis (Zainab): 
+
+We were only able to retrieve pesticide data from the California Department of Pesticide Regulation up to 2016, so the regression analysis was restricted to that year. Counties were categorized based on rank of the top ten agricultural counties, according to the California Department of Food and Agriculture [Production Statistics](http://www.cdfa.ca.gov/Statistics/). These counties, in no specific order, were Kern, Tulare, Fresno, Monterey, Merced, Stanislaus, San Joaquin, Imperial, Ventura, Kings county. Most of these counties are located in the San Joaquin Valley and all were highly ranked in terms of pesticide usage, according to the California Department of Pesticide Regulation.
+
+Initially, we considered logistic regression. We were interested in seeing if the different perinatal outcomes (birthweight and gestational age at birth) could predict the odds of being in a top ten agricultural county. Unfortunately, the logistic models did not appear to model the data well, as there were counties that had very small populations. Because they had small populations, they also had few births, and it was possible that no babies were born with low-birth weight or preterm. These appeared as outliers in all the scatterplots, and we felt that excluding those counties was not appropriate. So, instead of looking at the top ten ranking as an outcome, we decided to look at it as a predictor of the different birth outcomes. Linear regression was the next option for regression analysis, since the count data could easily be transformed into rates. Poisson regression was not used because there was difficulty in determining an appropriate offset.
+
 ### Final Analysis: 
 
+#### Exploratory Analysis via GGPlots (Lara): 
+From the exploratory data analysis using ggplots, we learned that Tulare, Fresno, Kings, Kern, and Imperial Counties (all counties with high agricultural and pesticide use rankings) had the highest fertility rates, and had higher fertility rates than Los Angeles (our comparison county). One reason for this could be the difference in access to and attitudes regarding family planning and contraception in these rural, agricultural counties. However we observed that all counties had a decreasing fertility rate over the years which matches the global and national average trends. Before stratifying by race we were curious to see if there was a disproportionate amount of any one race in any of the counties, and we found that no specific county stood out for having a disproportionate amount of any one race, except Los Angeles county which appeared to be the country where each race had the highest total population (as expected since we know that Los Angeles is one of the most populated and most diverse counties in california. To assess exposure to racism (measured as race) as a potential confounder went on to assess all our outcomes of interest stratified by race.
 
+We first assessed fertility rates stratified by race and found that White and Asian or Pacific Islander Populations had the highest fertility rates across all counties, compared to Black or African American and American Indian or Alaska Native with American Indian or Alaska Native populations having the lowest fertility rates across all counties.In all our counties of interest, White populations had the highest fertility rates followed by Asian or Pacific Islander Populations in Fresno County and Tulare (Ranked #1 and #3 for Pesticide Use respectively)  and Black or African American Populations in Kern County and San Joaquin County (Ranked #2 and #4 for Pesticide Use respectively). 
+
+We also analyzed gestational age at birth (measured in weeks via last menstrual period method) and stratified by race. We found that in the aggregate data, most counties seemed to have relatively high average gestational age at birth, but Fresno seemed to have a slightly lower average gestational age at birth compared to other counties, and since Fresno is ranked #1 in pesticide use, this may be cause to further explore a potential relationship between pesticide exposure and low gestational age although since the data is so similar across counties, there is a high probability that this is not a statistically significant difference. When stratifying by race we found, as expected, that Black or African American populations experienced more variability and lower gestational ages across counties. In all our counties of interest, we saw that Black or African American populations had the lowest gestational age at birth compared to other races, a national trend also found in the literature. However we also observed that none of the counties of interest had average gestational ages which equaled or were more extreme than the preterm birth cutoff of 37 weeks.  
+
+We also analyzed birth weight (measured in grams) and stratified our analysis by race. We found that in the aggregate data, most counties seemed to have relatively high average birth weights and were very similar across the years, but Fresno seemed to have a slightly lower average gestational age at birth compared to other counties, and since Fresno is ranked #1 in pesticide use, this may be cause to further explore a potential relationship between pesticide exposure and low birthweight although since the data is so similar across counties, there is a high probability that this is not a statistically significant difference. When stratifying by race we found, as expected, that Black or African American populations experienced more variability and lower gestational ages across counties. In all our counties of interest, we saw that Black or African American populations had the lowest birth weights compared to other races, a national trend also found in the literature. However we also observed that none of the counties of interest had average birth weights which equaled or were more extreme than the low birthweight cutoff of 2500 grams.  
+
+In conclusion, we found that our counties of interest (i.e. counties with high pesticide use) had higher fertility rates on average than counties without high pesticide use. The relationship between exposure to racism (measured as race) and adverse perinatal health outcomes was apparent in this data as we observed lower birth weights and gestational ages for Black and African American Populations compared to other races. However there was no evidence in the initial data exploration to support a statistically significant conclusion that our counties of interest  (i.e. counties with high pesticide use) had adverse perinatal health outcomes compared to  counties without high pesticide use.  
+
+
+#### Exploratory Analysis via Shiny App (Sonia):
+
+Using the same Shiny leaflet function, we tried to see if this region was associated with any use of pesticides. Note that California has a broad legal definition of pesticide: it includes pesticides applied in agriculture, parks, golf courses, cemeteries, etc. As can seen from the shiny app, we noticed that counties that sit around the central region (also known as San Joaquin Valley) of California have consistently been the highest pesticide users from 2007-2016. In fact, San Joaquin Valley is known to be the largest agricultural producer in the world! Naturally, our next question was whether high pesticide use in this particular region was associated with adverse perinatal outcomes. We speculated a possible correlation, and thought it would be interesting to investigate the relationship at a closer-look, using regression analysis. 
+
+#### Regression Analysis (Zainab): 
+
+We were able to create a linear regression model to determine the association between top ten ranking, average gestational age, and average birth weight by including an interaction term. The model is described in the following equation:
+
+BW = -6880.061 + 262.434 [AGE] + 5256.662 [I(TOP)] - 136.464 [AGE]x[I(TOP)], 
+
+Where BW is the average birth weight, AGE is the average LMP gestational age, and I(TOP) is an indicator variable for being a top ten agricultural county. According to the adjusted R-squared value, the model explains 46% of the variability in the data. Overall there is a positive relationship between gestational age and birth weight, as expected, but the trend is less pronounced amongst mothers living in top agricultural counties. For two babies that are the same gestational age, the baby born in a top ranked agricultural county will have a smaller birth weight, on average. This suggests that living in a highly agricultural environment, an environment with a lot of pesticide usage, has an adverse effect on birth weight.
+
+We were also interested in how this trend varies by race. According to the data, Asian, Pacific Islander, and Black mothers tend to have babies that weigh less at birth than American Indian, Alaska Native, or White mothers. We were able to successfully develop an appropriate linear model for all categories except for Asian and Pacific Islander mothers. The models for American Indian and Alaska Native, Black, and White mothers are: 
+BW = -3829.713 + 184.977 [AGE], 
+BW = -5672.432 + 230.120 [AGE] + 5451.896 [I(TOP)] - 142.404 [AGE]x[I(TOP)], 
+and 
+BW = -5250.834 + 221.394 [AGE] + 6590.076 [I(TOP)] - 170.141 [AGE]x[I(TOP)], 
+
+respectively.
+
+The population of American Indian and Alaska Native people was small in every county, so they will be excluded from the following comparison.
+
+The difference between babies born in high ranked agricultural counties and those not born in high ranked agricultural counties is smaller among those born to Black mothers as compared to those born to White mothers. However, babies born to White mothers tend to be older (in terms of gestational age), and have higher birth weights.
+
+Imperial County appeared as an influential point in most of the linear models. Imperial did not appear to have extreme values in any variable category, and the outliers involved low birth weights for high gestational ages in Asian and Pacific Islander and Black mothers. We already determined that these populations have babies with low birth weights on average, so it was not appropriate to exclude the points from our analysis.
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
@@ -1018,9 +1068,4 @@ curve(dnorm,from=-4,to=4,add=TRUE)
 
 ```
 
-
-Adding the top ranked pesticide counties do not improve any of the models
-```{r}
-
-```
-
+Adding the top ranked pesticide counties do not improve any of the models.
