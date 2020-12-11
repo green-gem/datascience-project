@@ -1,5 +1,5 @@
 ---
-title: "The Effects of Pesticide Exposure on Maternal and Child Health"
+title: "Exploration of Pesticides and Perinatal Outcomes in the State of California" 
 subtitle: "Final Project BST 260 Fall 2020"
 author:
   - Lara Rostomian
