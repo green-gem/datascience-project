@@ -427,13 +427,16 @@ MCH.CDC.Data_Race %>% filter(County == "San Joaquin") %>% ggplot(aes(Year, Ferti
 MCH.CDC.Data_Race %>% filter(County == "Los Angeles") %>% ggplot(aes(Year, Fertility.Rate, color = Mothers.Race)) + geom_line() + labs( y="Fertility Rate", title = "Race and Fertility Data in Los Angeles County", subtitle = "2007-2019", color = "Mother's Race", caption = "Data Source: CDC WONDER Online Database") + ylim(0,115)
 ```
 
+##### Preterm Birth (Stratified By Race)
+The next variable I examined was  **preterm birth** measured as LMP (last menstrual period) gestation age in weeks, and I added **stratification by race**. I first visualized the preterm birth across all counties over the years and then stratified the tile plots by race. I then viewed the trends of gestational age by race in our counties of interest which include Fresno, Kern, Tulare, San Joaquin (since they are continuously ranked as the top 4 in highest use of pesticides), and Los Angeles (as a control/comparison county) since LA is one of the most populated and most diverse counties in California. Fresno, Kern, Tulare, and San Joaquin counties are also all a part of *San Joaquin Valley* which we mentioned in our background and related work section to be of special interest to us because it is California’s most productive agricultural region and has one of the highest amounts of pesticide use. I also included a horizontal line for the county level stratified data at **37 weeks** which is the cutoff for defining preterm birth. 
+
 ```{r}
 #Preterm Birth GGPLOTS (With Race)
 MCH.CDC.Data %>% 
     ggplot(aes(x = Year, y = County,  fill = Average.LMP.Gestational.Age)) +
     geom_tile(color = "grey50") +
     scale_x_continuous(expand = c(0,0)) +
-    scale_fill_gradientn("Average Gestational Age (LMP) in Weeks", 
+    scale_fill_gradientn("Average Gestational Age (LMP) in Weeks", limits = c(36,40),
                          colors = brewer.pal(9, "Reds")) +
     theme_minimal() +  
     theme(panel.grid = element_blank()) +
@@ -444,7 +447,7 @@ MCH.CDC.Data_Race %>% filter(Mothers.Race == "American Indian or Alaska Native")
 ggplot(aes(x = Year, y = County,  fill = Average.LMP.Gestational.Age)) +
     geom_tile(color = "grey50") +
     scale_x_continuous(expand = c(0,0)) +
-    scale_fill_gradientn("Average Gestational Age (LMP) in Weeks", 
+    scale_fill_gradientn("Average Gestational Age (LMP) in Weeks", limits = c(36,40),
                          colors = brewer.pal(9, "Reds")) +
     theme_minimal() +  
     theme(panel.grid = element_blank()) +
@@ -455,7 +458,7 @@ MCH.CDC.Data_Race %>% filter(Mothers.Race == "Asian or Pacific Islander") %>%
 ggplot(aes(x = Year, y = County,  fill = Average.LMP.Gestational.Age)) +
     geom_tile(color = "grey50") +
     scale_x_continuous(expand = c(0,0)) +
-    scale_fill_gradientn("Average Gestational Age (LMP) in Weeks", 
+    scale_fill_gradientn("Average Gestational Age (LMP) in Weeks", limits = c(36,40),
                          colors = brewer.pal(9, "Reds")) +
     theme_minimal() +  
     theme(panel.grid = element_blank()) +
@@ -466,7 +469,7 @@ MCH.CDC.Data_Race %>% filter(Mothers.Race == "Black or African American") %>%
 ggplot(aes(x = Year, y = County,  fill = Average.LMP.Gestational.Age)) +
     geom_tile(color = "grey50") +
     scale_x_continuous(expand = c(0,0)) +
-    scale_fill_gradientn("Average Gestational Age (LMP) in Weeks", 
+    scale_fill_gradientn("Average Gestational Age (LMP) in Weeks", limits = c(36,40),
                          colors = brewer.pal(9, "Reds")) +
     theme_minimal() +  
     theme(panel.grid = element_blank()) +
@@ -477,29 +480,33 @@ MCH.CDC.Data_Race %>% filter(Mothers.Race == "White") %>%
 ggplot(aes(x = Year, y = County,  fill = Average.LMP.Gestational.Age)) +
     geom_tile(color = "grey50") +
     scale_x_continuous(expand = c(0,0)) +
-    scale_fill_gradientn("Average Gestational Age (LMP) in Weeks", 
+    scale_fill_gradientn("Average Gestational Age (LMP) in Weeks", limits = c(36,40),
                          colors = brewer.pal(9, "Reds")) +
     theme_minimal() +  
     theme(panel.grid = element_blank()) +
     ggtitle("Average Gestational Age by County for White Pop.") + 
     ylab("") + xlab("") 
 
-MCH.CDC.Data_Race %>% filter(County == "Fresno") %>% ggplot(aes(Year, Average.LMP.Gestational.Age, color = Mothers.Race)) + geom_line() + labs( y="Average LMP Gestational Age (Weeks)", title = "Preterm Birth in Fresno County", subtitle = "2007-2019", color = "Mother's Race", caption = "Data Source: CDC WONDER Online Database") + geom_hline(yintercept = 37, size =2)
+#Fresno, Ranked #1 in Pesticide Use
+MCH.CDC.Data_Race %>% filter(County == "Fresno") %>% ggplot(aes(Year, Average.LMP.Gestational.Age, color = Mothers.Race)) + geom_line() + labs( y="Average LMP Gestational Age (Weeks)", title = "Preterm Birth in Fresno County", subtitle = "2007-2019", color = "Mother's Race", caption = "Data Source: CDC WONDER Online Database") + geom_hline(yintercept = 37, size =2) + ylim(36,40)
 
-MCH.CDC.Data_Race %>% filter(County == "San Joaquin") %>% ggplot(aes(Year, Average.LMP.Gestational.Age, color = Mothers.Race)) + geom_line() + labs( y="Average LMP Gestational Age (Weeks)", title = "Preterm Birth in San Joaquin County", subtitle = "2007-2019", color = "Mother's Race", caption = "Data Source: CDC WONDER Online Database") + geom_hline(yintercept = 37, size =2)
+#Kern, Ranked #2 in Pesticide Use
+MCH.CDC.Data_Race %>% filter(County == "Kern") %>% ggplot(aes(Year, Average.LMP.Gestational.Age, color = Mothers.Race)) + geom_line() + labs( y="Average LMP Gestational Age (Weeks)", title = "Preterm Birth in Kern County", subtitle = "2007-2019", color = "Mother's Race", caption = "Data Source: CDC WONDER Online Database")  + geom_hline(yintercept = 37, size =2) + ylim(36,40)
 
-MCH.CDC.Data_Race %>% filter(County == "Kern") %>% ggplot(aes(Year, Average.LMP.Gestational.Age, color = Mothers.Race)) + geom_line() + labs( y="Average LMP Gestational Age (Weeks)", title = "Preterm Birth in Kern County", subtitle = "2007-2019", color = "Mother's Race", caption = "Data Source: CDC WONDER Online Database")  + geom_hline(yintercept = 37, size =2)
+#Tulare, Ranked #3 in Pesticide Use
+MCH.CDC.Data_Race %>% filter(County == "Tulare") %>% ggplot(aes(Year, Average.LMP.Gestational.Age, color = Mothers.Race)) + geom_line() + labs( y="Average LMP Gestational Age (Weeks)", title = "Preterm Birth in Tulare", subtitle = "2007-2019", color = "Mother's Race", caption = "Data Source: CDC WONDER Online Database")  + geom_hline(yintercept = 37, size =2) + ylim(36,40)
 
-MCH.CDC.Data_Race %>% filter(County == "San Bernardino") %>% ggplot(aes(Year, Average.LMP.Gestational.Age, color = Mothers.Race)) + geom_line() + labs( y="Average LMP Gestational Age (Weeks)", title = "Preterm Birth in San Bernardino County", subtitle = "2007-2019", color = "Mother's Race", caption = "Data Source: CDC WONDER Online Database")  + geom_hline(yintercept = 37, size =2)
+#San Joaquin, Ranked #4 in Pesticide Use
+MCH.CDC.Data_Race %>% filter(County == "San Joaquin") %>% ggplot(aes(Year, Average.LMP.Gestational.Age, color = Mothers.Race)) + geom_line() + labs( y="Average LMP Gestational Age (Weeks)", title = "Preterm Birth in San Joaquin County", subtitle = "2007-2019", color = "Mother's Race", caption = "Data Source: CDC WONDER Online Database") + geom_hline(yintercept = 37, size =2) + ylim(36,40)
 
-MCH.CDC.Data_Race %>% filter(County == "Los Angeles") %>% ggplot(aes(Year, Average.LMP.Gestational.Age, color = Mothers.Race)) + geom_line() + labs( y="Average LMP Gestational Age (Weeks)", title = "Preterm Birth in Los Angeles County", subtitle = "2007-2019", color = "Mother's Race", caption = "Data Source: CDC WONDER Online Database")  + geom_hline(yintercept = 37, size =2)
+#Los Angeles County, Comparison Group
+MCH.CDC.Data_Race %>% filter(County == "Los Angeles") %>% ggplot(aes(Year, Average.LMP.Gestational.Age, color = Mothers.Race)) + geom_line() + labs( y="Average LMP Gestational Age (Weeks)", title = "Preterm Birth in Los Angeles County", subtitle = "2007-2019", color = "Mother's Race", caption = "Data Source: CDC WONDER Online Database")  + geom_hline(yintercept = 37, size =2) + ylim(36,40)
 
-MCH.CDC.Data_Race %>% filter(County == "San Diego") %>% ggplot(aes(Year, Average.LMP.Gestational.Age, color = Mothers.Race)) + geom_line() + labs( y="Average LMP Gestational Age (Weeks)", title = "Preterm Birth in San Diego", subtitle = "2007-2019", color = "Mother's Race", caption = "Data Source: CDC WONDER Online Database")  + geom_hline(yintercept = 37, size =2)
-
-MCH.CDC.Data_Race %>% filter(County == "Tulare") %>% ggplot(aes(Year, Average.LMP.Gestational.Age, color = Mothers.Race)) + geom_line() + labs( y="Average LMP Gestational Age (Weeks)", title = "Preterm Birth in Tulare", subtitle = "2007-2019", color = "Mother's Race", caption = "Data Source: CDC WONDER Online Database")  + geom_hline(yintercept = 37, size =2)
 
 #Preterm Birth Cutoff is 37 Weeks (Horizontal Line)
 ``` 
+##### Birth Weight (Stratified By Race)
+The next variable I examined was  **birth weight** measured in grams, and I added **stratification by race**. I first visualized the birth weight across all counties over the years and then stratified the tile plots by race. I then viewed the trends of birth weight by race in our counties of interest which include Fresno, Kern, Tulare, San Joaquin (since they are continuously ranked as the top 4 in highest use of pesticides), and Los Angeles (as a control/comparison county) since LA is one of the most populated and most diverse counties in California. Fresno, Kern, Tulare, and San Joaquin counties are also all a part of *San Joaquin Valley* which we mentioned in our background and related work section to be of special interest to us because it is California’s most productive agricultural region and has one of the highest amounts of pesticide use. I also included a horizontal line for the county level stratified data at **25000 grams** which is the cutoff for defining low birth weight.
 
 ```{r}
 #Birth weight GGPLOTS (With Race)
@@ -507,7 +514,7 @@ MCH.CDC.Data %>%
     ggplot(aes(x = Year, y = County,  fill = Average.Birth.Weight)) +
     geom_tile(color = "grey50") +
     scale_x_continuous(expand = c(0,0)) +
-    scale_fill_gradientn("Average Birth Weight in Grams", 
+    scale_fill_gradientn("Average Birth Weight in Grams", limits = c(2400, 3600),
                          colors = brewer.pal(9, "Reds")) +
     theme_minimal() +  
     theme(panel.grid = element_blank()) +
@@ -518,7 +525,7 @@ MCH.CDC.Data_Race %>% filter(Mothers.Race == "American Indian or Alaska Native")
 ggplot(aes(x = Year, y = County,  fill = Average.Birth.Weight)) +
     geom_tile(color = "grey50") +
     scale_x_continuous(expand = c(0,0)) +
-    scale_fill_gradientn("Average Birth Weight in Grams", 
+    scale_fill_gradientn("Average Birth Weight in Grams", limits = c(2400, 3600),
                          colors = brewer.pal(9, "Reds")) +
     theme_minimal() +  
     theme(panel.grid = element_blank()) +
@@ -529,7 +536,7 @@ MCH.CDC.Data_Race %>% filter(Mothers.Race == "Asian or Pacific Islander") %>%
 ggplot(aes(x = Year, y = County,  fill = Average.Birth.Weight)) +
     geom_tile(color = "grey50") +
     scale_x_continuous(expand = c(0,0)) +
-    scale_fill_gradientn("Average Birth Weight in Grams", 
+    scale_fill_gradientn("Average Birth Weight in Grams", limits = c(2400, 3600),
                          colors = brewer.pal(9, "Reds")) +
     theme_minimal() +  
     theme(panel.grid = element_blank()) +
@@ -540,7 +547,7 @@ MCH.CDC.Data_Race %>% filter(Mothers.Race == "Black or African American") %>%
 ggplot(aes(x = Year, y = County,  fill = Average.Birth.Weight)) +
     geom_tile(color = "grey50") +
     scale_x_continuous(expand = c(0,0)) +
-    scale_fill_gradientn("Average Birth Weight Grams", 
+    scale_fill_gradientn("Average Birth Weight Grams", limits = c(2400, 3600),
                          colors = brewer.pal(9, "Reds")) +
     theme_minimal() +  
     theme(panel.grid = element_blank()) +
@@ -551,32 +558,33 @@ MCH.CDC.Data_Race %>% filter(Mothers.Race == "White") %>%
 ggplot(aes(x = Year, y = County,  fill = Average.Birth.Weight)) +
     geom_tile(color = "grey50") +
     scale_x_continuous(expand = c(0,0)) +
-    scale_fill_gradientn("Average Birth Weight in Grams", 
+    scale_fill_gradientn("Average Birth Weight in Grams", limits = c(2400, 3600),
                          colors = brewer.pal(9, "Reds")) +
     theme_minimal() +  
     theme(panel.grid = element_blank()) +
     ggtitle("Average Birth Weight by County for White Pop.") + 
     ylab("") + xlab("") 
 
-MCH.CDC.Data_Race %>% filter(County == "Fresno") %>% ggplot(aes(Year, Average.Birth.Weight, color = Mothers.Race)) + geom_line() + labs( y="Average Birth Weight (Grams)", title = "Birth Weight Data in Fresno County", subtitle = "2007-2019", color = "Mother's Race", caption = "Data Source: CDC WONDER Online Database") + geom_hline(yintercept = 2500, size =2)
+#Fresno, Ranked #1 in Pesticide Use
+MCH.CDC.Data_Race %>% filter(County == "Fresno") %>% ggplot(aes(Year, Average.Birth.Weight, color = Mothers.Race)) + geom_line() + labs( y="Average Birth Weight (Grams)", title = "Birth Weight Data in Fresno County", subtitle = "2007-2019", color = "Mother's Race", caption = "Data Source: CDC WONDER Online Database") + geom_hline(yintercept = 2500, size =2)+ ylim(2400, 3600)
 
-MCH.CDC.Data_Race %>% filter(County == "San Joaquin") %>% ggplot(aes(Year, Average.Birth.Weight, color = Mothers.Race)) + geom_line() + labs( y="Average Birth Weight (Grams)", title = "Birth Weight Data in San Joaquin County", subtitle = "2007-2019", color = "Mother's Race", caption = "Data Source: CDC WONDER Online Database") + geom_hline(yintercept = 2500, size =2)
+#Kern, Ranked #2 in Pesticide Use
+MCH.CDC.Data_Race %>% filter(County == "Kern") %>% ggplot(aes(Year, Average.Birth.Weight, color = Mothers.Race)) + geom_line() + labs( y="Average Birth Weight (Grams)", title = "Birth Weight Data in Kern County", subtitle = "2007-2019", color = "Mother's Race", caption = "Data Source: CDC WONDER Online Database")  + geom_hline(yintercept = 2500, size =2)+ ylim(2400, 3600)
 
-MCH.CDC.Data_Race %>% filter(County == "Kern") %>% ggplot(aes(Year, Average.Birth.Weight, color = Mothers.Race)) + geom_line() + labs( y="Average Birth Weight (Grams)", title = "Birth Weight Data in Kern County", subtitle = "2007-2019", color = "Mother's Race", caption = "Data Source: CDC WONDER Online Database")  + geom_hline(yintercept = 2500, size =2)
+#Tulare, Ranked #3 in Pesticide Use
+MCH.CDC.Data_Race %>% filter(County == "Tulare") %>% ggplot(aes(Year, Average.Birth.Weight, color = Mothers.Race)) + geom_line() + labs( y="Average Birth Weight (Grams)", title = "Birth Weight Data in Tulare", subtitle = "2007-2019", color = "Mother's Race", caption = "Data Source: CDC WONDER Online Database")  + geom_hline(yintercept = 2500, size =2)+ ylim(2400, 3600)
 
-MCH.CDC.Data_Race %>% filter(County == "San Bernardino") %>% ggplot(aes(Year, Average.Birth.Weight, color = Mothers.Race)) + geom_line() + labs( y="Average Birth Weight (Grams)", title = "Birth Weight Data in San Bernardino County", subtitle = "2007-2019", color = "Mother's Race", caption = "Data Source: CDC WONDER Online Database")  + geom_hline(yintercept = 2500, size =2)
+#San Joaquin, Ranked #4 in Pesticide Use
+MCH.CDC.Data_Race %>% filter(County == "San Joaquin") %>% ggplot(aes(Year, Average.Birth.Weight, color = Mothers.Race)) + geom_line() + labs( y="Average Birth Weight (Grams)", title = "Birth Weight Data in San Joaquin County", subtitle = "2007-2019", color = "Mother's Race", caption = "Data Source: CDC WONDER Online Database") + geom_hline(yintercept = 2500, size =2)+ ylim(2400, 3600)
 
-MCH.CDC.Data_Race %>% filter(County == "Los Angeles") %>% ggplot(aes(Year, Average.Birth.Weight, color = Mothers.Race)) + geom_line() + labs( y="Average Birth Weight (Grams)", title = "Birth Weight Data in Los Angeles County", subtitle = "2007-2019", color = "Mother's Race", caption = "Data Source: CDC WONDER Online Database")  + geom_hline(yintercept = 2500, size =2)
-
-MCH.CDC.Data_Race %>% filter(County == "San Diego") %>% ggplot(aes(Year, Average.Birth.Weight, color = Mothers.Race)) + geom_line() + labs( y="Average Birth Weight (Grams)", title = "Birth Weight Data in San Diego", subtitle = "2007-2019", color = "Mother's Race", caption = "Data Source: CDC WONDER Online Database")  + geom_hline(yintercept = 2500, size =2)
-
-MCH.CDC.Data_Race %>% filter(County == "Tulare") %>% ggplot(aes(Year, Average.Birth.Weight, color = Mothers.Race)) + geom_line() + labs( y="Average Birth Weight (Grams)", title = "Birth Weight Data in Tulare", subtitle = "2007-2019", color = "Mother's Race", caption = "Data Source: CDC WONDER Online Database")  + geom_hline(yintercept = 2500, size =2)
+#Los Angeles, Comparison Group
+MCH.CDC.Data_Race %>% filter(County == "Los Angeles") %>% ggplot(aes(Year, Average.Birth.Weight, color = Mothers.Race)) + geom_line() + labs( y="Average Birth Weight (Grams)", title = "Birth Weight Data in Los Angeles County", subtitle = "2007-2019", color = "Mother's Race", caption = "Data Source: CDC WONDER Online Database")  + geom_hline(yintercept = 2500, size =2) + ylim(2400, 3600)
 
 #LBW Cutoff is 2500 Grams (Horizontal Line)
 
 ```
 
-Pesticide Data Wrangling
+####Pesticide Data Wrangling
 
 The 
 ```{r warning=FALSE}
@@ -623,7 +631,7 @@ combined_pesticide_use <- combined_pesticide_use %>% group_by(usage)
 combined_pesticide_use <- combined_pesticide_use %>% arrange(usage)
 ```
 
-###Sonia's Work with LBW Data:
+#### LBW Data from CDC (Wrangling for use in ShinyApp):
 This is my data wrangling process for low birth weight for the CDC WONDER database. By default, CDC WONDER live birth database only displayed counties that had a county population >100,000. I only looked at low birth rate here and this is for my shiny app bar graph. 
 ```{r}
 #MCH_CDC Data for low birth weight 
@@ -685,7 +693,7 @@ df2 <- df2 %>% filter(!is.na(total_births)) %>% filter(!is.na(cases)) %>% mutate
 df2$County <- df2$County %>% str_to_title()
 ```
 
-###Sonia's CDC WONDER Database Work With Preterm Birth:
+##### Preterm Birth Data from CDC Wonder Database (Wrangling for use in ShinyApp)::
 This is my data wrangling process for preterm birth for the CDC WONDER database. By default, CDC WONDER live birth database only displayed counties that had a county population >100,000. I only looked at preterm birth here and this is for my shiny app bar graph. 
 ```{r}
 cdc_pretermbirth <- read.delim("Preterm birth.txt",  sep ="\t", dec=".", header = TRUE, stringsAsFactors = FALSE)
@@ -739,7 +747,7 @@ df1_pt <- df1_pt %>% filter(!is.na("total_birth")) %>% filter(!is.na(Events)) %>
 
 ```
 
-###Sonia's Data Joining of CDC WONDER Live Birth Data (Low Birth Weight and Pre-Term Birth) and Pesticide Data 
+#### Data Joining of CDC WONDER Live Birth Data (Low Birth Weight and Pre-Term Birth) and Pesticide Data 
 I then joined the CDC WONDER data (low birth weight and preterm birth) and Zainab's wrangled pesticide data to come up with a joint data. I then generated bar graphs to visualize the trend across a span of 2007-2016 (Please see shiny app). We noticed that Fresno and Kern county were the two top counties that used the highest amounts of pesticide and found out that San Joaquin Valley is a region that's agriculturally productive. 
 ```{r}
 county_ranks16 <- read_delim("table1_county_rank_2016.txt", "\t", escape_double = FALSE, trim_ws = TRUE)
@@ -794,7 +802,7 @@ pesticide_averagept_join %>% ggplot(aes(County, value)) + geom_col() + ylab("Pes
 
 ```
 
-###Code for Creating the Map - Leaflet Map Using Preterm Birth Data I Wrangled Earlier (See Shiny App for the Final Result) 
+#### Code for Creating the Map - Leaflet Map Using Preterm Birth Data I Wrangled Earlier (See Shiny App for the Final Result) 
 This is a similar spatial map but for pesticide use. Following is the wrangling process of generating a map that shapes the map of California, and merging that spatial object with pesticide use that I wrangled earlier to generate a leaflet map. 
 ```{r}
 averagept_df <- combined_pesticide_use %>% filter(usage == "2016")
@@ -826,7 +834,7 @@ leaflet(spatial_pesticide, options = leafletOptions(zoomControl = TRUE, zoomLeve
 ```
 
 
-### Regression Analysis
+#### Regression Analysis
 ```{r}
 #Top 10 Counties in term of pesticide usage
 agro <- c("Kern", "Tulare", "Fresno", "Monterey", "Merced", "Stanislaus", 
