@@ -252,8 +252,9 @@ MCH.CDC.Data_Race<- MCH.CDC.Data_Race %>% rename("Mothers.Race" = "Mother.s.Brid
 Data Key:
 
 #### Exploratory Data Analysis of Maternal and Infant Health Indicators from the [CDC Wonder Database](https://wonder.cdc.gov/natality-current.html): 
-The first variable I examined was **fertility rate** and I first visualized the fertility rates across all counties over the years in a tile plot. I then viewed the trend in our counties of interest which include Fresno, Kern, Tulare, San Joaquin (since they are continuously ranked as the top 4 in highest use of pesticides), and Los Angeles (as a control/comparison county) since LA is one of the most populated and most diverse counties in California. Fresno, Kern, Tulare, and San Joaquin counties are also all a part of *San Joaquin Valley* which we mentioned in our background and related work section to be of special interest to us because it is California’s most productive agricultural region and has one of the highest amounts of pesticide use. 
 
+##### Fertility Rate 
+The first variable I examined was **fertility rate** and I first visualized the fertility rates across all counties over the years in a tile plot. I then viewed the trend in our counties of interest which include Fresno, Kern, Tulare, San Joaquin (since they are continuously ranked as the top 4 in highest use of pesticides), and Los Angeles (as a control/comparison county) since LA is one of the most populated and most diverse counties in California. Fresno, Kern, Tulare, and San Joaquin counties are also all a part of *San Joaquin Valley* which we mentioned in our background and related work section to be of special interest to us because it is California’s most productive agricultural region and has one of the highest amounts of pesticide use. 
 
 ```{r}
 #Fertility Rate GGPLOTS
@@ -296,65 +297,8 @@ p4 <-MCH.CDC.Data %>% group_by(County) %>% filter(County == "Los Angeles") %>% g
 grid.arrange(p1, p2, p3, p4, bottom = "Data Source: CDC WONDER Online Database")
 ```
 
-```{r}
-#Race and Fertility GGPLOTS
-MCH.CDC.Data_Race %>% filter(Mothers.Race == "American Indian or Alaska Native") %>%
-ggplot(aes(x = Year, y = County,  fill = Fertility.Rate)) +
-    geom_tile(color = "grey50") +
-    scale_x_continuous(expand = c(0,0)) +
-    scale_fill_gradientn("Fertility Rate", 
-                         colors = brewer.pal(9, "Reds")) +
-    theme_minimal() +  
-    theme(panel.grid = element_blank()) +
-    ggtitle("Fertility Rate by County for American Indian or Alaska Native Pop.") + 
-    ylab("") + xlab("") 
-
-MCH.CDC.Data_Race %>% filter(Mothers.Race == "Asian or Pacific Islander") %>%
-ggplot(aes(x = Year, y = County,  fill = Fertility.Rate)) +
-    geom_tile(color = "grey50") +
-    scale_x_continuous(expand = c(0,0)) +
-    scale_fill_gradientn("Fertility Rate", 
-                         colors = brewer.pal(9, "Reds")) +
-    theme_minimal() +  
-    theme(panel.grid = element_blank()) +
-    ggtitle("Fertility Rate by County for Asian or Pacific Islander Pop.") + 
-    ylab("") + xlab("") 
-
-MCH.CDC.Data_Race %>% filter(Mothers.Race == "Black or African American") %>%
-ggplot(aes(x = Year, y = County,  fill = Fertility.Rate)) +
-    geom_tile(color = "grey50") +
-    scale_x_continuous(expand = c(0,0)) +
-    scale_fill_gradientn("Fertility Rate", 
-                         colors = brewer.pal(9, "Reds")) +
-    theme_minimal() +  
-    theme(panel.grid = element_blank()) +
-    ggtitle("Fertility Rate by County for Black or African American Pop.") + 
-    ylab("") + xlab("") 
-
-MCH.CDC.Data_Race %>% filter(Mothers.Race == "White") %>%
-ggplot(aes(x = Year, y = County,  fill = Fertility.Rate)) +
-    geom_tile(color = "grey50") +
-    scale_x_continuous(expand = c(0,0)) +
-    scale_fill_gradientn("Fertility Rate", 
-                         colors = brewer.pal(9, "Reds")) +
-    theme_minimal() +  
-    theme(panel.grid = element_blank()) +
-    ggtitle("Fertility Rate by County for White Pop.") + 
-    ylab("") + xlab("") 
-
-MCH.CDC.Data_Race %>% filter(County == "Fresno") %>% ggplot(aes(Year, Fertility.Rate, color = Mothers.Race)) + geom_line() + labs( y="Fertility Rate", title = "Race and Fertility Data in Fresno County", subtitle = "2007-2019", color = "Mother's Race", caption = "Data Source: CDC WONDER Online Database")
-
-MCH.CDC.Data_Race %>% filter(County == "Kern") %>% ggplot(aes(Year, Fertility.Rate, color = Mothers.Race)) + geom_line() + labs( y="Fertility Rate", title = "Race and Fertility Data in Kern County", subtitle = "2007-2019", color = "Mother's Race", caption = "Data Source: CDC WONDER Online Database")
-
-MCH.CDC.Data_Race %>% filter(County == "San Bernardino") %>% ggplot(aes(Year, Fertility.Rate, color = Mothers.Race)) + geom_line() + labs( y="Fertility Rate", title = "Race and Fertility Data in San Bernardino County", subtitle = "2007-2019", color = "Mother's Race", caption = "Data Source: CDC WONDER Online Database")
-
-MCH.CDC.Data_Race %>% filter(County == "Los Angeles") %>% ggplot(aes(Year, Fertility.Rate, color = Mothers.Race)) + geom_line() + labs( y="Fertility Rate", title = "Race and Fertility Data in Los Angeles County", subtitle = "2007-2019", color = "Mother's Race", caption = "Data Source: CDC WONDER Online Database")
-
-MCH.CDC.Data_Race %>% filter(County == "San Diego") %>% ggplot(aes(Year, Fertility.Rate, color = Mothers.Race)) + geom_line() + labs( y="Fertility Rate", title = "Race and Fertility Data in San Diego County", subtitle = "2007-2019", color = "Mother's Race", caption = "Data Source: CDC WONDER Online Database")
-
-MCH.CDC.Data_Race %>% filter(County == "Tulare") %>% ggplot(aes(Year, Fertility.Rate, color = Mothers.Race)) + geom_line() + labs( y="Fertility Rate", title = "Race and Fertility Data in Tulare County", subtitle = "2007-2019", color = "Mother's Race", caption = "Data Source: CDC WONDER Online Database")
-
-```
+##### Racial Demographics 
+The next variable I examined was the **racial demographics** and I did so by stratifying the MCH.CDC.Data by race (via the MCH.CDC.Data_Race data frame) and viewing the total population of each race across all counties in the tile plots to assess if there was any one county with a more dense population of a certain race. I then viewed the racial demographic trends in our counties of interest which include Fresno, Kern, Tulare, San Joaquin (since they are continuously ranked as the top 4 in highest use of pesticides), and Los Angeles (as a control/comparison county) since LA is one of the most populated and most diverse counties in California. Fresno, Kern, Tulare, and San Joaquin counties are also all a part of *San Joaquin Valley* which we mentioned in our background and related work section to be of special interest to us because it is California’s most productive agricultural region and has one of the highest amounts of pesticide use. 
 
 ```{r}
 #Racial Demographic GGPLOTS
@@ -362,7 +306,7 @@ MCH.CDC.Data_Race %>% filter(Mothers.Race == "American Indian or Alaska Native")
     ggplot(aes(x = Year, y = County,  fill = Total.Population)) +
     geom_tile(color = "grey50") +
     scale_x_continuous(expand = c(0,0)) +
-    scale_fill_gradientn("American Indian or Alaska Native Population", 
+    scale_fill_gradientn("American Indian or Alaska Native Population",
                          colors = brewer.pal(9, "Reds")) +
     theme_minimal() +  
     theme(panel.grid = element_blank()) +
@@ -384,7 +328,7 @@ MCH.CDC.Data_Race %>% filter(Mothers.Race == "Black or African American") %>%
     ggplot(aes(x = Year, y = County,  fill = Total.Population)) +
     geom_tile(color = "grey50") +
     scale_x_continuous(expand = c(0,0)) +
-    scale_fill_gradientn("Black or African American Population", 
+    scale_fill_gradientn("Black or African American Population",
                          colors = brewer.pal(9, "Reds")) +
     theme_minimal() +  
     theme(panel.grid = element_blank()) +
@@ -395,24 +339,91 @@ MCH.CDC.Data_Race %>% filter(Mothers.Race == "White") %>%
     ggplot(aes(x = Year, y = County,  fill = Total.Population)) +
     geom_tile(color = "grey50") +
     scale_x_continuous(expand = c(0,0)) +
-    scale_fill_gradientn("White Population", 
+    scale_fill_gradientn("White Population",
                          colors = brewer.pal(9, "Reds")) +
     theme_minimal() +  
     theme(panel.grid = element_blank()) +
     ggtitle("Racial Demographics by County") + 
     ylab("") + xlab("")
 
-MCH.CDC.Data_Race %>% group_by(County) %>% filter(County == "Fresno") %>% ggplot(aes(Year, Total.Population, color = Mothers.Race)) + geom_line() + scale_y_log10() + labs( y="Total Population (Log 10 Transformation)", title = "Racial Demographics in Fresno County (Transformed Y Axis)", subtitle = "2007-2019", color = "Mother's Race", caption = "Data Source: CDC WONDER Online Database") 
+#Fresno, Ranked #1 in Pesticide Use
+MCH.CDC.Data_Race %>% group_by(County) %>% filter(County == "Fresno") %>% ggplot(aes(Year, Total.Population, color = Mothers.Race)) + geom_line() + labs( y="Total Population (Log 10 Transformation)", title = "Racial Demographics in Fresno County (Transformed Y Axis)", subtitle = "2007-2019", color = "Mother's Race", caption = "Data Source: CDC WONDER Online Database") + scale_y_log10()
 
-MCH.CDC.Data_Race %>% group_by(County) %>% filter(County == "Fresno") %>% ggplot(aes(Year, Total.Population, color = Mothers.Race)) + geom_line() + scale_y_log10() + labs( y="Total Population (Log 10 Transformation)", title = "Racial Demographics in Fresno County (Transformed Y Axis)", subtitle = "2007-2019", color = "Mother's Race", caption = "Data Source: CDC WONDER Online Database") 
+#Kern, Ranked #2 in Pesticide Use
+MCH.CDC.Data_Race %>% group_by(County) %>% filter(County == "Kern") %>%  ggplot(aes(Year, Total.Population, color = Mothers.Race)) + geom_line() + labs( y="Total Population (Log 10 Transformation)", title = "Racial Demographics in Kern County (Transformed Y Axis)", subtitle = "2007-2019", color = "Mother's Race", caption = "Data Source: CDC WONDER Online Database") + scale_y_log10()
 
-MCH.CDC.Data_Race %>% group_by(County) %>% filter(County == "Kern") %>%  ggplot(aes(Year, Total.Population, color = Mothers.Race)) + geom_line()  + scale_y_log10() + labs( y="Total Population (Log 10 Transformation)", title = "Racial Demographics in Kern County (Transformed Y Axis)", subtitle = "2007-2019", color = "Mother's Race", caption = "Data Source: CDC WONDER Online Database") 
+#Tulare, Ranked #3 in Pesticide Use
+MCH.CDC.Data_Race %>% group_by(County) %>% filter(County == "Tulare") %>%  ggplot(aes(Year, Total.Population, color = Mothers.Race)) + geom_line() +  labs( y="Total Population (Log 10 Transformation)", title = "Racial Demographics in Tulare County (Transformed Y Axis)", subtitle = "2007-2019", color = "Mother's Race", caption = "Data Source: CDC WONDER Online Database") + scale_y_log10()
 
-MCH.CDC.Data_Race %>% group_by(County) %>% filter(County == "San Joaquin") %>%  ggplot(aes(Year, Total.Population, color = Mothers.Race)) + geom_line()  + scale_y_log10() + labs( y="Total Population (Log 10 Transformation)", title = "Racial Demographics in San Joaquin County (Transformed Y Axis)", subtitle = "2007-2019", color = "Mother's Race", caption = "Data Source: CDC WONDER Online Database") 
+#San Joaquin, Ranked #4 in Pesticide Use
+MCH.CDC.Data_Race %>% group_by(County) %>% filter(County == "San Joaquin") %>%  ggplot(aes(Year, Total.Population, color = Mothers.Race)) + geom_line()  + labs( y="Total Population (Log 10 Transformation)", title = "Racial Demographics in San Joaquin County (Transformed Y Axis)", subtitle = "2007-2019", color = "Mother's Race", caption = "Data Source: CDC WONDER Online Database") + scale_y_log10()
 
-MCH.CDC.Data_Race %>% group_by(County) %>% filter(County == "Los Angeles") %>%  ggplot(aes(Year, Total.Population, color = Mothers.Race)) + geom_line()  + scale_y_log10() + labs( y="Total Population (Log 10 Transformation)", title = "Racial Demographics in Los Angeles County (Transformed Y Axis)", subtitle = "2007-2019", color = "Mother's Race", caption = "Data Source: CDC WONDER Online Database")  
+#Los Angeles, Comparison Group
+MCH.CDC.Data_Race %>% group_by(County) %>% filter(County == "Los Angeles") %>%  ggplot(aes(Year, Total.Population, color = Mothers.Race)) + geom_line() + labs( y="Total Population (Log 10 Transformation)", title = "Racial Demographics in Los Angeles County (Transformed Y Axis)", subtitle = "2007-2019", color = "Mother's Race", caption = "Data Source: CDC WONDER Online Database") + scale_y_log10()
 
-MCH.CDC.Data_Race %>% group_by(County) %>% filter(County == "Tulare") %>%  ggplot(aes(Year, Total.Population, color = Mothers.Race)) + geom_line()  + scale_y_log10() + labs( y="Total Population (Log 10 Transformation)", title = "Racial Demographics in Tulare County (Transformed Y Axis)", subtitle = "2007-2019", color = "Mother's Race", caption = "Data Source: CDC WONDER Online Database")  
+```
+##### Fertility Rate (Stratified By Race)
+The next variable I examined was once again **fertility rate** but this time stratified by race. I first visualized the fertility rates across all counties over the years by each race in a tile plot. I then viewed the trends of fertility rates by race in our counties of interest which include Fresno, Kern, Tulare, San Joaquin (since they are continuously ranked as the top 4 in highest use of pesticides), and Los Angeles (as a control/comparison county) since LA is one of the most populated and most diverse counties in California. Fresno, Kern, Tulare, and San Joaquin counties are also all a part of *San Joaquin Valley* which we mentioned in our background and related work section to be of special interest to us because it is California’s most productive agricultural region and has one of the highest amounts of pesticide use. 
+```{r}
+#Race and Fertility GGPLOTS
+MCH.CDC.Data_Race %>% filter(Mothers.Race == "American Indian or Alaska Native") %>%
+ggplot(aes(x = Year, y = County,  fill = Fertility.Rate)) +
+    geom_tile(color = "grey50") +
+    scale_x_continuous(expand = c(0,0)) +
+    scale_fill_gradientn("Fertility Rate", limits = c(30,100),
+                         colors = brewer.pal(9, "Reds")) +
+    theme_minimal() +  
+    theme(panel.grid = element_blank()) +
+    ggtitle("Fertility Rate by County for American Indian or Alaska Native Pop.") + 
+    ylab("") + xlab("") 
+
+MCH.CDC.Data_Race %>% filter(Mothers.Race == "Asian or Pacific Islander") %>%
+ggplot(aes(x = Year, y = County,  fill = Fertility.Rate)) +
+    geom_tile(color = "grey50") +
+    scale_x_continuous(expand = c(0,0)) +
+    scale_fill_gradientn("Fertility Rate",limits = c(30,100),
+                         colors = brewer.pal(9, "Reds")) +
+    theme_minimal() +  
+    theme(panel.grid = element_blank()) +
+    ggtitle("Fertility Rate by County for Asian or Pacific Islander Pop.") + 
+    ylab("") + xlab("") 
+
+MCH.CDC.Data_Race %>% filter(Mothers.Race == "Black or African American") %>%
+ggplot(aes(x = Year, y = County,  fill = Fertility.Rate)) +
+    geom_tile(color = "grey50") +
+    scale_x_continuous(expand = c(0,0)) +
+    scale_fill_gradientn("Fertility Rate", limits = c(30,100),
+                         colors = brewer.pal(9, "Reds")) +
+    theme_minimal() +  
+    theme(panel.grid = element_blank()) +
+    ggtitle("Fertility Rate by County for Black or African American Pop.") + 
+    ylab("") + xlab("") 
+
+MCH.CDC.Data_Race %>% filter(Mothers.Race == "White") %>%
+ggplot(aes(x = Year, y = County,  fill = Fertility.Rate)) +
+    geom_tile(color = "grey50") +
+    scale_x_continuous(expand = c(0,0)) +
+    scale_fill_gradientn("Fertility Rate", limits = c(30,100),
+                         colors = brewer.pal(9, "Reds")) +
+    theme_minimal() +  
+    theme(panel.grid = element_blank()) +
+    ggtitle("Fertility Rate by County for White Pop.") + 
+    ylab("") + xlab("") 
+
+#Fresno, Ranked #1 in Pesticide Use
+MCH.CDC.Data_Race %>% filter(County == "Fresno") %>% ggplot(aes(Year, Fertility.Rate, color = Mothers.Race)) + geom_line() + labs( y="Fertility Rate", title = "Race and Fertility Data in Fresno County", subtitle = "2007-2019", color = "Mother's Race", caption = "Data Source: CDC WONDER Online Database") + ylim(30,100)
+
+#Kern, Ranked #2 in Pesticide Use
+MCH.CDC.Data_Race %>% filter(County == "Kern") %>% ggplot(aes(Year, Fertility.Rate, color = Mothers.Race)) + geom_line() + labs( y="Fertility Rate", title = "Race and Fertility Data in Kern County", subtitle = "2007-2019", color = "Mother's Race", caption = "Data Source: CDC WONDER Online Database") + ylim(30,100)
+
+#Tulare, Ranked #3 in Pesticide Use
+MCH.CDC.Data_Race %>% filter(County == "Tulare") %>% ggplot(aes(Year, Fertility.Rate, color = Mothers.Race)) + geom_line() + labs( y="Fertility Rate", title = "Race and Fertility Data in Tulare County", subtitle = "2007-2019", color = "Mother's Race", caption = "Data Source: CDC WONDER Online Database") + ylim(30,100)
+
+#San Joaquin, Ranked #4 in Pesticide Use
+MCH.CDC.Data_Race %>% filter(County == "San Joaquin") %>% ggplot(aes(Year, Fertility.Rate, color = Mothers.Race)) + geom_line() + labs( y="Fertility Rate", title = "Race and Fertility Data in San Joaquin County", subtitle = "2007-2019", color = "Mother's Race", caption = "Data Source: CDC WONDER Online Database") + ylim(30,100)
+
+#Los Angeles, Comparison 
+MCH.CDC.Data_Race %>% filter(County == "Los Angeles") %>% ggplot(aes(Year, Fertility.Rate, color = Mothers.Race)) + geom_line() + labs( y="Fertility Rate", title = "Race and Fertility Data in Los Angeles County", subtitle = "2007-2019", color = "Mother's Race", caption = "Data Source: CDC WONDER Online Database") + ylim(30,100)
 ```
 
 ```{r}
