@@ -957,10 +957,10 @@ scale_color_discrete(name = "Top Ten\nAgricultural\nCounty", labels = c('No', "Y
 
 ```{r}
 #Imperial appears to be an influential point in the plot for Asian, Black, and White mothers
-q1
-q2
-q3
-q4
+q1 #very small population, but the line fits well
+q2 #simplest linear model still not good :()
+q3 #appears to be a disparity, but Imperial my also be affecting the model
+q4 #least variation in birth weights and gestational ages
 ```
 
 
@@ -978,7 +978,7 @@ plot(asian_mod)
 #LINE assumptions satisfied
 plot(amerindian_mod)
 
-# Imperial
+# Imperial (7) strikes again! besides that it's good
 plot(black_mod)
 
 # Imperial (7), other than that it's good
