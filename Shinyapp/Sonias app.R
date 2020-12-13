@@ -41,12 +41,12 @@ map <- readOGR(path.expand("cb_2018_us_county_20m.shp"),
                layer = "cb_2018_us_county_20m", stringsAsFactors = FALSE)
 Statekey<-read.csv('./STATEFPtoSTATENAME_Key.csv', colClasses=c('character'))
 map<-merge(x=map, y=Statekey, by="STATEFP", all=TRUE)
-SingleState <- subset(map, map$STATENAME %in% c(
+calishape <- subset(map, map$STATENAME %in% c(
     "California"
 ))
 
 ptbirthdata_2016 <- ptbirthdata %>% filter(Year == "2016") 
-spatial_pt <-sp::merge(x=SingleState, y=ptbirthdata_2016, by.x="NAME", by.y="County", by=x)
+spatial_pt <-sp::merge(x=calishape, y=ptbirthdata_2016, by.x="NAME", by.y="County", by=x)
 
 bin <- c(5.5, 8.2, 9.1, 9.9, Inf)
 pal2 <- colorBin(
@@ -108,16 +108,17 @@ df1_pt <- df1_pt %>% filter(!is.na("total_birth")) %>% filter(!is.na(Events)) %>
 
 
 #Creating Leaflet
+#merging shape polygon data with state (California)
 map <- readOGR(path.expand("cb_2018_us_county_20m.shp"),
                layer = "cb_2018_us_county_20m", stringsAsFactors = FALSE)
 Statekey<-read.csv('./STATEFPtoSTATENAME_Key.csv', colClasses=c('character'))
 map<-merge(x=map, y=Statekey, by="STATEFP", all=TRUE)
-SingleState <- subset(map, map$STATENAME %in% c(
+calishape <- subset(map, map$STATENAME %in% c(
     "California"
 ))
 
 lbwdata_2016 <- lbwdata %>% filter(Year == "2016") %>% mutate(Rate = Events/Total.Births*100)
-spatial_lbw <-sp::merge(x=SingleState, y=lbwdata_2016, by.x="NAME", by.y="County", by=x)
+spatial_lbw <-sp::merge(x=calishape, y=lbwdata_2016, by.x="NAME", by.y="County", by=x)
 
 bins <- c(4.0,6.3,7.6,8.1, Inf)
 pal <- colorBin(
@@ -234,12 +235,13 @@ map <- readOGR(path.expand("cb_2018_us_county_20m.shp"),
                layer = "cb_2018_us_county_20m", stringsAsFactors = FALSE)
 Statekey<-read.csv('./STATEFPtoSTATENAME_Key.csv', colClasses=c('character'))
 map<-merge(x=map, y=Statekey, by="STATEFP", all=TRUE)
-SingleState <- subset(map, map$STATENAME %in% c(
+calishape <- subset(map, map$STATENAME %in% c(
     "California"
 ))
 
-spatial_pesticide <-sp::merge(x=SingleState, y=averagept_df, by.x="NAME", by.y="county", by=x)
+spatial_pesticide <-sp::merge(x=calishape, y=averagept_df, by.x="NAME", by.y="county", by=x)
 
+#specifying bin colors for the map (pesticide)
 binpes <- c(200, 100145, 1131454, 3345277, Inf)
 pal3 <- colorBin(
     palette = "magma",
@@ -291,7 +293,7 @@ ui <- fluidPage(
                     plotOutput("bargraph_pesticide")
                     )#closing mainpanel
                  ),#closing tabpanel
-        
+        #THIRD TAB- Pesticide use map
         tabPanel("Comparison of California Pesticide use by County", icon = icon("map-pin"),
                  sidebarPanel( 
                      p("Finally, we created a map that tracks the uses of pesticide in the county of California. As we can see, pesticide use seems to be pronounced in the central part of the state. This is also known as San Joaquin valley and 
