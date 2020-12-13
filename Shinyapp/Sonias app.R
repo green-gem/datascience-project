@@ -349,7 +349,7 @@ server <- function(input, output) {
                         fillColor = ~pal(Rate), 
                         highlightOptions = highlightOptions(color = "white", weight = 2,
                                                             bringToFront = TRUE), 
-                        popup = ~as.factor(paste0("<b><font size=\"4\"><center>County: </b>",spatial_lbw$NAME,"</font></center>","<b>% of Low Birth Weight Births: </b>", sprintf("%1.2f%%", spatial_lbw$Rate),"<br/>"))) %>%
+                        popup = ~as.factor(paste0("<b><font size=\"3\"><center>County: </b>",spatial_lbw$NAME,"</font></center>","<b>Low Birth Weight Births: </b>", sprintf("%1.2f%%", spatial_lbw$Rate),"<br/>"))) %>%
             addLegend(pal = pal, values = spatial_lbw$Rate, opacity = 1, title="% Low Birth Weight (Quartiles)")
         }else {
                 leaflet(spatial_pt, options = leafletOptions(zoomControl = TRUE, zoomLevelFixed = FALSE, dragging=TRUE, minZoom = 5.3, maxZoom = 9)) %>% 
@@ -359,7 +359,7 @@ server <- function(input, output) {
                                 fillColor = ~pal2(rate_pt), 
                                 highlightOptions = highlightOptions(color = "white", weight = 2,
                                                                     bringToFront = TRUE), 
-                                popup = ~as.factor(paste0("<b><font size=\"4\"><center>County: </b>",spatial_pt$NAME,"</font></center>","<b>% of Preterm Birth: </b>", sprintf("%1.2f%%", spatial_pt$rate_pt),"<br/>"))) %>%
+                                popup = ~as.factor(paste0("<b><font size=\"3\"><center>County: </b>",spatial_pt$NAME,"</font></center>","<b>Preterm Birth: </b>", sprintf("%1.2f%%", spatial_pt$rate_pt),"<br/>"))) %>%
                     addLegend(pal = pal2, values = spatial_pt$rate_pt, opacity = 1, title="% Preterm Birth (Quartiles)")
             
         }
@@ -368,8 +368,6 @@ server <- function(input, output) {
     output$caption1 <- renderText({"2016 Choropleth Map of California County"})    
     
    
-    
-        
     output$leaflet_pesticide <- renderLeaflet({
             leaflet(spatial_pesticide, options = leafletOptions(zoomControl = TRUE, zoomLevelFixed = FALSE, dragging=TRUE, minZoom = 5.3, maxZoom = 9)) %>% 
                 setView(lat = 36.778259, lng = -119.417931, zoom = 6) %>%
@@ -378,7 +376,7 @@ server <- function(input, output) {
                             fillColor = ~pal3(value), 
                             highlightOptions = highlightOptions(color = "white", weight = 2,
                                                                 bringToFront = TRUE), 
-                            popup = ~as.factor(paste0("<b><font size=\"4\"><center>County: </b>",spatial_pesticide$NAME,"</font></center>","Amounts of Pesticides used </b>", sprintf("%1.2f", spatial_pesticide$value),"<br/>"))) %>%
+                            popup = ~as.factor(paste0("<b><font size=\"3\"><center>County: </b>",spatial_pesticide$NAME,"</font></center>","<b>Amounts of Pesticide used: </b> <br>", sprintf("%.3g", spatial_pesticide$value)," Pounds"))) %>%
                 addLegend(pal = pal3, values = spatial_pesticide$value, opacity = 1, title="Amounts of Pesticide Used (Pounds)")
         
     })
